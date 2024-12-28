@@ -27,6 +27,21 @@ allprojects {
   }
 }
 
+project(":core") {
+  apply plugin: "java-library"
+
+  dependencies {
+    api "com.badlogicgames.gdx:gdx-ai:1.8.2"
+    api 'com.badlogicgames.gdx:gdx-jnigen-loader:3.0.0-ANTKILLER-SNAPSHOT'
+
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.20'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+  }
+}
+
 configure(subprojects - project(':android')) {
   apply plugin: 'java-library'
   sourceCompatibility = 8
