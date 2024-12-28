@@ -21,7 +21,7 @@ public class UI {
 
         // init components
         final BottomPanel bottomPanel = new BottomPanel();
-        rootUI.add(bottomPanel).growX().height(200);
+        rootUI.add(bottomPanel).expand().fillX().height(300).bottom();
     }
 
     public void resize (int width, int height) {
