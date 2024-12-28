@@ -13,20 +13,20 @@ public enum Squircle {
     private final int radius;
     private final String name;
 
-    Squircle(int radius, String name) {
+    Squircle (int radius, String name) {
         this.radius = radius;
         this.name = name;
     }
 
-    public String getRegionName() {
+    public String getRegionName () {
         return "ui/" + name + "-" + radius;
     }
 
-    public Drawable getDrawable() {
+    public Drawable getDrawable () {
         return getDrawable(Color.WHITE);
     }
 
-    public Drawable getDrawable(Color color) {
+    public Drawable getDrawable (Color color) {
         return Resources.getDrawable("basics/" + name + "-" + radius, color);
     }
 
