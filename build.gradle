@@ -10,7 +10,7 @@ buildscript {
   }
   dependencies {
     classpath "com.android.tools.build:gradle:8.5.2"
-
+    classpath "com.badlogicgames.gdx:gdx-tools:1.11.0"
   }
 }
 
@@ -31,14 +31,17 @@ project(":core") {
   apply plugin: "java-library"
 
   dependencies {
-    api "com.badlogicgames.gdx:gdx-ai:1.8.2"
-    api 'com.badlogicgames.gdx:gdx-jnigen-loader:3.0.0-ANTKILLER-SNAPSHOT'
+    // Use 'implementation' unless this needs to be exposed to other modules
+    implementation "com.badlogicgames.gdx:gdx-ai:1.8.2"
+    implementation 'com.badlogicgames.gdx:gdx-jnigen-loader:3.0.0-ANTKILLER-SNAPSHOT'
 
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    // Lombok for compile-time annotation processing
+    compileOnly 'org.projectlombok:lombok:1.18.30' // Updated to the latest version
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.20'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+    // Lombok for test-specific processing
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
   }
 }
 
@@ -82,6 +85,13 @@ subprojects {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://jitpack.io' }
+  }
+}
+
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+task packGameTextures() {
+  doFirst {
+    TexturePacker.processIfModified("raws", "assets/gameassets", "gameatlas")
   }
 }
 

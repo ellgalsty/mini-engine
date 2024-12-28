@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.glutils.HdpiMode;
 import com.tonir.games.Main;
+import com.tonir.games.lwjgl3.utils.SquircleGenerator;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
