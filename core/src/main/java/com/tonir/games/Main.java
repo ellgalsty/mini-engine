@@ -18,12 +18,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tonir.games.presenters.UI;
 
 public class Main extends ApplicationAdapter {
-    private Stage stage;
-    private Skin skin;
     private UI ui;
 
     @Override
-    public void create() {
+    public void create () {
         float aspect = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         final OrthographicCamera camera = new OrthographicCamera();
 
@@ -45,20 +43,18 @@ public class Main extends ApplicationAdapter {
     }
 
     @Override
-    public void render() {
+    public void render () {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
         ui.render();
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize (int width, int height) {
         ui.resize(width, height);
     }
 
     @Override
-    public void dispose() {
+    public void dispose () {
         ui.dispose();
-        stage.dispose();
-        skin.dispose();
     }
 }
