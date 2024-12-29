@@ -10,6 +10,7 @@ import com.tonir.demo.managers.API;
 import com.tonir.demo.managers.PageManager;
 import com.tonir.demo.managers.event.EventHandler;
 import com.tonir.demo.managers.event.EventListener;
+import com.tonir.demo.presenters.pages.MissionsPage;
 import com.tonir.demo.presenters.pages.TestPage;
 import com.tonir.demo.presenters.utils.BorderedTable;
 import com.tonir.demo.presenters.utils.pages.APage;
@@ -44,6 +45,7 @@ public class BottomPanel extends Table implements EventListener {
     public void onGameStartedEvent (GameStartedEvent event) {
         buttons.get(0).setPageClass(TestPage.class);
         buttons.get(1).setPageClass(null);
+        buttons.get(2).setPageClass(MissionsPage.class);
 
         // by default select button 1
         buttons.get(1).select();
