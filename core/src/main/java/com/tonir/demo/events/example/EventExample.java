@@ -1,4 +1,4 @@
-package com.tonir.demo.events;
+package com.tonir.demo.events.example;
 
 import com.tonir.demo.managers.API;
 import com.tonir.demo.managers.event.Event;

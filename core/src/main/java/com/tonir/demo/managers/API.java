@@ -30,6 +30,7 @@ public class API implements Disposable {
     public void initMinimal () {
         register(EventModule.class);
         register(Resources.class);
+        register(PageManager.class);
     }
 
     public <T extends Disposable> void register (Class<T> key, T object) {

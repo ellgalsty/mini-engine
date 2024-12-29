@@ -51,6 +51,12 @@ public class EventModule implements Disposable {
         }
     }
 
+    public <T extends Event> T fireEvent (final Class<T> eventType) {
+        final T event = obtainEvent(eventType);
+        fireEvent(event);
+        return event;
+    }
+
     private <T extends Event> void registerEvent (final Class<T> eventType) {
         final Method[] methods = ClassReflection.getMethods(eventType);
         for (final Method method : methods) {
