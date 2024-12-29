@@ -28,7 +28,7 @@ public class API implements Disposable {
     }
 
     public void initMinimal () {
-        register(new EventModule());
+        register(EventModule.class);
         register(Resources.class);
     }
 
