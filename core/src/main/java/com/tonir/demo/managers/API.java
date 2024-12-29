@@ -10,7 +10,7 @@ public class API implements Disposable {
 
     private static API api;
 
-    private final ObjectMap<Class<?>, Disposable> customMap = new ObjectMap<>();
+    private final ObjectMap<Class<?>, Disposable> apiMap = new ObjectMap<>();
 
     public static API Instance () {
         if (api == null) {
@@ -24,7 +24,7 @@ public class API implements Disposable {
     }
 
     public static <U> U get (Class<U> clazz) {
-        return clazz.cast(Instance().customMap.get(clazz));
+        return clazz.cast(Instance().apiMap.get(clazz));
     }
 
     public void initMinimal () {
@@ -33,15 +33,15 @@ public class API implements Disposable {
     }
 
     public <T extends Disposable> void register (Class<T> key, T object) {
-        if (customMap.containsKey(key)) return;
-        customMap.put(key, object);
+        if (apiMap.containsKey(key)) return;
+        apiMap.put(key, object);
     }
 
     public <T extends Disposable> void register (Class<T> clazz) {
-        if (customMap.containsKey(clazz)) return;
+        if (apiMap.containsKey(clazz)) return;
         try {
             T instance = ClassReflection.newInstance(clazz);
-            customMap.put(clazz, instance);
+            apiMap.put(clazz, instance);
         } catch (ReflectionException e) {
             throw new RuntimeException("Failed to instantiate class: " + clazz.getName(), e);
         }
@@ -53,9 +53,9 @@ public class API implements Disposable {
 
     @Override
     public void dispose () {
-        for (Disposable disposable : customMap.values()) {
+        for (Disposable disposable : apiMap.values()) {
             disposable.dispose();
         }
-        customMap.clear();
+        apiMap.clear();
     }
 }
