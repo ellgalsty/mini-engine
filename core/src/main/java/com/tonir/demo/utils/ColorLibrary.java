@@ -1,4 +1,4 @@
-package com.tonir.demo.presenters.utils;
+package com.tonir.demo.utils;
 
 import com.badlogic.gdx.utils.ObjectMap;
 

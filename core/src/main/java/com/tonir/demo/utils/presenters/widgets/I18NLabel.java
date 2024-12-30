@@ -1,4 +1,4 @@
-package com.tonir.demo.presenters.utils;
+package com.tonir.demo.utils.presenters.widgets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;

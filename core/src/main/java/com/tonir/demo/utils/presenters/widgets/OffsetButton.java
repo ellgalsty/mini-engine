@@ -1,4 +1,4 @@
-package com.tonir.demo.presenters.utils.widgets;
+package com.tonir.demo.utils.presenters.widgets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
@@ -16,7 +16,7 @@ import com.tonir.demo.notification.INotificationContainer;
 import com.tonir.demo.notification.INotificationProvider;
 import com.tonir.demo.notification.NotificationWidget;
 import com.tonir.demo.presenters.UI;
-import com.tonir.demo.presenters.utils.ColorLibrary;
+import com.tonir.demo.utils.ColorLibrary;
 import com.tonir.demo.utils.Squircle;
 import lombok.Getter;
 import lombok.Setter;

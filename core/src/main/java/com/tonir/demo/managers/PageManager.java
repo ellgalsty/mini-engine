@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.tonir.demo.events.page.PageClosedEvent;
 import com.tonir.demo.events.page.PageOpenedEvent;
 import com.tonir.demo.presenters.UI;
-import com.tonir.demo.presenters.utils.pages.APage;
+import com.tonir.demo.utils.presenters.widgets.pages.APage;
 
 public class PageManager implements Disposable {
 

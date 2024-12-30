@@ -1,7 +1,7 @@
 package com.tonir.demo.events.page;
 
 import com.tonir.demo.managers.event.Event;
-import com.tonir.demo.presenters.utils.pages.APage;
+import com.tonir.demo.utils.presenters.widgets.pages.APage;
 import lombok.Getter;
 
 @Getter

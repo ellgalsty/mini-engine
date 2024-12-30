@@ -1,4 +1,4 @@
-package com.tonir.demo.presenters.utils.widgets;
+package com.tonir.demo.utils.presenters.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
