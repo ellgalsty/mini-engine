@@ -3,6 +3,7 @@ package com.tonir.demo.managers;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.tonir.demo.localization.Localization;
 import com.tonir.demo.managers.event.EventModule;
 import com.tonir.demo.utils.Resources;
 
@@ -30,6 +31,7 @@ public class API implements Disposable {
     public void initMinimal () {
         register(EventModule.class);
         register(Resources.class);
+        register(Localization.class);
         register(PageManager.class);
     }
 

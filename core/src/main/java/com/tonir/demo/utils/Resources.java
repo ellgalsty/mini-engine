@@ -6,10 +6,13 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.tonir.demo.localization.Font;
+import com.tonir.demo.managers.API;
 import lombok.Getter;
 
 public class Resources implements Disposable {
@@ -39,7 +42,11 @@ public class Resources implements Disposable {
     }
 
     public static Drawable getDrawable (String region, Color color) {
-        return new Resources().obtainDrawable(region, color);
+        return API.get(Resources.class).obtainDrawable(region, color);
+    }
+
+    public static Drawable getDrawable (String region) {
+        return getDrawable(region, Color.WHITE);
     }
 
     // obtain a drawable with specified region and color
@@ -98,5 +105,10 @@ public class Resources implements Disposable {
         uiSkin.dispose();
         drawableCache.clear();
         drawableKeyCache.clear();
+    }
+
+    public Label.LabelStyle getLabelStyle (Font font) {
+        // TODO: 31.12.24 make
+        return null;
     }
 }

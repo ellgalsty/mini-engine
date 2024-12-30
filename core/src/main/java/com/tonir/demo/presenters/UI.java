@@ -9,12 +9,17 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tonir.demo.managers.API;
 import com.tonir.demo.presenters.utils.pages.APage;
 import lombok.Getter;
+import lombok.Setter;
 
 public class UI implements Disposable {
     private final Stage stage;
+    @Getter
     private final Table rootUI;
     @Getter
     private final Cell<APage> pageCell;
+
+    @Getter @Setter
+    private boolean buttonPressed;
 
     public UI (Viewport viewport) {
         API.Instance().register(UI.class, this);

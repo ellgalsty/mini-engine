@@ -7,7 +7,7 @@ import com.tonir.demo.managers.event.EventPriority;
 public class EventListenerExample implements EventListener {
 
     public EventListenerExample () {
-        registerListener(); // do not forget to register listener
+        registerEventListener(); // do not forget to register listener
     }
 
     @EventHandler(priority = EventPriority.HIGH)

@@ -3,7 +3,7 @@ package com.tonir.demo.managers.event;
 import com.tonir.demo.managers.API;
 
 public interface EventListener {
-    default void registerListener () {
+    default void registerEventListener () {
         API.get(EventModule.class).registerListener(this);
     }
 }

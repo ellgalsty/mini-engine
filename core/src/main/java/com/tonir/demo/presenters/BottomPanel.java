@@ -12,10 +12,9 @@ import com.tonir.demo.managers.event.EventHandler;
 import com.tonir.demo.managers.event.EventListener;
 import com.tonir.demo.presenters.pages.MissionsPage;
 import com.tonir.demo.presenters.pages.TestPage;
-import com.tonir.demo.presenters.utils.BorderedTable;
+import com.tonir.demo.presenters.utils.OffsetButton;
 import com.tonir.demo.presenters.utils.pages.APage;
 import com.tonir.demo.utils.Resources;
-import com.tonir.demo.utils.Squircle;
 import lombok.Setter;
 
 public class BottomPanel extends Table implements EventListener {
@@ -24,7 +23,7 @@ public class BottomPanel extends Table implements EventListener {
     private BottomButton currentButton;
 
     public BottomPanel () {
-        registerListener();
+        registerEventListener();
 
         setBackground(Resources.getDrawable("basics/white-pixel", Color.WHITE));
 
@@ -51,18 +50,17 @@ public class BottomPanel extends Table implements EventListener {
         buttons.get(1).select();
     }
 
-    private class BottomButton extends BorderedTable {
+    private class BottomButton extends OffsetButton {
         @Setter
         private Class<? extends APage> pageClass;
         @Setter
         private boolean isSelected;
 
         public BottomButton () {
-            setBackground(Squircle.SQUIRCLE_35.getDrawable(Color.GRAY));
-            setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(Color.GREEN));
+            super(Style.WHITE_GRAY_35_30);
 
             final Image icon = new Image(Resources.getDrawable("basics/white-pixel", Color.RED), Scaling.fit);
-            add(icon).size(100);
+            frontTable.add(icon).size(100);
 
             setOnClick(() -> {
                 if (isSelected) {
@@ -85,9 +83,9 @@ public class BottomPanel extends Table implements EventListener {
             // show page if any page exists otherwise just hide
             final PageManager pageManager = API.get(PageManager.class);
             if (pageClass == null) {
-                pageManager.hidePage();
+                pageManager.hide();
             } else {
-                pageManager.showPage(pageClass);
+                pageManager.show(pageClass);
             }
 
             visuallySelect();
@@ -95,7 +93,7 @@ public class BottomPanel extends Table implements EventListener {
 
         public void deselect () {
             isSelected = false;
-            API.get(PageManager.class).hidePage();
+            API.get(PageManager.class).hide();
 
             visuallyDeselect();
         }

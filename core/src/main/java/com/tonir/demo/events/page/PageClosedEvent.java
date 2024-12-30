@@ -1,19 +1,14 @@
-package com.tonir.demo.events;
+package com.tonir.demo.events.page;
 
 import com.tonir.demo.managers.API;
-import com.tonir.demo.managers.event.Event;
 import com.tonir.demo.managers.event.EventModule;
 import com.tonir.demo.presenters.utils.pages.APage;
-import lombok.Getter;
 
-public class PageClosedEvent extends Event {
+public class PageClosedEvent extends APageEvent {
 
-    @Getter
-    private Class<? extends APage> aClass;
-
-    public static void fire (Class<? extends APage> aClass) {
+    public static void fire (Class<? extends APage> pageClass) {
         final PageClosedEvent event = API.get(EventModule.class).obtainEvent(PageClosedEvent.class);
-        event.aClass = aClass;
+        event.pageClass = pageClass;
         API.get(EventModule.class).fireEvent(event);
     }
 }
