@@ -1,4 +1,4 @@
-package com.tonir.demo.utils.presenters.widgets.pages;
+package com.tonir.demo.utils.presenters.pages;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

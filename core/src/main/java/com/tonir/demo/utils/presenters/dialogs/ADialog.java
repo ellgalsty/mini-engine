@@ -1,4 +1,4 @@
-package com.tonir.demo.utils.presenters.widgets.dialogs;
+package com.tonir.demo.utils.presenters.dialogs;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;

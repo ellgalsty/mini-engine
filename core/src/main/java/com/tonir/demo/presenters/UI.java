@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tonir.demo.managers.API;
-import com.tonir.demo.utils.presenters.widgets.pages.APage;
+import com.tonir.demo.utils.presenters.pages.APage;
 import lombok.Getter;
 import lombok.Setter;
 

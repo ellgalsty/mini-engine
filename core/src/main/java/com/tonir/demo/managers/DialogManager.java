@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.tonir.demo.events.dialog.DialogClosedEvent;
 import com.tonir.demo.events.dialog.DialogOpenedEvent;
 import com.tonir.demo.presenters.UI;
-import com.tonir.demo.utils.presenters.widgets.dialogs.ADialog;
+import com.tonir.demo.utils.presenters.dialogs.ADialog;
 
 public class DialogManager implements Disposable {
 
