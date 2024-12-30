@@ -12,7 +12,7 @@ import com.tonir.demo.managers.event.EventHandler;
 import com.tonir.demo.managers.event.EventListener;
 import com.tonir.demo.presenters.pages.MissionsPage;
 import com.tonir.demo.presenters.pages.TestPage;
-import com.tonir.demo.presenters.utils.OffsetButton;
+import com.tonir.demo.presenters.utils.widget.OffsetButton;
 import com.tonir.demo.presenters.utils.pages.APage;
 import com.tonir.demo.utils.Resources;
 import lombok.Setter;
