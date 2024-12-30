@@ -52,7 +52,7 @@ public class NotificationsManager implements Disposable {
         }
     }
 
-    public static INotificationProvider getProvider(Class<? extends INotificationProvider> clazz) {
+    public static INotificationProvider getProvider (Class<? extends INotificationProvider> clazz) {
         NotificationsManager notificationsManager = API.get(NotificationsManager.class);
         return notificationsManager.notificationProviderMap.get(clazz);
     }
@@ -85,7 +85,7 @@ public class NotificationsManager implements Disposable {
         notificationsManager.widgetMap.put(button, widget);
         widget.setVisible(false);
 
-        if(API.get(NotificationsManager.class).initialLoadingComplete) {
+        if (API.get(NotificationsManager.class).initialLoadingComplete) {
             updateNotificationState(provider);
             updateButtonsState(provider);
         }
@@ -179,7 +179,7 @@ public class NotificationsManager implements Disposable {
         NotificationsManager notificationsManager = API.get(NotificationsManager.class);
         final Table button = notificationsManager.map.get(provider);
 
-        if(button == null) return;
+        if (button == null) return;
 
         final int notificationCount = provider.getNotificationCount();
 
@@ -192,7 +192,7 @@ public class NotificationsManager implements Disposable {
     }
 
     private static void showNotificationOn (Table button, int count, INotificationProvider.Priority priority) {
-        if (button == null){
+        if (button == null) {
             System.out.println("Ignore this case");
             return;
         }
@@ -228,7 +228,7 @@ public class NotificationsManager implements Disposable {
         widget.showAnim();
     }
 
-    private static void hideNotificationOn(Table button) {
+    private static void hideNotificationOn (Table button) {
         if (button == null) {
             //This is bad, but fix for now
             return;
@@ -244,14 +244,14 @@ public class NotificationsManager implements Disposable {
         }
     }
 
-    public void updateAllProviders() {
+    public void updateAllProviders () {
         for (ObjectMap.Entry<Class<? extends INotificationProvider>, INotificationProvider> entry : notificationProviderMap) {
             INotificationProvider provider = entry.value;
             updateNotificationState(provider);
         }
     }
 
-    public void updateAllButtonStates() {
+    public void updateAllButtonStates () {
         for (ObjectMap.Entry<INotificationProvider, Table> entry : map) {
             INotificationProvider provider = entry.key;
             updateButtonsState(provider);
@@ -261,7 +261,7 @@ public class NotificationsManager implements Disposable {
     }
 
     @Override
-    public void dispose() {
+    public void dispose () {
         // EXTRA cautious
         if (map != null) {
             map.clear();
