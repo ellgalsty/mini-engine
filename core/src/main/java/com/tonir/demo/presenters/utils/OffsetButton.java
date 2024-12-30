@@ -285,7 +285,6 @@ public class OffsetButton extends Table implements INotificationContainer {
         hideNotification();
     }
 
-
     @Override
     protected void sizeChanged () {
         super.sizeChanged();
