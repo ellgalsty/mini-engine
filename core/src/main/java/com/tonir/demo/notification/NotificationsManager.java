@@ -9,11 +9,10 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
 import com.tonir.demo.managers.API;
-import com.tonir.demo.managers.event.EventListener;
 import lombok.Getter;
 
 
-public class NotificationsManager implements EventListener, Disposable {
+public class NotificationsManager implements Disposable {
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationsManager.class);
 
@@ -23,10 +22,6 @@ public class NotificationsManager implements EventListener, Disposable {
 
     @Getter
     private final ObjectMap<Class<? extends INotificationProvider>, INotificationProvider> notificationProviderMap = new ObjectMap<>();
-
-    public NotificationsManager() {
-        registerEventListener();
-    }
 
     private boolean initialLoadingComplete = false;
 
