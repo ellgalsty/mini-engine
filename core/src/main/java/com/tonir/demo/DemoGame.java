@@ -38,4 +38,11 @@ public class DemoGame extends Game {
         final ExtendViewport viewport = new ExtendViewport(width, height, camera);
         return new UI(viewport);
     }
+
+    @Override
+    public void dispose () {
+        super.dispose();
+        API.Instance().dispose();
+        Gdx.app.exit();
+    }
 }
