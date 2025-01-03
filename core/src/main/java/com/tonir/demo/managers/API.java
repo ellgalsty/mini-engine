@@ -4,8 +4,9 @@ import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.tonir.demo.localization.Localization;
-import com.tonir.demo.managers.event.EventModule;
-import com.tonir.demo.utils.Resources;
+import com.tonir.demo.events.core.EventModule;
+import com.tonir.demo.engine.Resources;
+import com.tonir.demo.pages.core.PageManager;
 
 public class API implements Disposable {
 

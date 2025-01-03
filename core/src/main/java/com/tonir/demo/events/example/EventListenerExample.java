@@ -1,8 +1,8 @@
 package com.tonir.demo.events.example;
 
-import com.tonir.demo.managers.event.EventHandler;
-import com.tonir.demo.managers.event.EventListener;
-import com.tonir.demo.managers.event.EventPriority;
+import com.tonir.demo.events.core.EventHandler;
+import com.tonir.demo.events.core.EventListener;
+import com.tonir.demo.events.core.EventPriority;
 
 public class EventListenerExample implements EventListener {
 

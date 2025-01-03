@@ -1,4 +1,4 @@
-package com.tonir.demo.utils;
+package com.tonir.demo.engine;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;

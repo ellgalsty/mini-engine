@@ -1,4 +1,4 @@
-package com.tonir.demo.utils.presenters.dialogs;
+package com.tonir.demo.dialogs.core;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -12,8 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.tonir.demo.managers.API;
-import com.tonir.demo.managers.DialogManager;
-import com.tonir.demo.utils.Resources;
+import com.tonir.demo.engine.Resources;
 import lombok.Getter;
 
 public abstract class ADialog extends Table {

@@ -1,8 +1,8 @@
 package com.tonir.demo.events.dialog;
 
 import com.tonir.demo.managers.API;
-import com.tonir.demo.managers.event.EventModule;
-import com.tonir.demo.utils.presenters.dialogs.ADialog;
+import com.tonir.demo.events.core.EventModule;
+import com.tonir.demo.dialogs.core.ADialog;
 
 public class DialogOpenedEvent extends ADialogEvent {
 

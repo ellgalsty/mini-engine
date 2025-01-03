@@ -1,4 +1,4 @@
-package com.tonir.demo.managers.event;
+package com.tonir.demo.events.core;
 
 import com.badlogic.gdx.utils.Pool;
 import lombok.Getter;

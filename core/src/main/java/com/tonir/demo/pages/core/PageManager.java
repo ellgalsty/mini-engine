@@ -1,4 +1,4 @@
-package com.tonir.demo.managers;
+package com.tonir.demo.pages.core;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.utils.Disposable;
@@ -7,8 +7,8 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.tonir.demo.events.page.PageClosedEvent;
 import com.tonir.demo.events.page.PageOpenedEvent;
+import com.tonir.demo.managers.API;
 import com.tonir.demo.presenters.UI;
-import com.tonir.demo.utils.presenters.pages.APage;
 
 public class PageManager implements Disposable {
 

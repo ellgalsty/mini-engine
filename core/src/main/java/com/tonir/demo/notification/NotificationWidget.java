@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.tonir.demo.localization.Font;
-import com.tonir.demo.utils.presenters.widgets.I18NLabel;
-import com.tonir.demo.utils.Resources;
+import com.tonir.demo.engine.widgets.I18NLabel;
+import com.tonir.demo.engine.Resources;
 
 public class NotificationWidget extends Table {
 

@@ -1,4 +1,4 @@
-package com.tonir.demo.utils.presenters.widgets;
+package com.tonir.demo.engine.widgets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.tonir.demo.localization.Font;
 import com.tonir.demo.localization.Localization;
 import com.tonir.demo.managers.API;
-import com.tonir.demo.utils.Resources;
+import com.tonir.demo.engine.Resources;
 
 public class I18NLabel extends Label {
 

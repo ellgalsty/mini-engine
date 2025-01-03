@@ -7,14 +7,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.tonir.demo.events.GameStartedEvent;
 import com.tonir.demo.managers.API;
-import com.tonir.demo.managers.PageManager;
-import com.tonir.demo.managers.event.EventHandler;
-import com.tonir.demo.managers.event.EventListener;
-import com.tonir.demo.presenters.pages.MissionsPage;
-import com.tonir.demo.presenters.pages.TestPage;
-import com.tonir.demo.utils.presenters.widgets.OffsetButton;
-import com.tonir.demo.utils.presenters.pages.APage;
-import com.tonir.demo.utils.Resources;
+import com.tonir.demo.pages.core.PageManager;
+import com.tonir.demo.events.core.EventHandler;
+import com.tonir.demo.events.core.EventListener;
+import com.tonir.demo.pages.MissionsPage;
+import com.tonir.demo.pages.TestPage;
+import com.tonir.demo.engine.widgets.OffsetButton;
+import com.tonir.demo.pages.core.APage;
+import com.tonir.demo.engine.Resources;
 import lombok.Setter;
 
 public class BottomPanel extends Table implements EventListener {

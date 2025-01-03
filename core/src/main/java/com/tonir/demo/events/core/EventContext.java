@@ -1,4 +1,4 @@
-package com.tonir.demo.managers.event;
+package com.tonir.demo.events.core;
 
 public enum EventContext {
     MAIN

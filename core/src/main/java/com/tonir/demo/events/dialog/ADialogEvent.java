@@ -1,7 +1,7 @@
 package com.tonir.demo.events.dialog;
 
-import com.tonir.demo.managers.event.Event;
-import com.tonir.demo.utils.presenters.dialogs.ADialog;
+import com.tonir.demo.events.core.Event;
+import com.tonir.demo.dialogs.core.ADialog;
 import lombok.Getter;
 
 @Getter

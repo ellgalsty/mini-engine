@@ -1,4 +1,4 @@
-package com.tonir.demo.managers;
+package com.tonir.demo.dialogs.core;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -7,8 +7,8 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.tonir.demo.events.dialog.DialogClosedEvent;
 import com.tonir.demo.events.dialog.DialogOpenedEvent;
+import com.tonir.demo.managers.API;
 import com.tonir.demo.presenters.UI;
-import com.tonir.demo.utils.presenters.dialogs.ADialog;
 
 public class DialogManager implements Disposable {
 

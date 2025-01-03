@@ -1,6 +1,6 @@
 package com.tonir.demo.events;
 
-import com.tonir.demo.managers.event.Event;
+import com.tonir.demo.events.core.Event;
 
 public class GameStartedEvent extends Event {
 }

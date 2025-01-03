@@ -1,11 +1,9 @@
-package com.tonir.demo.utils.presenters.pages;
+package com.tonir.demo.pages.core;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.tonir.demo.utils.Resources;
 import lombok.Getter;
 
 public abstract class APage extends Table {
@@ -15,7 +13,6 @@ public abstract class APage extends Table {
     private boolean shown;
 
     public APage () {
-        setBackground(Resources.getDrawable("basics/white-pixel", Color.valueOf("#69605Bff")));
         setTouchable(Touchable.enabled);
         addListener(new ClickListener() {
             @Override

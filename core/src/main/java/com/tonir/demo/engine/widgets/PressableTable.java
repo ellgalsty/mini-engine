@@ -1,4 +1,4 @@
-package com.tonir.demo.utils.presenters.widgets;
+package com.tonir.demo.engine.widgets;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;

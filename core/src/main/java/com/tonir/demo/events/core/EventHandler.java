@@ -1,4 +1,4 @@
-package com.tonir.demo.managers.event;
+package com.tonir.demo.events.core;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

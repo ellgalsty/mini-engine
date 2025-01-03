@@ -1,7 +1,7 @@
-package com.tonir.demo.presenters.pages;
+package com.tonir.demo.pages;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.tonir.demo.utils.presenters.pages.APage;
+import com.tonir.demo.pages.core.APage;
 
 public class TestPage extends APage {
     @Override

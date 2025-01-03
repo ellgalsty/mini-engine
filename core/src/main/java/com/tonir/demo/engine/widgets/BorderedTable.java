@@ -1,10 +1,10 @@
-package com.tonir.demo.utils.presenters.widgets;
+package com.tonir.demo.engine.widgets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.tonir.demo.utils.Squircle;
+import com.tonir.demo.engine.Squircle;
 import lombok.Getter;
 
 public class BorderedTable extends PressableTable {

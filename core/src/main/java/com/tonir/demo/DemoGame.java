@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.tonir.demo.events.GameStartedEvent;
 import com.tonir.demo.managers.API;
-import com.tonir.demo.managers.event.EventModule;
+import com.tonir.demo.events.core.EventModule;
 import com.tonir.demo.presenters.UI;
 
 public class DemoGame extends Game {

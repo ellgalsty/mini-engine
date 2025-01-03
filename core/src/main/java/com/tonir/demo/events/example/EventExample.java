@@ -1,8 +1,8 @@
 package com.tonir.demo.events.example;
 
 import com.tonir.demo.managers.API;
-import com.tonir.demo.managers.event.Event;
-import com.tonir.demo.managers.event.EventModule;
+import com.tonir.demo.events.core.Event;
+import com.tonir.demo.events.core.EventModule;
 
 public class EventExample extends Event {
     public String test;
