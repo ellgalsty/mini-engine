@@ -17,7 +17,7 @@ public class UI implements Disposable, Screen {
     @Getter
     private final Table rootUI;
     @Getter
-    private final Cell<APage> pageCell;
+    private final Cell<APage> mainPageCell;
 
     @Getter @Setter
     private boolean buttonPressed;
@@ -36,7 +36,7 @@ public class UI implements Disposable, Screen {
         final BottomPanel bottomPanel = new BottomPanel();
 
         // construct
-        pageCell = rootUI.add().grow();
+        mainPageCell = rootUI.add().grow();
         rootUI.row();
         rootUI.add(bottomPanel).growX().height(300);
     }
@@ -54,7 +54,7 @@ public class UI implements Disposable, Screen {
 
     @Override
     public void resize (int width, int height) {
-        stage.getViewport().update(width, height);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
