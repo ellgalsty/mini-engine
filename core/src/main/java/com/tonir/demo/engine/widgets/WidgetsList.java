@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Pools;
 import lombok.Getter;
 import lombok.Setter;
 
-public class WidgetsContainer<T extends Table> extends Table {
+public class WidgetsList<T extends Table> extends Table {
 
     @Getter
     protected final Array<T> widgets = new Array<>();
@@ -21,32 +21,32 @@ public class WidgetsContainer<T extends Table> extends Table {
     @Setter
     private IWidgetReset<T> widgetReset;
 
-    public WidgetsContainer (int widgetSize, int widgetPerRow, int space) {
+    public WidgetsList (int widgetSize, int widgetPerRow, int space) {
         this(widgetSize, widgetSize, widgetPerRow, space);
     }
 
-    public WidgetsContainer (int widgetWidth, int widgetHeight, int widgetPerRow, int space) {
+    public WidgetsList (int widgetWidth, int widgetHeight, int widgetPerRow, int space) {
         this(widgetWidth, widgetHeight, widgetPerRow, space, space);
     }
 
-    public WidgetsContainer (int widgetWidth, int widgetHeight, int widgetPerRow, int verticalSpace, int horizontalSpace) {
+    public WidgetsList (int widgetWidth, int widgetHeight, int widgetPerRow, int verticalSpace, int horizontalSpace) {
         this.widgetPerRow = widgetPerRow;
 
         top().left().defaults().size(widgetWidth, widgetHeight).space(verticalSpace, horizontalSpace, verticalSpace, horizontalSpace);
     }
 
-    public WidgetsContainer (int widgetPerRow, int space) {
+    public WidgetsList (int widgetPerRow, int space) {
         this.widgetPerRow = widgetPerRow;
 
         top().left().defaults().space(space);
     }
 
-    public WidgetsContainer (int widgetPerRow) {
+    public WidgetsList (int widgetPerRow) {
         this.widgetPerRow = widgetPerRow;
         top().left();
     }
 
-    public WidgetsContainer () {
+    public WidgetsList () {
         top().left();
     }
 
@@ -90,7 +90,7 @@ public class WidgetsContainer<T extends Table> extends Table {
         clearChildren();
     }
 
-    public WidgetsContainer<T> reserveCells (boolean reserveCells) {
+    public WidgetsList<T> reserveCells (boolean reserveCells) {
         this.reserveCells = reserveCells;
         return this;
     }
