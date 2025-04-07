@@ -9,16 +9,16 @@ public class HomeworkOne extends APage {
     private static final float WIDGET_SIZE = 275f;
     @Override
     protected void constructContent (Table content) {
-        final Table mainGrid = constructMainGrid(5, 2);
+        final Table mainGrid = constructMainGrid(5, 2, WIDGET_SIZE);
 
         content.add(mainGrid);
     }
 
-    private Table constructMainGrid (int rows, int cols) {
+    private Table constructMainGrid (int rows, int cols, float widgetSize) {
         final Table segment = new Table();
         segment.setBackground(Resources.getDrawable("basics/white-squircle-35"));
         segment.pad(25);
-        segment.defaults().space(25).size(WIDGET_SIZE);
+        segment.defaults().space(25).size(widgetSize);
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
