@@ -6,6 +6,8 @@ import com.bootcamp.demo.engine.Resources;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
 import com.bootcamp.demo.pages.core.APage;
 
+import javax.swing.border.Border;
+
 public class MissionsPage extends APage {
     private static final float STAT_HEIGHT = 50f;
     private static final float WIDGET_SIZE = 225f;
@@ -143,18 +145,27 @@ public class MissionsPage extends APage {
         final BorderedTable lootLevelButton = new BorderedTable();
         lootLevelButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("e3b26a")));
         lootLevelButton.setBorderDrawable(Resources.getDrawable("basics/white-squircle-border-35", ColorLibrary.get("988153")));
-        final BorderedTable lootButton = new BorderedTable();
-        lootButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("9ad880")));
-        lootButton.setBorderDrawable(Resources.getDrawable("basics/white-squircle-border-35", ColorLibrary.get("6f9b56")));
+        final Table lootButton = constructLootButtonSegment();
         final BorderedTable autoLootButton = new BorderedTable();
         autoLootButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("acacac")));
         autoLootButton.setBorderDrawable(Resources.getDrawable("basics/white-squircle-border-35", ColorLibrary.get("828482")));
 
         final Table segment = new Table();
         segment.defaults().bottom().growX().space(35);
-        segment.add(lootLevelButton).height(100);
-        segment.add(lootButton).height(150);    // todo: add upper segment later
-        segment.add(autoLootButton).height(100);
+        segment.add(lootLevelButton).height(200);
+        segment.add(lootButton).height(300);
+        segment.add(autoLootButton).height(200);
+        return segment;
+    }
+
+    private Table constructLootButtonSegment(){
+        final BorderedTable lootButton = new BorderedTable();
+        lootButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("97d382")));
+        lootButton.setBorderDrawable(Resources.getDrawable("basics/white-squircle-border-35", ColorLibrary.get("6b9d54")));
+
+        final Table segment = new Table();
+        segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("bcbbba")));
+        segment.add(lootButton).expand().height(200).bottom().growX();
         return segment;
     }
 
