@@ -6,8 +6,6 @@ import com.bootcamp.demo.engine.Resources;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
 import com.bootcamp.demo.pages.core.APage;
 
-import javax.swing.border.Border;
-
 public class MissionsPage extends APage {
     private static final float STAT_HEIGHT = 50f;
     private static final float WIDGET_SIZE = 225f;
