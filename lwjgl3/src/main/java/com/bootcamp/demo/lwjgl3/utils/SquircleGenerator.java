@@ -144,7 +144,7 @@ public class SquircleGenerator extends ApplicationAdapter {
     }
 
     private static void savePixmapToFile (final Pixmap pixmap, final String outputPath) {
-        final FileHandle file = Gdx.files.local(outputPath);
+        final FileHandle file = Gdx.files.absolute(outputPath);
         PixmapIO.writePNG(file, pixmap);
         System.out.println("pixmap saved to: " + file.path());
     }

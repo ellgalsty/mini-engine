@@ -19,7 +19,7 @@ public class BorderedTable extends PressableTable {
         this(Squircle.SQUIRCLE_35.getDrawable(Color.valueOf("c2b8b0")), Squircle.SQUIRCLE_35_BORDER.getDrawable(Color.valueOf("81776e")));
     }
 
-    public BorderedTable (int padding){
+    public BorderedTable (int padding) {
         this(Squircle.SQUIRCLE_35.getDrawable(Color.valueOf("c2b8b0")), Squircle.SQUIRCLE_35_BORDER.getDrawable(Color.valueOf("81776e")), padding);
 
     }

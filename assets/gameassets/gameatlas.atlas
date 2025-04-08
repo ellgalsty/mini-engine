@@ -13,6 +13,15 @@ basics/white-pixel
   orig: 10, 10
   offset: 0, 0
   index: -1
+basics/white-squircle-25
+  rotate: false
+  xy: 75, 33
+  size: 52, 52
+  split: 24, 24, 24, 24
+  pad: 0, 0, 0, 0
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
 basics/white-squircle-35
   rotate: false
   xy: 1, 13
@@ -20,6 +29,15 @@ basics/white-squircle-35
   split: 34, 34, 34, 34
   pad: 0, 0, 0, 0
   orig: 72, 72
+  offset: 0, 0
+  index: -1
+basics/white-squircle-border-25
+  rotate: false
+  xy: 148, 106
+  size: 52, 52
+  split: 24, 24, 24, 24
+  pad: 0, 0, 0, 0
+  orig: 52, 52
   offset: 0, 0
   index: -1
 basics/white-squircle-border-35

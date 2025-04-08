@@ -1,9 +1,15 @@
 package com.bootcamp.demo.pages;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.utils.Scaling;
+import com.bootcamp.demo.data.itemdata.Gear;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Resources;
+import com.bootcamp.demo.engine.Squircle;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
+import com.bootcamp.demo.engine.widgets.WidgetsList;
 import com.bootcamp.demo.pages.core.APage;
 
 public class MissionsPage extends APage {
@@ -13,14 +19,28 @@ public class MissionsPage extends APage {
 
     @Override
     protected void constructContent (Table content) {
+        final Table powerSegment = constructPowerSegment();
+        final Table mainUISegment = constructMainUISegment();
+
         final Table gameUIOverlay = new Table();
         gameUIOverlay.setBackground(Resources.getDrawable("basics/white-pixel", ColorLibrary.get("e0945b")));
-        final Table mainUISegment = constructMainUISegment();
+        gameUIOverlay.add(powerSegment).expand().bottom().size(700, 125);
 
         // assemble
         content.add(gameUIOverlay).grow();
         content.row();
         content.add(mainUISegment).growX();
+    }
+
+    private Table constructPowerSegment () {
+        final Table powerSegmentInner = new Table();
+        powerSegmentInner.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("998272")));
+
+        final Table segment = new Table();
+        segment.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("fee5d6")));
+
+        segment.add(powerSegmentInner).expand().bottom().size(690, 115);
+        return segment;
     }
 
     private Table constructMainUISegment () {
@@ -30,7 +50,7 @@ public class MissionsPage extends APage {
 
         final Table segment = new Table();
         segment.setBackground(Resources.getDrawable("basics/white-pixel", ColorLibrary.get("f6e6de")));
-        segment.pad(25).defaults().growX().space(30);
+        segment.pad(30).defaults().growX().space(30);
         segment.add(statsSegment);
         segment.row();
         segment.add(equipmentsSegment);
@@ -57,7 +77,7 @@ public class MissionsPage extends APage {
         final Table secondaryGearSegment = constructSecondaryGearSegment();
 
         final Table segment = new Table();
-        segment.defaults().space(60);
+        segment.defaults().space(60).growX();
         segment.add(gearSegment);
         segment.add(secondaryGearSegment);
         return segment;
@@ -77,30 +97,59 @@ public class MissionsPage extends APage {
         tacticalFlagContainersWrapper.add(flagContainer);
 
         // right segment
-        final BorderedTable animalSegment = new BorderedTable();
+        final BorderedTable animalSegment = constructAnimalSegment();
 
         // assemble
         final Table segment = new Table();
-        segment.defaults().space(space);
+        segment.defaults().space(space).growX();
         segment.add(tacticalFlagContainersWrapper);
         segment.add(animalSegment).fillY().width(WIDGET_SIZE);
         return segment;
     }
 
+    private BorderedTable constructAnimalSegment () {
+        final BorderedTable animalSegmentButton = new BorderedTable();
+        animalSegmentButton.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("deb46e")));
+        animalSegmentButton.setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get("988060")));
+
+        final BorderedTable segment = new BorderedTable(0);
+        segment.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("b29983")));
+        segment.add(animalSegmentButton).expand().bottom().growX().height(100);
+        return segment;
+    }
+
     private BorderedTable constructTacticalGearContainer () {
-        // TODO: use widget container
-        final BorderedTable container = new BorderedTable();
-        container.pad(15).defaults().space(10).grow();
+        final TacticalsWidgetsContainer widgetContainer = new TacticalsWidgetsContainer(2);
 
         for (int i = 0; i < 4; i++) {
-            final Table tacticalGearContainer = new Table();
-            tacticalGearContainer.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("6398c3")));
-            container.add(tacticalGearContainer);
-            if (i == 1) {
-                container.row();
-            }
+            final TacticalWidgetContainer tacticalGear = new TacticalWidgetContainer();
+            widgetContainer.setData(tacticalGear);
         }
+
+        final BorderedTable container = new BorderedTable();
+        container.add(widgetContainer).grow();
         return container;
+    }
+
+    private static class TacticalsWidgetsContainer extends Table {
+        private final WidgetsList<TacticalWidgetContainer> tacticalsWidgetContainer;
+
+        public TacticalsWidgetsContainer (int rows) {
+            tacticalsWidgetContainer = new WidgetsList<>(rows);
+            tacticalsWidgetContainer.pad(15).defaults().space(10).grow();
+            add(tacticalsWidgetContainer).grow();
+        }
+
+        public void setData (TacticalWidgetContainer tacticalWidgetContainer) {
+            tacticalsWidgetContainer.add(tacticalWidgetContainer);
+        }
+
+    }
+
+    private static class TacticalWidgetContainer extends Table {
+        public TacticalWidgetContainer () {
+            setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("6398c3")));
+        }
     }
 
     private Table constructGearSegment () {
@@ -156,7 +205,7 @@ public class MissionsPage extends APage {
         return segment;
     }
 
-    private Table constructLootButtonSegment(){
+    private Table constructLootButtonSegment () {
         final BorderedTable lootButton = new BorderedTable();
         lootButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("97d382")));
         lootButton.setBorderDrawable(Resources.getDrawable("basics/white-squircle-border-35", ColorLibrary.get("6b9d54")));
@@ -167,7 +216,7 @@ public class MissionsPage extends APage {
         return segment;
     }
 
-    private Table constructStatsContainer () {
+    private Table constructStatsContainer () {           // TODO: create separate stat class
         // TODO: use widget container
         final Table segment = new Table();
         segment.defaults().growX().space(25).height(STAT_HEIGHT);
