@@ -19,6 +19,11 @@ public class BorderedTable extends PressableTable {
         this(Squircle.SQUIRCLE_35.getDrawable(Color.valueOf("c2b8b0")), Squircle.SQUIRCLE_35_BORDER.getDrawable(Color.valueOf("81776e")));
     }
 
+    public BorderedTable (int padding){
+        this(Squircle.SQUIRCLE_35.getDrawable(Color.valueOf("c2b8b0")), Squircle.SQUIRCLE_35_BORDER.getDrawable(Color.valueOf("81776e")), padding);
+
+    }
+
     public BorderedTable (Drawable backgroundDrawable, Drawable borderDrawable) {
         borderImage = new Image(borderDrawable);
         borderImage.setFillParent(true);
@@ -27,6 +32,16 @@ public class BorderedTable extends PressableTable {
 
         setBackground(backgroundDrawable);
         pad(borderSize); // pad for border
+    }
+
+    public BorderedTable (Drawable backgroundDrawable, Drawable borderDrawable, int padding) {
+        borderImage = new Image(borderDrawable);
+        borderImage.setFillParent(true);
+        borderImage.setTouchable(Touchable.disabled);
+        addActor(borderImage);
+
+        setBackground(backgroundDrawable);
+        pad(padding); // pad by given padding size
     }
 
     public void set (Drawable backgroundDrawable, Drawable borderDrawable) {
