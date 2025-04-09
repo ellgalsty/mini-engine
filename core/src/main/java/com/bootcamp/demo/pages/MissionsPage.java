@@ -1,5 +1,6 @@
 package com.bootcamp.demo.pages;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Resources;
@@ -238,8 +239,13 @@ public class MissionsPage extends APage {
     }
 
     public static class StatWidgetContainer extends Table {
+        private final Label.LabelStyle labelStyle;
+        private Label label;
+
         public StatWidgetContainer () {
-            setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("4c403a")));
+            labelStyle = new Label.LabelStyle(new BitmapFont(), ColorLibrary.get("4e4238"));
+            label = new Label("Power:      10", labelStyle);
+            add(label);
         }
     }
 
