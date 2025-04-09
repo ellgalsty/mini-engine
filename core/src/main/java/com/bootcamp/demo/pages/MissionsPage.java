@@ -2,8 +2,7 @@ package com.bootcamp.demo.pages;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.Array;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Resources;
 import com.bootcamp.demo.engine.Squircle;
@@ -15,7 +14,9 @@ import com.bootcamp.demo.pages.core.APage;
 public class MissionsPage extends APage {
     private static final float STAT_HEIGHT = 50f;
     private static final float WIDGET_SIZE = 225f;
-    private static final int DISPLAYED_STATS_COUNT = 9;
+    private StatsContainer statsContainer;
+    private TacticalsContainer widgetContainer;
+    private GearsContainer gearsContainer;
 
     @Override
     protected void constructContent (Table content) {
@@ -60,8 +61,7 @@ public class MissionsPage extends APage {
     }
 
     private Table constructStatsSegment () {
-        final StatsWidgetsContainer statsContainer = new StatsWidgetsContainer(3);
-        statsContainer.setData();
+        statsContainer = new StatsContainer();
 
         final Table statsInfoButton = new BorderedTable();
         statsInfoButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("f4e7dc")));
@@ -90,7 +90,7 @@ public class MissionsPage extends APage {
 
         // left segment
         final BorderedTable tacticalGearContainer = constructTacticalGearContainer();
-        final FlagContainer flagContainer = new FlagContainer();
+        final FlagWidget flagContainer = new FlagWidget();
 
         final Table tacticalFlagContainersWrapper = new Table();
         tacticalFlagContainersWrapper.defaults().space(space).size(WIDGET_SIZE);
@@ -109,10 +109,8 @@ public class MissionsPage extends APage {
         return segment;
     }
 
-
     private BorderedTable constructTacticalGearContainer () {
-        final TacticalsWidgetsContainer widgetContainer = new TacticalsWidgetsContainer(2);
-        widgetContainer.setData();
+        widgetContainer = new TacticalsContainer();
 
         final BorderedTable container = new BorderedTable();
         container.add(widgetContainer).grow();
@@ -122,8 +120,7 @@ public class MissionsPage extends APage {
     private Table constructGearSegment () {
         final Table incompleteSetSegment = new Table();
         incompleteSetSegment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("a19891")));
-        final GearsWidgetsContainer gearsContainer = new GearsWidgetsContainer(3);
-        gearsContainer.setData();
+        gearsContainer = new GearsContainer();
 
         final Table segment = new Table();
         segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("c8c7c7")));
@@ -158,7 +155,7 @@ public class MissionsPage extends APage {
     }
 
     private BorderedTable constructAnimalSegment () {
-        final PetWidgetContainer animalSegmentButton = new PetWidgetContainer();
+        final PetWidget animalSegmentButton = new PetWidget();
         animalSegmentButton.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("deb46e")));
         animalSegmentButton.setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get("988060")));
 
@@ -168,69 +165,83 @@ public class MissionsPage extends APage {
         return segment;
     }
 
-    // static widget container classes
-    public static class StatsWidgetsContainer extends Table {
-        private final WidgetsList<StatWidgetContainer> statsContainer;
+    @Override
+    public void show (Runnable onComplete) {
+        super.show(onComplete);
+        statsContainer.setData();
+        widgetContainer.setData();
+        gearsContainer.setData();
+    }
 
-        public StatsWidgetsContainer (int rows) {
-            statsContainer = new WidgetsList<>(rows);
-            statsContainer.defaults().space(25).growX().height(STAT_HEIGHT);
-            add(statsContainer).grow();
-        }
+    public static class StatsContainer extends WidgetsList<StatWidget> {
 
-        public void setData () {
-            statsContainer.freeChildren();
+        public StatsContainer () {
+            super(3);
+            defaults().space(25).growX().height(STAT_HEIGHT);
 
             for (int i = 0; i < 9; i++) {
-                final StatWidgetContainer statContainer = Pools.obtain(StatWidgetContainer.class);
-                statsContainer.add(statContainer);
+                final StatWidget statContainer = new StatWidget();
+                statContainer.setData();
+                add(statContainer);
             }
-        }
-    }
-
-    private static class TacticalsWidgetsContainer extends Table {
-        private final WidgetsList<TacticalWidgetContainer> tacticalsWidgetContainer;
-
-        public TacticalsWidgetsContainer (int rows) {
-            tacticalsWidgetContainer = new WidgetsList<>(rows);
-            tacticalsWidgetContainer.pad(15).defaults().space(10).grow();
-            add(tacticalsWidgetContainer).grow();
         }
 
         public void setData () {
-            tacticalsWidgetContainer.freeChildren();
-
-            for (int i = 0; i < 4; i++) {
-                final TacticalWidgetContainer tacticalWidgetContainer = Pools.obtain(TacticalWidgetContainer.class);
-                tacticalsWidgetContainer.add(tacticalWidgetContainer);
+            final Array<StatWidget> widgets = getWidgets();
+            for (StatWidget widget : widgets) {
+                widget.setData();
             }
         }
     }
 
-    public static class GearsWidgetsContainer extends Table {
-        private final WidgetsList<GearWidgetContainer> gearsWidgetsContainer;
+    private static class TacticalsContainer extends WidgetsList<TacticalWidget> {
 
-        public GearsWidgetsContainer (int rows) {
-            gearsWidgetsContainer = new WidgetsList<>(rows);
-            gearsWidgetsContainer.defaults().space(25).size(WIDGET_SIZE);
-            add(gearsWidgetsContainer);
+        public TacticalsContainer () {
+            super(2);
+            pad(15).defaults().space(10).grow();
+
+            for (int i = 0; i < 4; i++) {
+                final TacticalWidget tacticalContainer = new TacticalWidget();
+                tacticalContainer.setData();
+                add(tacticalContainer);
+            }
+        }
+
+        public void setData () {
+            final Array<TacticalWidget> widgets = getWidgets();
+
+            for (TacticalWidget widget : widgets) {
+                widget.setData();
+            }
+        }
+    }
+
+    public static class GearsContainer extends WidgetsList<GearWidget> {
+
+        public GearsContainer () {
+            super(3);
+            defaults().space(25).size(WIDGET_SIZE);
+
+            for (int i = 0; i < 6; i++) {
+                final GearWidget gearContainer = new GearWidget();
+                gearContainer.setData();
+                add(gearContainer);
+            }
         }
 
         private void setData () {
-            gearsWidgetsContainer.freeChildren();
-
-            for (int i = 0; i < 6; i++) {
-                final GearWidgetContainer gearContainer = Pools.obtain(GearWidgetContainer.class);
-                gearsWidgetsContainer.add(gearContainer);
+            final Array<GearWidget> widgets = getWidgets();
+            for (GearWidget widget : widgets) {
+                widget.setData();
             }
         }
     }
 
-    public static class StatWidgetContainer extends Table {
+    public static class StatWidget extends Table {
         private final Label.LabelStyle labelStyle;
         private Label label;
 
-        public StatWidgetContainer () {
+        public StatWidget () {
             labelStyle = new Label.LabelStyle(new BitmapFont(), ColorLibrary.get("4e4238"));
             label = new Label("Power:      10", labelStyle);
             add(label);
@@ -241,8 +252,8 @@ public class MissionsPage extends APage {
         }
     }
 
-    public static class TacticalWidgetContainer extends Table {
-        public TacticalWidgetContainer () {
+    public static class TacticalWidget extends Table {
+        public TacticalWidget () {
             setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("6398c3")));
         }
 
@@ -251,8 +262,8 @@ public class MissionsPage extends APage {
         }
     }
 
-    public static class GearWidgetContainer extends BorderedTable {
-        public GearWidgetContainer () {
+    public static class GearWidget extends BorderedTable {
+        public GearWidget () {
             setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("6098c0")));
         }
 
@@ -261,8 +272,8 @@ public class MissionsPage extends APage {
         }
     }
 
-    public static class PetWidgetContainer extends BorderedTable {
-        public PetWidgetContainer () {
+    public static class PetWidget extends BorderedTable {
+        public PetWidget () {
         }
 
         private void setData () {
@@ -270,8 +281,8 @@ public class MissionsPage extends APage {
         }
     }
 
-    public static class FlagContainer extends BorderedTable {
-        public FlagContainer () {
+    public static class FlagWidget extends BorderedTable {
+        public FlagWidget () {
         }
 
         private void setData () {
