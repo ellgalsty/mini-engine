@@ -2,6 +2,8 @@ package com.bootcamp.demo.pages;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Resources;
 import com.bootcamp.demo.engine.Squircle;
@@ -58,7 +60,9 @@ public class MissionsPage extends APage {
     }
 
     private Table constructStatsSegment () {
-        final Table statsContainer = constructStatsContainer();
+        final StatsWidgetsContainer statsContainer = new StatsWidgetsContainer(3);
+        statsContainer.setData();
+
         final Table statsInfoButton = new BorderedTable();
         statsInfoButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("f4e7dc")));
 
@@ -108,11 +112,7 @@ public class MissionsPage extends APage {
 
     private BorderedTable constructTacticalGearContainer () {
         final TacticalsWidgetsContainer widgetContainer = new TacticalsWidgetsContainer(2);
-
-        for (int i = 0; i < 4; i++) {
-            final TacticalWidgetContainer tacticalGear = new TacticalWidgetContainer();
-            widgetContainer.setData(tacticalGear);
-        }
+        widgetContainer.setData();
 
         final BorderedTable container = new BorderedTable();
         container.add(widgetContainer).grow();
@@ -122,7 +122,8 @@ public class MissionsPage extends APage {
     private Table constructGearSegment () {
         final Table incompleteSetSegment = new Table();
         incompleteSetSegment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("a19891")));
-        final Table gearsContainer = constructGearsContainer();
+        final GearsWidgetsContainer gearsContainer = new GearsWidgetsContainer(3);
+        gearsContainer.setData();
 
         final Table segment = new Table();
         segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("c8c7c7")));
@@ -132,25 +133,7 @@ public class MissionsPage extends APage {
         segment.add(gearsContainer);
         return segment;
     }
-
-    private Table constructGearsContainer () {
-        // TODO: make an enum for slot types(with static values array), make a slot type widget, populate gear slots from slot enum
-        final GearWidgetContainer weaponContainer = new GearWidgetContainer();
-        final GearWidgetContainer meleeContainer = new GearWidgetContainer();
-        final GearWidgetContainer headContainer = new GearWidgetContainer();
-        final GearWidgetContainer bodyContainer = new GearWidgetContainer();
-        final GearWidgetContainer glovesContainer = new GearWidgetContainer();
-        final GearWidgetContainer shoesContainer = new GearWidgetContainer();
-
-        final GearsWidgetsContainer segment = new GearsWidgetsContainer(3);
-        segment.setData(weaponContainer);
-        segment.setData(meleeContainer);
-        segment.setData(headContainer);
-        segment.setData(bodyContainer);
-        segment.setData(glovesContainer);
-        segment.setData(shoesContainer);
-        return segment;
-    }
+    // TODO: make an enum for slot types(with static values array), make a slot type widget, populate gear slots from slot enum
 
     private Table constructButtonsSegment () {
         final OffsetButton lootLevelButton = new OffsetButton(OffsetButton.Style.ORANGE_35);
@@ -174,16 +157,6 @@ public class MissionsPage extends APage {
         return segment;
     }
 
-    private Table constructStatsContainer () {
-        final StatsWidgetsContainer statsSegment = new StatsWidgetsContainer(3);
-
-        for (int i = 0; i < DISPLAYED_STATS_COUNT; i++) {
-            final StatWidgetContainer statContainer = new StatWidgetContainer();
-            statsSegment.setData(statContainer);
-        }
-        return statsSegment;
-    }
-
     private BorderedTable constructAnimalSegment () {
         final PetWidgetContainer animalSegmentButton = new PetWidgetContainer();
         animalSegmentButton.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("deb46e")));
@@ -205,8 +178,13 @@ public class MissionsPage extends APage {
             add(statsContainer).grow();
         }
 
-        public void setData (StatWidgetContainer stat) {
-            statsContainer.add(stat);
+        public void setData () {
+            statsContainer.freeChildren();
+
+            for (int i = 0; i < 9; i++) {
+                final StatWidgetContainer statContainer = Pools.obtain(StatWidgetContainer.class);
+                statsContainer.add(statContainer);
+            }
         }
     }
 
@@ -219,22 +197,32 @@ public class MissionsPage extends APage {
             add(tacticalsWidgetContainer).grow();
         }
 
-        public void setData (TacticalWidgetContainer tacticalWidgetContainer) {
-            tacticalsWidgetContainer.add(tacticalWidgetContainer);
+        public void setData () {
+            tacticalsWidgetContainer.freeChildren();
+
+            for (int i = 0; i < 4; i++) {
+                final TacticalWidgetContainer tacticalWidgetContainer = Pools.obtain(TacticalWidgetContainer.class);
+                tacticalsWidgetContainer.add(tacticalWidgetContainer);
+            }
         }
     }
 
     public static class GearsWidgetsContainer extends Table {
-        private final WidgetsList<GearWidgetContainer> gearsWidgetContainer;
+        private final WidgetsList<GearWidgetContainer> gearsWidgetsContainer;
 
         public GearsWidgetsContainer (int rows) {
-            gearsWidgetContainer = new WidgetsList<>(rows);
-            gearsWidgetContainer.defaults().space(25).size(WIDGET_SIZE);
-            add(gearsWidgetContainer);
+            gearsWidgetsContainer = new WidgetsList<>(rows);
+            gearsWidgetsContainer.defaults().space(25).size(WIDGET_SIZE);
+            add(gearsWidgetsContainer);
         }
 
-        private void setData (GearWidgetContainer gearWidgetContainer) {
-            gearsWidgetContainer.add(gearWidgetContainer);
+        private void setData () {
+            gearsWidgetsContainer.freeChildren();
+
+            for (int i = 0; i < 6; i++) {
+                final GearWidgetContainer gearContainer = Pools.obtain(GearWidgetContainer.class);
+                gearsWidgetsContainer.add(gearContainer);
+            }
         }
     }
 
@@ -247,26 +235,47 @@ public class MissionsPage extends APage {
             label = new Label("Power:      10", labelStyle);
             add(label);
         }
+
+        private void setData () {
+
+        }
     }
 
-    private static class TacticalWidgetContainer extends Table {
+    public static class TacticalWidgetContainer extends Table {
         public TacticalWidgetContainer () {
             setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("6398c3")));
         }
-    }
 
-    private static class GearWidgetContainer extends BorderedTable {
-        public GearWidgetContainer () {
+        private void setData () {
+
         }
     }
 
-    private static class PetWidgetContainer extends BorderedTable {
+    public static class GearWidgetContainer extends BorderedTable {
+        public GearWidgetContainer () {
+            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("6098c0")));
+        }
+
+        private void setData () {
+
+        }
+    }
+
+    public static class PetWidgetContainer extends BorderedTable {
         public PetWidgetContainer () {
         }
+
+        private void setData () {
+
+        }
     }
 
-    private static class FlagContainer extends BorderedTable {
+    public static class FlagContainer extends BorderedTable {
         public FlagContainer () {
+        }
+
+        private void setData () {
+
         }
     }
 }
