@@ -206,7 +206,6 @@ public class MissionsPage extends APage {
 
         public void setData (StatWidgetContainer stat) {
             statsContainer.add(stat);
-            statsContainer.debugAll();
         }
     }
 
