@@ -1,14 +1,11 @@
 package com.bootcamp.demo.pages;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
-import com.badlogic.gdx.utils.Scaling;
-import com.bootcamp.demo.data.itemdata.Gear;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Resources;
 import com.bootcamp.demo.engine.Squircle;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
+import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.engine.widgets.WidgetsList;
 import com.bootcamp.demo.pages.core.APage;
 
@@ -88,7 +85,7 @@ public class MissionsPage extends APage {
 
         // left segment
         final BorderedTable tacticalGearContainer = constructTacticalGearContainer();
-        final Table flagContainer = new BorderedTable();
+        final FlagContainer flagContainer = new FlagContainer();
 
         final Table tacticalFlagContainersWrapper = new Table();
         tacticalFlagContainersWrapper.defaults().space(space).size(WIDGET_SIZE);
@@ -107,16 +104,6 @@ public class MissionsPage extends APage {
         return segment;
     }
 
-    private BorderedTable constructAnimalSegment () {
-        final BorderedTable animalSegmentButton = new BorderedTable();
-        animalSegmentButton.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("deb46e")));
-        animalSegmentButton.setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get("988060")));
-
-        final BorderedTable segment = new BorderedTable(0);
-        segment.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("b29983")));
-        segment.add(animalSegmentButton).expand().bottom().growX().height(100);
-        return segment;
-    }
 
     private BorderedTable constructTacticalGearContainer () {
         final TacticalsWidgetsContainer widgetContainer = new TacticalsWidgetsContainer(2);
@@ -131,6 +118,98 @@ public class MissionsPage extends APage {
         return container;
     }
 
+    private Table constructGearSegment () {
+        final Table incompleteSetSegment = new Table();
+        incompleteSetSegment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("a19891")));
+        final Table gearsContainer = constructGearsContainer();
+
+        final Table segment = new Table();
+        segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("c8c7c7")));
+        segment.pad(20).defaults().space(15);
+        segment.add(incompleteSetSegment).height(50).fillX();
+        segment.row();
+        segment.add(gearsContainer);
+        return segment;
+    }
+
+    private Table constructGearsContainer () {
+        // TODO: make an enum for slot types(with static values array), make a slot type widget, populate gear slots from slot enum
+        final GearWidgetContainer weaponContainer = new GearWidgetContainer();
+        final GearWidgetContainer meleeContainer = new GearWidgetContainer();
+        final GearWidgetContainer headContainer = new GearWidgetContainer();
+        final GearWidgetContainer bodyContainer = new GearWidgetContainer();
+        final GearWidgetContainer glovesContainer = new GearWidgetContainer();
+        final GearWidgetContainer shoesContainer = new GearWidgetContainer();
+
+        final GearsWidgetsContainer segment = new GearsWidgetsContainer(3);
+        segment.setData(weaponContainer);
+        segment.setData(meleeContainer);
+        segment.setData(headContainer);
+        segment.setData(bodyContainer);
+        segment.setData(glovesContainer);
+        segment.setData(shoesContainer);
+        return segment;
+    }
+
+    private Table constructButtonsSegment () {
+        final OffsetButton lootLevelButton = new OffsetButton(OffsetButton.Style.ORANGE_35);
+        final Table lootButton = constructLootButtonSegment();
+        final OffsetButton autoLootButton = new OffsetButton(OffsetButton.Style.GREY_35);
+
+        final Table segment = new Table();
+        segment.defaults().bottom().growX().space(35);
+        segment.add(lootLevelButton).height(200);
+        segment.add(lootButton).height(300);
+        segment.add(autoLootButton).height(200);
+        return segment;
+    }
+
+    private Table constructLootButtonSegment () {
+        final OffsetButton lootButton = new OffsetButton(OffsetButton.Style.GREEN_35);
+
+        final Table segment = new Table();
+        segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("bcbbba")));
+        segment.add(lootButton).expand().height(200).bottom().growX();
+        return segment;
+    }
+
+    private Table constructStatsContainer () {
+        final StatsWidgetsContainer statsSegment = new StatsWidgetsContainer(3);
+
+        for (int i = 0; i < DISPLAYED_STATS_COUNT; i++) {
+            final StatWidgetContainer statContainer = new StatWidgetContainer();
+            statsSegment.setData(statContainer);
+        }
+        return statsSegment;
+    }
+
+    private BorderedTable constructAnimalSegment () {
+        final PetWidgetContainer animalSegmentButton = new PetWidgetContainer();
+        animalSegmentButton.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("deb46e")));
+        animalSegmentButton.setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get("988060")));
+
+        final BorderedTable segment = new BorderedTable(0);
+        segment.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("b29983")));
+        segment.add(animalSegmentButton).expand().bottom().growX().height(100);
+        return segment;
+    }
+
+    // static widget container classes
+    public static class StatsWidgetsContainer extends Table {
+        private final WidgetsList<StatWidgetContainer> statsContainer;
+
+        public StatsWidgetsContainer (int rows) {
+            statsContainer = new WidgetsList<>(rows);
+            statsContainer.defaults().space(25).growX().height(STAT_HEIGHT);
+            add(statsContainer).grow();
+        }
+
+        public void setData (StatWidgetContainer stat) {
+            statsContainer.add(stat);
+            statsContainer.debugAll();
+        }
+    }
+
     private static class TacticalsWidgetsContainer extends Table {
         private final WidgetsList<TacticalWidgetContainer> tacticalsWidgetContainer;
 
@@ -143,7 +222,26 @@ public class MissionsPage extends APage {
         public void setData (TacticalWidgetContainer tacticalWidgetContainer) {
             tacticalsWidgetContainer.add(tacticalWidgetContainer);
         }
+    }
 
+    public static class GearsWidgetsContainer extends Table {
+        private final WidgetsList<GearWidgetContainer> gearsWidgetContainer;
+
+        public GearsWidgetsContainer (int rows) {
+            gearsWidgetContainer = new WidgetsList<>(rows);
+            gearsWidgetContainer.defaults().space(25).size(WIDGET_SIZE);
+            add(gearsWidgetContainer);
+        }
+
+        private void setData (GearWidgetContainer gearWidgetContainer) {
+            gearsWidgetContainer.add(gearWidgetContainer);
+        }
+    }
+
+    public static class StatWidgetContainer extends Table {
+        public StatWidgetContainer () {
+            setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("4c403a")));
+        }
     }
 
     private static class TacticalWidgetContainer extends Table {
@@ -152,83 +250,18 @@ public class MissionsPage extends APage {
         }
     }
 
-    private Table constructGearSegment () {
-        final Table incompleteSetSegment = new Table();
-        incompleteSetSegment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("a19891")));
-        final Table gearsContainer = constructGearsContainer();
-
-        final Table segment = new Table();
-        segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("c8c7c7")));
-        segment.pad(20).defaults().growX().space(15);
-        segment.add(incompleteSetSegment).height(50);
-        segment.row();
-        segment.add(gearsContainer);
-        return segment;
-    }
-
-    private Table constructGearsContainer () {
-        // TODO: use widget container
-        // TODO: make an enum for slot types(with static values array), make a slot type widget, populate gear slots from slot enum
-        final BorderedTable weaponContainer = new BorderedTable();
-        final BorderedTable meleeContainer = new BorderedTable();
-        final BorderedTable headContainer = new BorderedTable();
-        final BorderedTable bodyContainer = new BorderedTable();
-        final BorderedTable glovesContainer = new BorderedTable();
-        final BorderedTable shoesContainer = new BorderedTable();
-
-        final Table segment = new Table();
-        segment.defaults().space(25).size(WIDGET_SIZE);
-        segment.add(weaponContainer);
-        segment.add(meleeContainer);
-        segment.add(headContainer);
-        segment.row();
-        segment.add(bodyContainer);
-        segment.add(glovesContainer);
-        segment.add(shoesContainer);
-        return segment;
-    }
-
-    private Table constructButtonsSegment () {
-        final BorderedTable lootLevelButton = new BorderedTable();
-        lootLevelButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("e3b26a")));
-        lootLevelButton.setBorderDrawable(Resources.getDrawable("basics/white-squircle-border-35", ColorLibrary.get("988153")));
-        final Table lootButton = constructLootButtonSegment();
-        final BorderedTable autoLootButton = new BorderedTable();
-        autoLootButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("acacac")));
-        autoLootButton.setBorderDrawable(Resources.getDrawable("basics/white-squircle-border-35", ColorLibrary.get("828482")));
-
-        final Table segment = new Table();
-        segment.defaults().bottom().growX().space(35);
-        segment.add(lootLevelButton).height(200);
-        segment.add(lootButton).height(300);
-        segment.add(autoLootButton).height(200);
-        return segment;
-    }
-
-    private Table constructLootButtonSegment () {
-        final BorderedTable lootButton = new BorderedTable();
-        lootButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("97d382")));
-        lootButton.setBorderDrawable(Resources.getDrawable("basics/white-squircle-border-35", ColorLibrary.get("6b9d54")));
-
-        final Table segment = new Table();
-        segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("bcbbba")));
-        segment.add(lootButton).expand().height(200).bottom().growX();
-        return segment;
-    }
-
-    private Table constructStatsContainer () {           // TODO: create separate stat class
-        // TODO: use widget container
-        final Table segment = new Table();
-        segment.defaults().growX().space(25).height(STAT_HEIGHT);
-
-        for (int i = 0; i < DISPLAYED_STATS_COUNT; i++) {
-            final Table statContainer = new Table();
-            statContainer.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("4c403a")));
-            segment.add(statContainer);
-            if ((i + 1) % 3 == 0) {
-                segment.row();
-            }
+    private static class GearWidgetContainer extends BorderedTable {
+        public GearWidgetContainer () {
         }
-        return segment;
+    }
+
+    private static class PetWidgetContainer extends BorderedTable {
+        public PetWidgetContainer () {
+        }
+    }
+
+    private static class FlagContainer extends BorderedTable {
+        public FlagContainer () {
+        }
     }
 }
