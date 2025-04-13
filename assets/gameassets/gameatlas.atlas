@@ -1,12 +1,12 @@
 
 gameatlas.png
-size: 256, 256
+size: 2048, 128
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
 basics/white-pixel
   rotate: false
-  xy: 1, 1
+  xy: 1117, 39
   size: 10, 10
   split: 3, 3, 3, 3
   pad: 0, 0, 0, 0
@@ -15,7 +15,7 @@ basics/white-pixel
   index: -1
 basics/white-squircle-25
   rotate: false
-  xy: 75, 33
+  xy: 1367, 69
   size: 52, 52
   split: 24, 24, 24, 24
   pad: 0, 0, 0, 0
@@ -24,7 +24,7 @@ basics/white-squircle-25
   index: -1
 basics/white-squircle-35
   rotate: false
-  xy: 1, 13
+  xy: 1219, 49
   size: 72, 72
   split: 34, 34, 34, 34
   pad: 0, 0, 0, 0
@@ -33,7 +33,7 @@ basics/white-squircle-35
   index: -1
 basics/white-squircle-border-25
   rotate: false
-  xy: 148, 106
+  xy: 1421, 69
   size: 52, 52
   split: 24, 24, 24, 24
   pad: 0, 0, 0, 0
@@ -42,17 +42,108 @@ basics/white-squircle-border-25
   index: -1
 basics/white-squircle-border-35
   rotate: false
-  xy: 148, 160
+  xy: 1293, 49
   size: 72, 72
   split: 34, 34, 34, 34
   pad: 0, 0, 0, 0
   orig: 72, 72
   offset: 0, 0
   index: -1
-ui/ui-chat-gift-button-icon
+ui/atk
   rotate: false
-  xy: 1, 87
-  size: 145, 145
-  orig: 145, 145
+  xy: 1527, 72
+  size: 50, 49
+  orig: 50, 49
+  offset: 0, 0
+  index: -1
+ui/maingears/bloody-grail
+  rotate: false
+  xy: 1, 1
+  size: 100, 120
+  orig: 100, 120
+  offset: 0, 0
+  index: -1
+ui/maingears/hard-armor
+  rotate: false
+  xy: 613, 23
+  size: 100, 98
+  orig: 100, 98
+  offset: 0, 0
+  index: -1
+ui/maingears/revival-cape
+  rotate: false
+  xy: 409, 16
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+ui/maingears/skyflame-crown
+  rotate: false
+  xy: 511, 21
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+ui/maingears/star-palochka
+  rotate: false
+  xy: 919, 33
+  size: 100, 88
+  orig: 100, 88
+  offset: 0, 0
+  index: -1
+ui/maingears/warriors-blade
+  rotate: false
+  xy: 103, 5
+  size: 100, 116
+  orig: 100, 116
+  offset: 0, 0
+  index: -1
+ui/secondarygears/cactus-fighter
+  rotate: false
+  xy: 1117, 51
+  size: 100, 70
+  orig: 100, 70
+  offset: 0, 0
+  index: -1
+ui/secondarygears/flag
+  rotate: false
+  xy: 1475, 71
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+ui/secondarygears/frostwind-horn
+  rotate: false
+  xy: 715, 27
+  size: 100, 94
+  orig: 100, 94
+  offset: 0, 0
+  index: -1
+ui/secondarygears/ice-bubble
+  rotate: false
+  xy: 307, 13
+  size: 100, 108
+  orig: 100, 108
+  offset: 0, 0
+  index: -1
+ui/secondarygears/proof-of-glory
+  rotate: false
+  xy: 817, 30
+  size: 100, 91
+  orig: 100, 91
+  offset: 0, 0
+  index: -1
+ui/secondarygears/susu
+  rotate: false
+  xy: 1021, 22
+  size: 94, 99
+  orig: 100, 99
+  offset: 3, 0
+  index: -1
+ui/secondarygears/vitality-stone
+  rotate: false
+  xy: 205, 12
+  size: 100, 109
+  orig: 100, 109
   offset: 0, 0
   index: -1
