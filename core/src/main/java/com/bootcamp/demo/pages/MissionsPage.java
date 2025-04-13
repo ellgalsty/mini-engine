@@ -1,15 +1,16 @@
 package com.bootcamp.demo.pages;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.bootcamp.demo.engine.ColorLibrary;
+import com.bootcamp.demo.engine.Labels;
 import com.bootcamp.demo.engine.Resources;
 import com.bootcamp.demo.engine.Squircle;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
 import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.engine.widgets.WidgetsContainer;
+import com.bootcamp.demo.localization.GameFont;
 import com.bootcamp.demo.pages.core.APage;
 
 public class MissionsPage extends APage {
@@ -130,6 +131,7 @@ public class MissionsPage extends APage {
         return segment;
     }
 
+    // TODO: 13.04.25 remove this redundant method
     private BorderedTable constructTacticalGearContainer () {
         widgetContainer = new TacticalsContainer();
 
@@ -154,6 +156,7 @@ public class MissionsPage extends APage {
     // TODO: make an enum for slot types(with static values array), make a slot type widget, populate gear slots from slot enum
 
     private Table constructButtonsSegment () {
+        // TODO: 13.04.25 make nested classes for each button
         final Image lootButtonIcon = new Image(Resources.getDrawable("ui/capy-loot"));
         lootButtonIcon.setScaling(Scaling.fit);
         final OffsetButton lootLevelButton = new OffsetButton(OffsetButton.Style.ORANGE_35) {
@@ -217,7 +220,6 @@ public class MissionsPage extends APage {
 
             for (int i = 0; i < 9; i++) {
                 final StatWidget statContainer = new StatWidget();
-                statContainer.setData();
                 add(statContainer);
             }
         }
@@ -272,29 +274,32 @@ public class MissionsPage extends APage {
     }
 
     public static class StatWidget extends Table {
-        private final Label.LabelStyle labelStyle;
-        private Label label;
+        private final Label label;
 
         public StatWidget () {
-            labelStyle = new Label.LabelStyle(new BitmapFont(), ColorLibrary.get("4e4238"));
-            label = new Label("Power:      10", labelStyle);
+            label = Labels.make(GameFont.BOLD_40, ColorLibrary.get("4e4238"));
             add(label);
         }
 
         private void setData () {
-
+            label.setText("Power: 124k");
         }
     }
 
+    // TODO: 13.04.25 changed this as an example, do the same for the rest
     public static class TacticalWidget extends Table {
+        private final Image icon;
+
         public TacticalWidget () {
             setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("6398c3")));
+
+            icon = new Image();
+            icon.setScaling(Scaling.fit);
+            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
         }
 
         private void setData () {
-            Image icon = new Image(Resources.getDrawable("ui/secondarygears/ice-bubble"));
-            icon.setScaling(Scaling.fit);
-            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
+            icon.setDrawable(Resources.getDrawable("ui/secondarygears/ice-bubble"));
         }
     }
 
@@ -331,4 +336,6 @@ public class MissionsPage extends APage {
             add(flagIcon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
         }
     }
+
+    // TODO: 13.04.25 maybe remove TacticalWidget, GearWidget, FlagWidget, PetWidget into TacticalContainer, GearContainer, FlagContainer, PetContainer
 }
