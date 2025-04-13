@@ -8,7 +8,7 @@ import com.bootcamp.demo.engine.Resources;
 import com.bootcamp.demo.engine.Squircle;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
 import com.bootcamp.demo.engine.widgets.OffsetButton;
-import com.bootcamp.demo.engine.widgets.WidgetsList;
+import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.pages.core.APage;
 
 public class MissionsPage extends APage {
@@ -173,7 +173,7 @@ public class MissionsPage extends APage {
         gearsContainer.setData();
     }
 
-    public static class StatsContainer extends WidgetsList<StatWidget> {
+    public static class StatsContainer extends WidgetsContainer<StatWidget> {
 
         public StatsContainer () {
             super(3);
@@ -194,7 +194,7 @@ public class MissionsPage extends APage {
         }
     }
 
-    private static class TacticalsContainer extends WidgetsList<TacticalWidget> {
+    private static class TacticalsContainer extends WidgetsContainer<TacticalWidget> {
 
         public TacticalsContainer () {
             super(2);
@@ -215,8 +215,7 @@ public class MissionsPage extends APage {
             }
         }
     }
-
-    public static class GearsContainer extends WidgetsList<GearWidget> {
+    public static class GearsContainer extends WidgetsContainer<GearWidget> {
 
         public GearsContainer () {
             super(3);

@@ -45,15 +45,7 @@ public class GameUI extends ScreenAdapter implements Disposable, EventListener {
         // construct
         mainPageCell = rootUI.add().grow();
 
-        playground();
     }
-
-    private void playground () {
-        final Table playground = new Table();
-
-        rootUI.add(playground);
-    }
-
     @Override
     public void render (float delta) {
         if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.L)) {

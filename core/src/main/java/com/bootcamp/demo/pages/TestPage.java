@@ -6,6 +6,5 @@ import com.bootcamp.demo.pages.core.APage;
 public class TestPage extends APage {
     @Override
     protected void constructContent (Table content) {
-
     }
 }
