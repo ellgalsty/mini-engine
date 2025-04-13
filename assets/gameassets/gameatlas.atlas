@@ -15,7 +15,7 @@ basics/white-pixel
   index: -1
 basics/white-squircle-25
   rotate: false
-  xy: 1367, 69
+  xy: 1419, 69
   size: 52, 52
   split: 24, 24, 24, 24
   pad: 0, 0, 0, 0
@@ -33,7 +33,7 @@ basics/white-squircle-35
   index: -1
 basics/white-squircle-border-25
   rotate: false
-  xy: 1421, 69
+  xy: 1473, 69
   size: 52, 52
   split: 24, 24, 24, 24
   pad: 0, 0, 0, 0
@@ -51,9 +51,16 @@ basics/white-squircle-border-35
   index: -1
 ui/atk
   rotate: false
-  xy: 1527, 72
+  xy: 1579, 72
   size: 50, 49
   orig: 50, 49
+  offset: 0, 0
+  index: -1
+ui/capy-loot
+  rotate: false
+  xy: 1367, 66
+  size: 50, 55
+  orig: 50, 55
   offset: 0, 0
   index: -1
 ui/maingears/bloody-grail
@@ -107,7 +114,7 @@ ui/secondarygears/cactus-fighter
   index: -1
 ui/secondarygears/flag
   rotate: false
-  xy: 1475, 71
+  xy: 1527, 71
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
