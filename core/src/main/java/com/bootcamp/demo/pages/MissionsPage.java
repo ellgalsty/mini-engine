@@ -3,6 +3,7 @@ package com.bootcamp.demo.pages;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Resources;
 import com.bootcamp.demo.engine.Squircle;
@@ -36,6 +37,10 @@ public class MissionsPage extends APage {
     private Table constructPowerSegment () {
         final Table powerSegmentInner = new Table();
         powerSegmentInner.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("998272")));
+
+        final Image atkIcon = new Image(Resources.getDrawable("ui/atk"));
+        atkIcon.setScaling(Scaling.fit);
+        powerSegmentInner.add(atkIcon).size(Value.percentHeight(0.75f, powerSegmentInner));
 
         final Table segment = new Table();
         segment.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("fee5d6")));
@@ -91,6 +96,7 @@ public class MissionsPage extends APage {
         // left segment
         final BorderedTable tacticalGearContainer = constructTacticalGearContainer();
         final FlagWidget flagContainer = new FlagWidget();
+        flagContainer.setData();
 
         final Table tacticalFlagContainersWrapper = new Table();
         tacticalFlagContainersWrapper.defaults().space(space).size(WIDGET_SIZE);
@@ -99,13 +105,26 @@ public class MissionsPage extends APage {
         tacticalFlagContainersWrapper.add(flagContainer);
 
         // right segment
-        final BorderedTable animalSegment = constructAnimalSegment();
+        final PetWidget petSegment = new PetWidget();
+        petSegment.setData();
+
+        final Table petButtonSegment = constructPetButtonSegment();
+        petSegment.addActor(petButtonSegment);
 
         // assemble
         final Table segment = new Table();
         segment.defaults().space(space).growX();
         segment.add(tacticalFlagContainersWrapper);
-        segment.add(animalSegment).fillY().width(WIDGET_SIZE);
+        segment.add(petSegment).fillY().width(WIDGET_SIZE);
+        return segment;
+    }
+
+    private Table constructPetButtonSegment () {
+        final OffsetButton petButton = new OffsetButton(OffsetButton.Style.ORANGE_35);
+
+        final Table segment = new Table();
+        segment.setFillParent(true);
+        segment.add(petButton).expand().bottom().growX().height(125);
         return segment;
     }
 
@@ -133,9 +152,26 @@ public class MissionsPage extends APage {
     // TODO: make an enum for slot types(with static values array), make a slot type widget, populate gear slots from slot enum
 
     private Table constructButtonsSegment () {
-        final OffsetButton lootLevelButton = new OffsetButton(OffsetButton.Style.ORANGE_35);
+        final Image lootButtonIcon = new Image(Resources.getDrawable("ui/capy-loot"));
+        lootButtonIcon.setScaling(Scaling.fit);
+        final OffsetButton lootLevelButton = new OffsetButton(OffsetButton.Style.ORANGE_35) {
+            @Override
+            protected void buildInner (Table container) {
+                super.buildInner(container);
+                container.add(lootButtonIcon).size(Value.percentHeight(0.6f, container));
+            }
+        };
+
         final Table lootButton = constructLootButtonSegment();
-        final OffsetButton autoLootButton = new OffsetButton(OffsetButton.Style.GREY_35);
+
+        final Image autoLootIcon = new Image(Resources.getDrawable("ui/capy-loot"));
+        final OffsetButton autoLootButton = new OffsetButton(OffsetButton.Style.GREY_35) {
+            @Override
+            protected void buildInner (Table container) {
+                super.buildInner(container);
+                container.add(autoLootIcon).size(Value.percentHeight(0.6f, container));
+            }
+        };
 
         final Table segment = new Table();
         segment.defaults().bottom().growX().space(35);
@@ -146,22 +182,20 @@ public class MissionsPage extends APage {
     }
 
     private Table constructLootButtonSegment () {
-        final OffsetButton lootButton = new OffsetButton(OffsetButton.Style.GREEN_35);
+        final Image lootButtonIcon = new Image(Resources.getDrawable("ui/capy-loot"));
+        lootButtonIcon.setScaling(Scaling.fit);
+
+        final OffsetButton lootButton = new OffsetButton(OffsetButton.Style.GREEN_35) {
+            @Override
+            protected void buildInner (Table container) {
+                super.buildInner(container);
+                container.add(lootButtonIcon).size(Value.percentHeight(0.6f, container));
+            }
+        };
 
         final Table segment = new Table();
         segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("bcbbba")));
         segment.add(lootButton).expand().height(200).bottom().growX();
-        return segment;
-    }
-
-    private BorderedTable constructAnimalSegment () {
-        final PetWidget animalSegmentButton = new PetWidget();
-        animalSegmentButton.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("deb46e")));
-        animalSegmentButton.setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get("988060")));
-
-        final BorderedTable segment = new BorderedTable(0);
-        segment.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("b29983")));
-        segment.add(animalSegmentButton).expand().bottom().growX().height(100);
         return segment;
     }
 
@@ -202,7 +236,6 @@ public class MissionsPage extends APage {
 
             for (int i = 0; i < 4; i++) {
                 final TacticalWidget tacticalContainer = new TacticalWidget();
-                tacticalContainer.setData();
                 add(tacticalContainer);
             }
         }
@@ -215,6 +248,7 @@ public class MissionsPage extends APage {
             }
         }
     }
+
     public static class GearsContainer extends WidgetsContainer<GearWidget> {
 
         public GearsContainer () {
@@ -223,7 +257,6 @@ public class MissionsPage extends APage {
 
             for (int i = 0; i < 6; i++) {
                 final GearWidget gearContainer = new GearWidget();
-                gearContainer.setData();
                 add(gearContainer);
             }
         }
@@ -257,7 +290,9 @@ public class MissionsPage extends APage {
         }
 
         private void setData () {
-
+            Image icon = new Image(Resources.getDrawable("ui/secondarygears/ice-bubble"));
+            icon.setScaling(Scaling.fit);
+            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
         }
     }
 
@@ -267,7 +302,9 @@ public class MissionsPage extends APage {
         }
 
         private void setData () {
-
+            Image icon = new Image(Resources.getDrawable("ui/maingears/star-palochka"));
+            icon.setScaling(Scaling.fit);
+            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
         }
     }
 
@@ -276,7 +313,9 @@ public class MissionsPage extends APage {
         }
 
         private void setData () {
-
+            Image petIcon = new Image(Resources.getDrawable("ui/secondarygears/susu"));
+            petIcon.setScaling(Scaling.fit);
+            add(petIcon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
         }
     }
 
@@ -285,7 +324,9 @@ public class MissionsPage extends APage {
         }
 
         private void setData () {
-
+            Image flagIcon = new Image(Resources.getDrawable("ui/secondarygears/flag"));
+            flagIcon.setScaling(Scaling.fit);
+            add(flagIcon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
         }
     }
 }
