@@ -13,8 +13,10 @@ import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.pages.core.APage;
 
 public class MissionsPage extends APage {
+
     private static final float STAT_HEIGHT = 50f;
     private static final float WIDGET_SIZE = 225f;
+
     private StatsContainer statsContainer;
     private TacticalsContainer widgetContainer;
     private GearsContainer gearsContainer;
@@ -35,17 +37,17 @@ public class MissionsPage extends APage {
     }
 
     private Table constructPowerSegment () {
-        final Table powerSegmentInner = new Table();
-        powerSegmentInner.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("998272")));
-
         final Image atkIcon = new Image(Resources.getDrawable("ui/atk"));
         atkIcon.setScaling(Scaling.fit);
-        powerSegmentInner.add(atkIcon).size(Value.percentHeight(0.75f, powerSegmentInner));
+
+        // add inner table so that we have a border for the segment
+        final Table inner = new Table();
+        inner.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("998272")));
+        inner.add(atkIcon).size(Value.percentHeight(0.75f, inner));
 
         final Table segment = new Table();
         segment.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("fee5d6")));
-
-        segment.add(powerSegmentInner).expand().bottom().size(690, 115);
+        segment.add(inner).grow().pad(8, 8, 0, 8);
         return segment;
     }
 
