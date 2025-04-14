@@ -3,6 +3,7 @@ package com.bootcamp.demo.pages;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
+import com.bootcamp.demo.data.game.MilitaryGearSlot;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Labels;
 import com.bootcamp.demo.engine.Resources;
@@ -19,8 +20,10 @@ public class MissionsPage extends APage {
     private static final float WIDGET_SIZE = 225f;
 
     private StatsContainer statsContainer;
-    private TacticalsContainer widgetContainer;
+    private TacticalsContainer tacticalGearContainer;
     private GearsContainer gearsContainer;
+    private FlagContainer flagContainer;
+    private PetContainer petContainer;
 
     @Override
     protected void constructContent (Table content) {
@@ -72,10 +75,10 @@ public class MissionsPage extends APage {
         statsContainer = new StatsContainer();
 
         final Table statsInfoButton = new BorderedTable();
-        statsInfoButton.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("f4e7dc")));
+        statsInfoButton.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("f4e7dc")));
 
         final Table segment = new Table();
-        segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("ae9d90")));
+        segment.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("ae9d90")));
         segment.pad(15).defaults().space(25);
         segment.add(statsContainer).growX();
         segment.add(statsInfoButton).size(100);
@@ -97,9 +100,8 @@ public class MissionsPage extends APage {
         final int space = 25;
 
         // left segment
-        final BorderedTable tacticalGearContainer = constructTacticalGearContainer();
-        final FlagWidget flagContainer = new FlagWidget();
-        flagContainer.setData();
+        tacticalGearContainer = new TacticalsContainer();
+        flagContainer = new FlagContainer();
 
         final Table tacticalFlagContainersWrapper = new Table();
         tacticalFlagContainersWrapper.defaults().space(space).size(WIDGET_SIZE);
@@ -108,22 +110,30 @@ public class MissionsPage extends APage {
         tacticalFlagContainersWrapper.add(flagContainer);
 
         // right segment
-        final PetWidget petSegment = new PetWidget();
-        petSegment.setData();
+        petContainer = new PetContainer();
 
         final Table petButtonSegment = constructPetButtonSegment();
-        petSegment.addActor(petButtonSegment);
+        petContainer.addActor(petButtonSegment);
 
         // assemble
         final Table segment = new Table();
         segment.defaults().space(space).growX();
         segment.add(tacticalFlagContainersWrapper);
-        segment.add(petSegment).fillY().width(WIDGET_SIZE);
+        segment.add(petContainer).fillY().width(WIDGET_SIZE);
         return segment;
     }
 
     private Table constructPetButtonSegment () {
-        final OffsetButton petButton = new OffsetButton(OffsetButton.Style.ORANGE_35);
+        final Image buttonImage = new Image(Resources.getDrawable("ui/secondarygears/cactus-fighter"));
+        buttonImage.setScaling(Scaling.fit);
+
+        final OffsetButton petButton = new OffsetButton(OffsetButton.Style.ORANGE_35) {
+            @Override
+            protected void buildInner (Table container) {
+                super.buildInner(container);
+                container.add(buttonImage).size(Value.percentHeight(0.75f, container));
+            }
+        };
 
         final Table segment = new Table();
         segment.setFillParent(true);
@@ -131,29 +141,32 @@ public class MissionsPage extends APage {
         return segment;
     }
 
-    // TODO: 13.04.25 remove this redundant method
-    private BorderedTable constructTacticalGearContainer () {
-        widgetContainer = new TacticalsContainer();
-
-        final BorderedTable container = new BorderedTable();
-        container.add(widgetContainer).grow();
-        return container;
-    }
-
     private Table constructGearSegment () {
-        final Table incompleteSetSegment = new Table();
-        incompleteSetSegment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("a19891")));
+        final Table incompleteSetSegment = constructIncompleteSetSegment();
         gearsContainer = new GearsContainer();
 
         final Table segment = new Table();
-        segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("c8c7c7")));
-        segment.pad(20).defaults().space(15);
+        segment.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("c8c7c7")));
+        segment.pad(15).defaults().space(15);
         segment.add(incompleteSetSegment).height(50).fillX();
         segment.row();
         segment.add(gearsContainer);
         return segment;
     }
-    // TODO: make an enum for slot types(with static values array), make a slot type widget, populate gear slots from slot enum
+
+    private Table constructIncompleteSetSegment () {
+        final BorderedTable setInfoButton = new BorderedTable();
+
+        final Table infoWrapper = new Table();
+        infoWrapper.add(setInfoButton).expand().size(75).right();
+        infoWrapper.setFillParent(true);
+
+        final Table segment = new Table();
+        segment.setBackground(Squircle.SQUIRCLE_15.getDrawable(ColorLibrary.get("a19891")));
+        segment.addActor(infoWrapper);
+
+        return segment;
+    }
 
     private Table constructButtonsSegment () {
         // TODO: 13.04.25 make nested classes for each button
@@ -199,7 +212,7 @@ public class MissionsPage extends APage {
         };
 
         final Table segment = new Table();
-        segment.setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("bcbbba")));
+        segment.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("bcbbba")));
         segment.add(lootButton).expand().height(200).bottom().growX();
         return segment;
     }
@@ -208,8 +221,11 @@ public class MissionsPage extends APage {
     public void show (Runnable onComplete) {
         super.show(onComplete);
         statsContainer.setData();
-        widgetContainer.setData();
+        tacticalGearContainer.setData();
         gearsContainer.setData();
+        flagContainer.setData();
+        petContainer.setData();
+
     }
 
     public static class StatsContainer extends WidgetsContainer<StatWidget> {
@@ -232,42 +248,43 @@ public class MissionsPage extends APage {
         }
     }
 
-    private static class TacticalsContainer extends WidgetsContainer<TacticalWidget> {
+    private static class TacticalsContainer extends WidgetsContainer<TacticalContainer> {
 
         public TacticalsContainer () {
             super(2);
+            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("bab9bb")));
             pad(15).defaults().space(10).grow();
 
             for (int i = 0; i < 4; i++) {
-                final TacticalWidget tacticalContainer = new TacticalWidget();
+                final TacticalContainer tacticalContainer = new TacticalContainer();
                 add(tacticalContainer);
             }
         }
 
         public void setData () {
-            final Array<TacticalWidget> widgets = getWidgets();
+            final Array<TacticalContainer> widgets = getWidgets();
 
-            for (TacticalWidget widget : widgets) {
+            for (TacticalContainer widget : widgets) {
                 widget.setData();
             }
         }
     }
 
-    public static class GearsContainer extends WidgetsContainer<GearWidget> {
+    public static class GearsContainer extends WidgetsContainer<GearContainer> {
 
         public GearsContainer () {
             super(3);
             defaults().space(25).size(WIDGET_SIZE);
 
-            for (int i = 0; i < 6; i++) {
-                final GearWidget gearContainer = new GearWidget();
+            for (MilitaryGearSlot slot : MilitaryGearSlot.values) {
+                final GearContainer gearContainer = new GearContainer(slot);
                 add(gearContainer);
             }
         }
 
         private void setData () {
-            final Array<GearWidget> widgets = getWidgets();
-            for (GearWidget widget : widgets) {
+            final Array<GearContainer> widgets = getWidgets();
+            for (GearContainer widget : widgets) {
                 widget.setData();
             }
         }
@@ -277,7 +294,7 @@ public class MissionsPage extends APage {
         private final Label label;
 
         public StatWidget () {
-            label = Labels.make(GameFont.BOLD_40, ColorLibrary.get("4e4238"));
+            label = Labels.make(GameFont.BOLD_24, ColorLibrary.get("4e4238"));
             add(label);
         }
 
@@ -286,11 +303,10 @@ public class MissionsPage extends APage {
         }
     }
 
-    // TODO: 13.04.25 changed this as an example, do the same for the rest
-    public static class TacticalWidget extends Table {
+    public static class TacticalContainer extends Table {
         private final Image icon;
 
-        public TacticalWidget () {
+        public TacticalContainer () {
             setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("6398c3")));
 
             icon = new Image();
@@ -303,39 +319,109 @@ public class MissionsPage extends APage {
         }
     }
 
-    public static class GearWidget extends BorderedTable {
-        public GearWidget () {
+    public static class GearContainer extends BorderedTable {
+        private final Image icon;
+        private final MilitaryGearSlot slot;
+        private Label levelLabel;
+        private Label rankLabel;
+        private StarsContainer starsContainer;
+        private Table overlay = new Table();
+
+        public GearContainer (MilitaryGearSlot slot) {
+            this.slot = slot;
             setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("6098c0")));
+
+            icon = new Image();
+            icon.setScaling(Scaling.fit);
+            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
+            starsContainer = new StarsContainer();
+            overlay = constructOverlay();
+            addActor(overlay);
         }
 
         private void setData () {
-            Image icon = new Image(Resources.getDrawable("ui/maingears/star-palochka"));
+            icon.setDrawable(Resources.getDrawable("ui/maingears/star-palochka"));
+            levelLabel.setText("Lv.9");
+            rankLabel.setText("A");
+            starsContainer.setData();
+        }
+
+        private Table constructOverlay () {
+            levelLabel = Labels.make(GameFont.BOLD_20, ColorLibrary.get("fef4ee"));
+            rankLabel = Labels.make(GameFont.BOLD_20, ColorLibrary.get("fef4ee"));
+
+
+            final Table segment = new Table();
+            segment.pad(10).defaults().expand();
+            segment.add(starsContainer).top().left();
+            segment.row();
+            segment.add(levelLabel).bottom().left();
+            segment.add(rankLabel).bottom().right();
+            segment.setFillParent(true);
+
+            return segment;
+        }
+    }
+
+    public static class StarsContainer extends WidgetsContainer<StarWidget> {
+        private int starCount = 2;
+
+        public StarsContainer () {
+            super(4);
+            defaults().space(5).size(30);
+            for (int i = 0; i < starCount; i++) {
+                final StarWidget star = new StarWidget();
+                add(star);
+            }
+        }
+
+        private void setData () {
+            final Array<StarWidget> widgets = getWidgets();
+            for (StarWidget star : widgets) {
+                star.setData();
+            }
+        }
+    }
+
+    public static class StarWidget extends Table {
+        private Image star;
+
+        public StarWidget () {
+            star = new Image();
+            add(star).size(30);
+        }
+
+        private void setData () {
+            star.setDrawable(Resources.getDrawable("ui/star"));
+        }
+    }
+
+    public static class PetContainer extends BorderedTable {
+        private final Image icon;
+
+        public PetContainer () {
+            icon = new Image();
             icon.setScaling(Scaling.fit);
             add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
         }
+
+        private void setData () {
+            icon.setDrawable(Resources.getDrawable("ui/secondarygears/susu"));
+        }
     }
 
-    public static class PetWidget extends BorderedTable {
-        public PetWidget () {
+    public static class FlagContainer extends BorderedTable {
+        private final Image icon;
+
+        public FlagContainer () {
+            icon = new Image();
+            icon.setScaling(Scaling.fit);
+            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
+
         }
 
         private void setData () {
-            Image petIcon = new Image(Resources.getDrawable("ui/secondarygears/susu"));
-            petIcon.setScaling(Scaling.fit);
-            add(petIcon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
+            icon.setDrawable(Resources.getDrawable("ui/secondarygears/flag"));
         }
     }
-
-    public static class FlagWidget extends BorderedTable {
-        public FlagWidget () {
-        }
-
-        private void setData () {
-            Image flagIcon = new Image(Resources.getDrawable("ui/secondarygears/flag"));
-            flagIcon.setScaling(Scaling.fit);
-            add(flagIcon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
-        }
-    }
-
-    // TODO: 13.04.25 maybe remove TacticalWidget, GearWidget, FlagWidget, PetWidget into TacticalContainer, GearContainer, FlagContainer, PetContainer
 }
