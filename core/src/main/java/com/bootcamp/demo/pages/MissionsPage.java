@@ -45,9 +45,14 @@ public class MissionsPage extends APage {
         atkIcon.setScaling(Scaling.fit);
 
         // add inner table so that we have a border for the segment
+        final Label label = Labels.make(GameFont.BOLD_28, ColorLibrary.get("fffdfc"));
+        label.setText("30.3m");
+
         final Table inner = new Table();
         inner.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("998272")));
+        inner.defaults().space(20);
         inner.add(atkIcon).size(Value.percentHeight(0.75f, inner));
+        inner.add(label);
 
         final Table segment = new Table();
         segment.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("fee5d6")));
@@ -170,23 +175,34 @@ public class MissionsPage extends APage {
 
     private Table constructButtonsSegment () {
         // TODO: 13.04.25 make nested classes for each button
+        final Label autoLootLabel = Labels.make(GameFont.BOLD_20, ColorLibrary.get("f5f4e9"));
+        autoLootLabel.setText("Lv.7");
+
         final Image lootButtonIcon = new Image(Resources.getDrawable("ui/capy-loot"));
+
         lootButtonIcon.setScaling(Scaling.fit);
         final OffsetButton lootLevelButton = new OffsetButton(OffsetButton.Style.ORANGE_35) {
             @Override
             protected void buildInner (Table container) {
                 super.buildInner(container);
+                container.defaults().expand();
                 container.add(lootButtonIcon).size(Value.percentHeight(0.6f, container));
+                container.add(autoLootLabel).left();
             }
         };
 
         final Table lootButton = constructLootButtonSegment();
+
+        final Label lootButtonLabel = Labels.make(GameFont.BOLD_22, ColorLibrary.get("f3ffe6"));
+        lootButtonLabel.setText("Auto Loot");
 
         final Image autoLootIcon = new Image(Resources.getDrawable("ui/capy-loot"));
         final OffsetButton autoLootButton = new OffsetButton(OffsetButton.Style.GREY_35) {
             @Override
             protected void buildInner (Table container) {
                 super.buildInner(container);
+                container.defaults().expand().right();
+                container.add(lootButtonLabel);
                 container.add(autoLootIcon).size(Value.percentHeight(0.6f, container));
             }
         };
@@ -203,10 +219,15 @@ public class MissionsPage extends APage {
         final Image lootButtonIcon = new Image(Resources.getDrawable("ui/capy-loot"));
         lootButtonIcon.setScaling(Scaling.fit);
 
+        final Label lootButtonLabel = Labels.make(GameFont.BOLD_24, ColorLibrary.get("f3ffe6"));
+        lootButtonLabel.setText("LOOT");
+
         final OffsetButton lootButton = new OffsetButton(OffsetButton.Style.GREEN_35) {
             @Override
             protected void buildInner (Table container) {
                 super.buildInner(container);
+                container.defaults().expand().right();
+                container.add(lootButtonLabel);
                 container.add(lootButtonIcon).size(Value.percentHeight(0.6f, container));
             }
         };
