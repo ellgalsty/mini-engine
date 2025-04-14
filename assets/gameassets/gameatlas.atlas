@@ -13,6 +13,24 @@ basics/white-pixel
   orig: 10, 10
   offset: 0, 0
   index: -1
+basics/white-squircle-15
+  rotate: false
+  xy: 1785, 89
+  size: 32, 32
+  split: 14, 14, 14, 14
+  pad: 0, 0, 0, 0
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+basics/white-squircle-24
+  rotate: false
+  xy: 1579, 71
+  size: 50, 50
+  split: 23, 23, 23, 23
+  pad: 0, 0, 0, 0
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
 basics/white-squircle-25
   rotate: false
   xy: 1419, 69
@@ -29,6 +47,24 @@ basics/white-squircle-35
   split: 34, 34, 34, 34
   pad: 0, 0, 0, 0
   orig: 72, 72
+  offset: 0, 0
+  index: -1
+basics/white-squircle-border-15
+  rotate: false
+  xy: 1819, 89
+  size: 32, 32
+  split: 14, 14, 14, 14
+  pad: 0, 0, 0, 0
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+basics/white-squircle-border-24
+  rotate: false
+  xy: 1631, 71
+  size: 50, 50
+  split: 23, 23, 23, 23
+  pad: 0, 0, 0, 0
+  orig: 50, 50
   offset: 0, 0
   index: -1
 basics/white-squircle-border-25
@@ -51,7 +87,7 @@ basics/white-squircle-border-35
   index: -1
 ui/atk
   rotate: false
-  xy: 1579, 72
+  xy: 1683, 72
   size: 50, 49
   orig: 50, 49
   offset: 0, 0
@@ -152,5 +188,12 @@ ui/secondarygears/vitality-stone
   xy: 205, 12
   size: 100, 109
   orig: 100, 109
+  offset: 0, 0
+  index: -1
+ui/star
+  rotate: false
+  xy: 1735, 75
+  size: 48, 46
+  orig: 48, 46
   offset: 0, 0
   index: -1

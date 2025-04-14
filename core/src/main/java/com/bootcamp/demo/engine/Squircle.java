@@ -9,6 +9,10 @@ public enum Squircle {
     SQUIRCLE_35_BORDER(35, "white-squircle-border"),
     SQUIRCLE_25(25, "white-squircle"),
     SQUIRCLE_25_BORDER(25, "white-squircle-border"),
+    SQUIRCLE_24(24, "white-squircle"),
+    SQUIRCLE_24_BORDER(24, "white-squircle-border"),
+    SQUIRCLE_15(15, "white-squircle"),
+    SQUIRCLE_15_BORDER(15, "white-squircle-border"),
     ;
 
     @Getter
