@@ -49,13 +49,13 @@ public class MissionsPage extends APage {
         label.setText("30.3m");
 
         final Table inner = new Table();
-        inner.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("998272")));
+        inner.setBackground(Squircle.SQUIRCLE_35_TOP.getDrawable(ColorLibrary.get("998272")));
         inner.defaults().space(20);
         inner.add(atkIcon).size(Value.percentHeight(0.75f, inner));
         inner.add(label);
 
         final Table segment = new Table();
-        segment.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("fee5d6")));
+        segment.setBackground(Squircle.SQUIRCLE_35_TOP.getDrawable(ColorLibrary.get("fee5d6")));
         segment.add(inner).grow().pad(8, 8, 0, 8);
         return segment;
     }
@@ -328,7 +328,7 @@ public class MissionsPage extends APage {
         private final Image icon;
 
         public TacticalContainer () {
-            setBackground(Resources.getDrawable("basics/white-squircle-35", ColorLibrary.get("6398c3")));
+            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("6398c3")));
 
             icon = new Image();
             icon.setScaling(Scaling.fit);
