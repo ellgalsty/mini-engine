@@ -24,6 +24,9 @@ public class MissionsPage extends APage {
     private GearsContainer gearsContainer;
     private FlagContainer flagContainer;
     private PetContainer petContainer;
+    private LootLevelButton lootLevelButton;
+    private LootButton lootButton;
+    private AutoLootButton autoLootButton;
 
     @Override
     protected void constructContent (Table content) {
@@ -174,68 +177,113 @@ public class MissionsPage extends APage {
     }
 
     private Table constructButtonsSegment () {
-        // TODO: 13.04.25 make nested classes for each button
-        final Label autoLootLabel = Labels.make(GameFont.BOLD_20, ColorLibrary.get("f5f4e9"));
-        autoLootLabel.setText("Lv.7");
+        lootLevelButton = new LootLevelButton();
+        lootButton = new LootButton();
+        autoLootButton = new AutoLootButton();
 
-        final Image lootButtonIcon = new Image(Resources.getDrawable("ui/capy-loot"));
-
-        lootButtonIcon.setScaling(Scaling.fit);
-        final OffsetButton lootLevelButton = new OffsetButton(OffsetButton.Style.ORANGE_35) {
-            @Override
-            protected void buildInner (Table container) {
-                super.buildInner(container);
-                container.defaults().expand();
-                container.add(lootButtonIcon).size(Value.percentHeight(0.6f, container));
-                container.add(autoLootLabel).left();
-            }
-        };
-
-        final Table lootButton = constructLootButtonSegment();
-
-        final Label lootButtonLabel = Labels.make(GameFont.BOLD_22, ColorLibrary.get("f3ffe6"));
-        lootButtonLabel.setText("Auto Loot");
-
-        final Image autoLootIcon = new Image(Resources.getDrawable("ui/capy-loot"));
-        final OffsetButton autoLootButton = new OffsetButton(OffsetButton.Style.GREY_35) {
-            @Override
-            protected void buildInner (Table container) {
-                super.buildInner(container);
-                container.defaults().expand().right();
-                container.add(lootButtonLabel);
-                container.add(autoLootIcon).size(Value.percentHeight(0.6f, container));
-            }
-        };
+        final Table lootButtonWrapper = new Table();
+        lootButtonWrapper.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("bebab8")));
+        lootButtonWrapper.add(lootButton).height(200).growX().expand().bottom();
 
         final Table segment = new Table();
-        segment.defaults().bottom().growX().space(35);
+        segment.defaults().uniform().bottom().growX().space(35);
         segment.add(lootLevelButton).height(200);
-        segment.add(lootButton).height(300);
+        segment.add(lootButtonWrapper).height(300);
         segment.add(autoLootButton).height(200);
         return segment;
     }
 
-    private Table constructLootButtonSegment () {
-        final Image lootButtonIcon = new Image(Resources.getDrawable("ui/capy-loot"));
-        lootButtonIcon.setScaling(Scaling.fit);
+    public static class LootLevelButton extends OffsetButton {
+        private Label handleLevelLabel;
+        private Label gripLevelLabel;
+        private final Image lootIcon;
+        private Table handleGripLevelWrapper;
 
-        final Label lootButtonLabel = Labels.make(GameFont.BOLD_24, ColorLibrary.get("f3ffe6"));
-        lootButtonLabel.setText("LOOT");
+        public  LootLevelButton () {
+            handleLevelLabel = Labels.make(GameFont.BOLD_20, ColorLibrary.get("fffae3"));
+            gripLevelLabel = Labels.make(GameFont.BOLD_20, ColorLibrary.get("fffae3"));
+            lootIcon = new Image();
 
-        final OffsetButton lootButton = new OffsetButton(OffsetButton.Style.GREEN_35) {
-            @Override
-            protected void buildInner (Table container) {
-                super.buildInner(container);
-                container.defaults().expand().right();
-                container.add(lootButtonLabel);
-                container.add(lootButtonIcon).size(Value.percentHeight(0.6f, container));
-            }
-        };
+            final Table handleLevelSegment = new Table();
+            handleLevelSegment.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("987f59")));
+            handleLevelSegment.add(handleLevelLabel).expand().center();
 
-        final Table segment = new Table();
-        segment.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("bcbbba")));
-        segment.add(lootButton).expand().height(200).bottom().growX();
-        return segment;
+            final Table gripLevelSegment = new Table();
+            gripLevelSegment.setBackground(Squircle.SQUIRCLE_25.getDrawable(ColorLibrary.get("987f59")));
+            gripLevelSegment.add(gripLevelLabel).expand().center();
+
+            handleGripLevelWrapper = new Table();
+            handleGripLevelWrapper.defaults().grow().space(10);
+            handleGripLevelWrapper.add(handleLevelSegment);
+            handleGripLevelWrapper.row();
+            handleGripLevelWrapper.add(gripLevelSegment);
+
+            build(OffsetButton.Style.ORANGE_35);
+        }
+        @Override
+        protected void buildInner (Table container) {
+            super.buildInner(container);
+            container.pad(20).defaults().space(20);
+            container.add(lootIcon).size(Value.percentHeight(0.5f, container)).padLeft(25);
+            container.add(handleGripLevelWrapper).grow().padRight(20);
+        }
+
+        public void setData () {
+            handleLevelLabel.setText("Lv.7");
+            gripLevelLabel.setText("Lv.3");
+            lootIcon.setDrawable(Resources.getDrawable("ui/capy-loot"));
+        }
+    }
+
+    // TODO: basically LootButton and AutoLootButton are the same, with different data,
+    //  so when we have actual data we will deal accordingly:)
+    public static class LootButton extends OffsetButton {
+        private final Label label;
+        private final Image lootIcon;
+
+        public LootButton () {
+            label = Labels.make(GameFont.BOLD_22, ColorLibrary.get("fffae3"));
+            lootIcon = new Image();
+
+            build(Style.GREEN_35);
+        }
+        @Override
+        protected void buildInner (Table container) {
+            super.buildInner(container);
+            container.pad(20).defaults().expand().right();
+            container.add(label);
+            container.add(lootIcon).size(Value.percentHeight(0.5f, container));
+        }
+
+        public void setData () {
+            label.setText("LOOT");
+            lootIcon.setDrawable(Resources.getDrawable("ui/capy-loot"));
+        }
+    }
+
+    public static class AutoLootButton extends OffsetButton {
+        private final Label label;
+        private final Image lootIcon;
+
+        public AutoLootButton () {
+            label = Labels.make(GameFont.BOLD_22, ColorLibrary.get("fffae3"));
+            lootIcon = new Image();
+
+            build(Style.GREY_35);
+        }
+
+        @Override
+        protected void buildInner (Table container) {
+            super.buildInner(container);
+            container.pad(20);
+            container.add(label);
+            container.add(lootIcon).size(Value.percentHeight(0.5f, container));
+        }
+
+        public void setData () {
+            label.setText("Auto Loot");
+            lootIcon.setDrawable(Resources.getDrawable("ui/capy-loot"));
+        }
     }
 
     @Override
@@ -246,7 +294,9 @@ public class MissionsPage extends APage {
         gearsContainer.setData();
         flagContainer.setData();
         petContainer.setData();
-
+        lootLevelButton.setData();
+        lootButton.setData();
+        autoLootButton.setData();
     }
 
     public static class StatsContainer extends WidgetsContainer<StatWidget> {

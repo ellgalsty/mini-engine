@@ -10,12 +10,16 @@ public class GameData {
 
     @Getter
     private final MilitaryGearsGameData militaryGearsGameData;
+    @Getter
+    private final TacticalsGameData tacticalsGameData;
 
     public GameData () {
         militaryGearsGameData = new MilitaryGearsGameData();
+        tacticalsGameData = new TacticalsGameData();
     }
 
     public void load () {
         militaryGearsGameData.load(xmlReader.parse(Gdx.files.internal("data/military-gear.xml")));
+        tacticalsGameData.load(xmlReader.parse(Gdx.files.internal("data/tacticals.xml")));
     }
 }
