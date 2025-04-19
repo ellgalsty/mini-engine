@@ -6,7 +6,7 @@ import com.bootcamp.demo.data.game.Rarity;
 import lombok.Getter;
 import lombok.Setter;
 
-public class MilitaryGearSaveData implements Json.Serializable {
+public class TacticalSaveData implements Json.Serializable {
 
     @Getter @Setter
     private String name;

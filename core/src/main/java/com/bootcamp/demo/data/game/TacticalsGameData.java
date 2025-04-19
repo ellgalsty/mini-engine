@@ -3,17 +3,21 @@ package com.bootcamp.demo.data.game;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
+import lombok.Getter;
 
 public class TacticalsGameData implements IGameData {
 
-    private ObjectMap<String, TacticalsGameData> militaryGearsSlotMap;
+    @Getter
+    private final ObjectMap<String, TacticalGameData> tacticals = new ObjectMap<>();
 
-    // tacticals list
     @Override
     public void load (XmlReader.Element rootXml) {
+        tacticals.clear();
         final Array<XmlReader.Element> tacticalsXml = rootXml.getChildrenByName("tactical");
-        for(final XmlReader.Element tacticalXml : tacticalsXml) {
-
+        for (XmlReader.Element tacticalXml : tacticalsXml) {
+            final TacticalGameData tacticalGameData = new TacticalGameData();
+            tacticalGameData.load(tacticalXml);
+            tacticals.put(tacticalGameData.getName(), tacticalGameData);
         }
     }
 }

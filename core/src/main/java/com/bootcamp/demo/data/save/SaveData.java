@@ -5,5 +5,5 @@ import lombok.Getter;
 public class SaveData {
 
     @Getter
-    private final EquippedMilitaryGearsSaveData equippedMilitaryGearsSaveData = new EquippedMilitaryGearsSaveData();
+    private final TacticalsSaveData tacticalsSaveData = new TacticalsSaveData();
 }
