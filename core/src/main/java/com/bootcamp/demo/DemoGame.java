@@ -6,9 +6,10 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.*;
 import com.bootcamp.demo.data.game.GameData;
+import com.bootcamp.demo.data.game.Rarity;
+import com.bootcamp.demo.data.save.MilitaryGearSaveData;
 import com.bootcamp.demo.data.save.SaveData;
 import com.bootcamp.demo.data.save.TacticalSaveData;
-import com.bootcamp.demo.data.save.TacticalsSaveData;
 import com.bootcamp.demo.events.GameStartedEvent;
 import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.events.core.EventModule;
@@ -28,8 +29,21 @@ public class DemoGame extends Game {
         final TacticalSaveData tacticalsSaveData = new TacticalSaveData();
         tacticalsSaveData.setName("present");
         tacticalsSaveData.setLevel(3);
+        tacticalsSaveData.setPower(750);
+        tacticalsSaveData.setRarity(Rarity.EPIC);
+        tacticalsSaveData.setStarCount(2);
+
+        final MilitaryGearSaveData militaryGearSaveData = new MilitaryGearSaveData();
+        militaryGearSaveData.setName("bloody-grail");
+        militaryGearSaveData.setLevel(5);
+        militaryGearSaveData.setPower(490);
+        militaryGearSaveData.setRarity(Rarity.RARE);
+        militaryGearSaveData.setStarCount(2);
+        militaryGearSaveData.setRank("A");
+
 
         API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(0, tacticalsSaveData);
+        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(0, militaryGearSaveData);
         savePlayerData();
 
         setScreen(new GameScreen());

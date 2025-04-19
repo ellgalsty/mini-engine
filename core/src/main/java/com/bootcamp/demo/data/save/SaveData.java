@@ -6,4 +6,6 @@ public class SaveData {
 
     @Getter
     private final TacticalsSaveData tacticalsSaveData = new TacticalsSaveData();
+    @Getter
+    private final MilitaryGearsSaveData militaryGearsSaveData = new MilitaryGearsSaveData();
 }

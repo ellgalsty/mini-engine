@@ -2,8 +2,13 @@ package com.bootcamp.demo.pages;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
+import com.bootcamp.demo.data.game.GameData;
+import com.bootcamp.demo.data.game.MilitaryGearGameData;
 import com.bootcamp.demo.data.game.MilitaryGearSlot;
+import com.bootcamp.demo.data.game.TacticalGameData;
+import com.bootcamp.demo.data.save.*;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Labels;
 import com.bootcamp.demo.engine.Resources;
@@ -12,6 +17,7 @@ import com.bootcamp.demo.engine.widgets.BorderedTable;
 import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.localization.GameFont;
+import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.pages.core.APage;
 
 public class MissionsPage extends APage {
@@ -199,7 +205,7 @@ public class MissionsPage extends APage {
         private final Image lootIcon;
         private Table handleGripLevelWrapper;
 
-        public  LootLevelButton () {
+        public LootLevelButton () {
             handleLevelLabel = Labels.make(GameFont.BOLD_20, ColorLibrary.get("fffae3"));
             gripLevelLabel = Labels.make(GameFont.BOLD_20, ColorLibrary.get("fffae3"));
             lootIcon = new Image();
@@ -220,6 +226,7 @@ public class MissionsPage extends APage {
 
             build(OffsetButton.Style.ORANGE_35);
         }
+
         @Override
         protected void buildInner (Table container) {
             super.buildInner(container);
@@ -247,6 +254,7 @@ public class MissionsPage extends APage {
 
             build(Style.GREEN_35);
         }
+
         @Override
         protected void buildInner (Table container) {
             super.buildInner(container);
@@ -289,9 +297,10 @@ public class MissionsPage extends APage {
     @Override
     public void show (Runnable onComplete) {
         super.show(onComplete);
+        final SaveData saveData = API.get(SaveData.class);
         statsContainer.setData();
-        tacticalGearContainer.setData();
-        gearsContainer.setData();
+        tacticalGearContainer.setData(saveData.getTacticalsSaveData());
+        gearsContainer.setData(saveData.getMilitaryGearsSaveData());
         flagContainer.setData();
         petContainer.setData();
         lootLevelButton.setData();
@@ -332,11 +341,14 @@ public class MissionsPage extends APage {
             }
         }
 
-        public void setData () {
+        public void setData (TacticalsSaveData tacticalsSaveData) {
             final Array<TacticalContainer> widgets = getWidgets();
 
-            for (TacticalContainer widget : widgets) {
-                widget.setData();
+            for (int i = 0; i < widgets.size; i++) {
+                final TacticalContainer widget = widgets.get(i);
+                final TacticalSaveData tacticalSaveData = tacticalsSaveData.getTacticals().get(i);
+
+                widget.setData(tacticalSaveData);
             }
         }
     }
@@ -353,10 +365,14 @@ public class MissionsPage extends APage {
             }
         }
 
-        private void setData () {
+        private void setData (@Null MilitaryGearsSaveData militaryGearsSaveData) {
             final Array<GearContainer> widgets = getWidgets();
-            for (GearContainer widget : widgets) {
-                widget.setData();
+
+            for (int i = 0; i < widgets.size; i++) {
+                final GearContainer widget = widgets.get(i);
+                final MilitaryGearSaveData militarySaveData = militaryGearsSaveData.getMilitaryGears().get(i);
+
+                widget.setData(militarySaveData);
             }
         }
     }
@@ -385,7 +401,16 @@ public class MissionsPage extends APage {
             add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
         }
 
-        private void setData () {
+        private void setData (@Null TacticalSaveData tacticalSaveData) {
+            if (tacticalSaveData == null) {
+                setEmpty();
+                return;
+            }
+            final TacticalGameData tacticalGameData = API.get(GameData.class).getTacticalsGameData().getTacticals().get(tacticalSaveData.getName());
+            icon.setDrawable(tacticalGameData.getIcon());
+        }
+
+        private void setEmpty () {
             icon.setDrawable(Resources.getDrawable("ui/secondarygears/ice-bubble"));
         }
     }
@@ -395,8 +420,7 @@ public class MissionsPage extends APage {
         private final MilitaryGearSlot slot;
         private Label levelLabel;
         private Label rankLabel;
-        private StarsContainer starsContainer;
-        private Table overlay = new Table();
+        private final StarsContainer starsContainer;
 
         public GearContainer (MilitaryGearSlot slot) {
             this.slot = slot;
@@ -406,15 +430,26 @@ public class MissionsPage extends APage {
             icon.setScaling(Scaling.fit);
             add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
             starsContainer = new StarsContainer();
-            overlay = constructOverlay();
+            final Table overlay = constructOverlay();
             addActor(overlay);
         }
 
-        private void setData () {
+        private void setData (MilitaryGearSaveData militaryGearSaveData) {
+            if (militaryGearSaveData == null) {
+                setEmptyGear();
+                return;
+            }
+            final MilitaryGearGameData militaryGameData = API.get(GameData.class).getMilitaryGearsGameData().getMilitarySlotsWithGears().get(slot).get(militaryGearSaveData.getName());
+            icon.setDrawable(militaryGameData.getIcon());
+            levelLabel.setText("Lv. " + militaryGearSaveData.getLevel());
+            rankLabel.setText(militaryGearSaveData.getRank());
+            starsContainer.setData(militaryGearSaveData.getStarCount());
+        }
+
+        private void setEmptyGear () {
             icon.setDrawable(Resources.getDrawable("ui/maingears/star-palochka"));
-            levelLabel.setText("Lv.9");
-            rankLabel.setText("A");
-            starsContainer.setData();
+            levelLabel.setText("");
+            rankLabel.setText("");
         }
 
         private Table constructOverlay () {
@@ -435,7 +470,7 @@ public class MissionsPage extends APage {
     }
 
     public static class StarsContainer extends WidgetsContainer<StarWidget> {
-        private int starCount = 2;
+        private int starCount;
 
         public StarsContainer () {
             super(4);
@@ -446,7 +481,8 @@ public class MissionsPage extends APage {
             }
         }
 
-        private void setData () {
+        private void setData (int starCount) {
+            this.starCount = starCount;
             final Array<StarWidget> widgets = getWidgets();
             for (StarWidget star : widgets) {
                 star.setData();

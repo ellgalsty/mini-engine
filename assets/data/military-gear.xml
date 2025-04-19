@@ -1,20 +1,20 @@
 <root>
     <weapon>
-        <item name="night-vision" title="Night Vision" icon="icons/ui-mission-item-night-vision" rarity="rare" type="weapon"/>
+        <item name="bloody-grail" title="Night Vision" icon="ui/maingears/bloody-grail" type="weapon"/>
     </weapon>
     <melee>
-        <item name="night-vision" title="Night Vision" icon="icons/ui-mission-item-night-vision" rarity="rare" type="weapon"/>
+        <item name="hard-armor" title="Night Vision" icon="ui/maingears/hard-armor" type="melee"/>
     </melee>
     <head>
-        <item name="night-vision" title="Night Vision" icon="icons/ui-mission-item-night-vision" rarity="rare" type="weapon"/>
+        <item name="revival-cape" title="Night Vision" icon="ui/maingears/revival-cape" type="head"/>
     </head>
     <body>
-        <item name="night-vision" title="Night Vision" icon="icons/ui-mission-item-night-vision" rarity="rare" type="weapon"/>
+        <item name="skyflame-crown" title="Night Vision" icon="ui/maingears/skyflame-crown" type="body"/>
     </body>
     <gloves>
-        <item name="night-vision" title="Night Vision" icon="icons/ui-mission-item-night-vision" rarity="rare" type="weapon"/>
+        <item name="star-palochka" title="Night Vision" icon="ui/maingears/star-palochka" type="gloves"/>
     </gloves>
     <shoes>
-        <item name="night-vision" title="Night Vision" icon="icons/ui-mission-item-night-vision" rarity="rare" type="weapon"/>
+        <item name="warriors-blade" title="Night Vision" icon="ui/maingears/warriors-blade" type="shoes"/>
     </shoes>
 </root>

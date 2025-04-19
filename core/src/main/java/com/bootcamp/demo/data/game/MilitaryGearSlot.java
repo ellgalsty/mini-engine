@@ -5,7 +5,7 @@ public enum MilitaryGearSlot {
     MELEE,
     HEAD,
     BODY,
-    GLOVE,
+    GLOVES,
     SHOES;
 
     public static final MilitaryGearSlot[] values = values();
