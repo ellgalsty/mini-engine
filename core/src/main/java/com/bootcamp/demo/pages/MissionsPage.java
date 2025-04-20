@@ -382,6 +382,7 @@ public class MissionsPage extends APage {
     public static class StatWidget extends Table {
         private final Label label;
         private final int defaultValue = 0;
+        private int currentValue;
 
         public StatWidget () {
             label = Labels.make(GameFont.BOLD_20, ColorLibrary.get("4e4238"));
@@ -390,22 +391,18 @@ public class MissionsPage extends APage {
 
         private void setData (@Null StatData statData) {
             if (statData == null) {
-                setEmpty();
                 return;
             }
+            currentValue += statData.getStatNumber();
             if (statData.getType() == StatType.NUMBER) {
-                label.setText(statData.getStat() + ": " + statData.getStatNumber() + "k");
+                label.setText(statData.getStat() + ": " + currentValue + "k");
             } else {
-                label.setText(statData.getStat() + ": " + statData.getStatNumber() + "%");
+                label.setText(statData.getStat() + ": " + currentValue + "%");
             }
         }
 
         private void setEmptyData (Stat stat) {
-            label.setText(stat + ": " + defaultValue);
-        }
-
-        private void setEmpty () {
-            label.setText("0");
+            label.setText(stat + ": " + defaultValue + "%");
         }
     }
 
