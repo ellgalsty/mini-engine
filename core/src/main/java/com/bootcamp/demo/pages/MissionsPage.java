@@ -2,10 +2,7 @@ package com.bootcamp.demo.pages;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.*;
-import com.bootcamp.demo.data.Stat;
-import com.bootcamp.demo.data.StatData;
-import com.bootcamp.demo.data.StatType;
-import com.bootcamp.demo.data.StatsData;
+import com.bootcamp.demo.data.*;
 import com.bootcamp.demo.data.game.*;
 import com.bootcamp.demo.data.save.*;
 import com.bootcamp.demo.engine.ColorLibrary;
@@ -299,7 +296,7 @@ public class MissionsPage extends APage {
         statsContainer.setData(statsData);
         tacticalGearContainer.setData(saveData.getTacticalsSaveData());
         gearsContainer.setData(saveData.getMilitaryGearsSaveData());
-        flagContainer.setData();
+        flagContainer.setData(saveData.getFlagsSaveData());
         petContainer.setData(saveData.getPetsSaveData());
         lootLevelButton.setData();
         lootButton.setData();
@@ -558,8 +555,17 @@ public class MissionsPage extends APage {
 
         }
 
-        private void setData () {
-            icon.setDrawable(Resources.getDrawable("ui/secondarygears/flag"));
+        private void setData (FlagsSaveData flagsSaveData) {
+            if (flagsSaveData == null) {
+                setEmpty();
+                return;
+            }
+            for (IntMap.Entry<FlagSaveData> flagSaveData : flagsSaveData.getFlags()) {
+                if (flagSaveData.value.isEquipped()) {
+                    final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(flagSaveData.value.getName());
+                    icon.setDrawable(flagGameData.getIcon());
+                }
+            }
         }
     }
 }

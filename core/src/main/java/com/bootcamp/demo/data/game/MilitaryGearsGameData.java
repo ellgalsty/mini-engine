@@ -3,6 +3,7 @@ package com.bootcamp.demo.data.game;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
+import com.bootcamp.demo.data.MilitaryGearSlot;
 import lombok.Getter;
 
 import java.util.Locale;

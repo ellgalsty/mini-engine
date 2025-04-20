@@ -2,7 +2,7 @@ package com.bootcamp.demo.data.save;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.bootcamp.demo.data.game.Rarity;
+import com.bootcamp.demo.data.Rarity;
 import lombok.Getter;
 import lombok.Setter;
 

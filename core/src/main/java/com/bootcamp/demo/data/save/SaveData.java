@@ -10,4 +10,6 @@ public class SaveData {
     private final MilitaryGearsSaveData militaryGearsSaveData = new MilitaryGearsSaveData();
     @Getter
     private final PetsSaveData petsSaveData = new PetsSaveData();
+    @Getter
+    private final FlagsSaveData flagsSaveData = new FlagsSaveData();
 }

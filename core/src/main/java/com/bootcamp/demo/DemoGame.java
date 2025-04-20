@@ -10,11 +10,8 @@ import com.bootcamp.demo.data.StatData;
 import com.bootcamp.demo.data.StatType;
 import com.bootcamp.demo.data.StatsData;
 import com.bootcamp.demo.data.game.GameData;
-import com.bootcamp.demo.data.game.Rarity;
-import com.bootcamp.demo.data.save.MilitaryGearSaveData;
-import com.bootcamp.demo.data.save.PetSaveData;
-import com.bootcamp.demo.data.save.SaveData;
-import com.bootcamp.demo.data.save.TacticalSaveData;
+import com.bootcamp.demo.data.Rarity;
+import com.bootcamp.demo.data.save.*;
 import com.bootcamp.demo.events.GameStartedEvent;
 import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.events.core.EventModule;
@@ -61,10 +58,18 @@ public class DemoGame extends Game {
         petSaveData.setStarCount(2);
         petSaveData.setEquipped(true);
 
+        final FlagSaveData flagSaveData = new FlagSaveData();
+        flagSaveData.setName("flash-flag");
+        flagSaveData.setLevel(3);
+        flagSaveData.setRarity(Rarity.RARE);
+        flagSaveData.setStarCount(1);
+        flagSaveData.setEquipped(true);
+
         API.get(StatsData.class).getStats().put(0, statData);
         API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(0, tacticalsSaveData);
         API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(0, militaryGearSaveData);
         API.get(SaveData.class).getPetsSaveData().getPets().put(0, petSaveData);
+        API.get(SaveData.class).getFlagsSaveData().getFlags().put(0, flagSaveData);
         savePlayerData();
 
         setScreen(new GameScreen());

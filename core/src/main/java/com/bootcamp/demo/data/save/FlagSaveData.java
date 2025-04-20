@@ -6,37 +6,33 @@ import com.bootcamp.demo.data.Rarity;
 import lombok.Getter;
 import lombok.Setter;
 
-public class MilitaryGearSaveData implements Json.Serializable {
+public class FlagSaveData implements Json.Serializable {
     @Getter @Setter
     private String name;
     @Getter @Setter
     private int level;
     @Getter @Setter
-    private int power;
-    @Getter @Setter
     private Rarity rarity;
     @Getter @Setter
     private int starCount;
     @Getter @Setter
-    private String rank;
+    private boolean equipped;
 
     @Override
     public void write (Json json) {
         json.writeValue("n", name);
         json.writeValue("l", level);
-        json.writeValue("p", power);
         json.writeValue("r", rarity);
         json.writeValue("s", starCount);
-        json.writeValue("rk", rank);
+        json.writeValue("e", equipped);
     }
 
     @Override
-    public void read (Json json, JsonValue jsonValue) {
-        name = jsonValue.getString("n");
-        level = jsonValue.getInt("l");
-        power = jsonValue.getInt("p");
-        rarity = Rarity.valueOf(jsonValue.getString("r"));
-        starCount = jsonValue.getInt("s");
-        rank = jsonValue.getString("rk");
+    public void read (Json json, JsonValue jsonData) {
+        name = jsonData.getString("n");
+        level = jsonData.getInt("l");
+        rarity = Rarity.valueOf(jsonData.getString("r"));
+        starCount = jsonData.getInt("s");
+        equipped = jsonData.getBoolean("e");
     }
 }
