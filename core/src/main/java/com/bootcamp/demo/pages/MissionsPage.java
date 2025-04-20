@@ -489,21 +489,16 @@ public class MissionsPage extends APage {
     }
 
     public static class StarsContainer extends WidgetsContainer<StarWidget> {
-        private int starCount;
-
         public StarsContainer () {
             super(4);
             defaults().space(5).size(30);
-            for (int i = 0; i < starCount; i++) {
-                final StarWidget star = new StarWidget();
-                add(star);
-            }
         }
 
         private void setData (int starCount) {
-            this.starCount = starCount;
-            final Array<StarWidget> widgets = getWidgets();
-            for (StarWidget star : widgets) {
+            freeChildren();
+            for (int i = 0; i < starCount; i++) {
+                final StarWidget star = Pools.obtain(StarWidget.class);
+                add(star);
                 star.setData();
             }
         }
