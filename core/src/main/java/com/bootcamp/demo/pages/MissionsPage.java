@@ -1,13 +1,12 @@
 package com.bootcamp.demo.pages;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Null;
-import com.badlogic.gdx.utils.Scaling;
-import com.bootcamp.demo.data.game.GameData;
-import com.bootcamp.demo.data.game.MilitaryGearGameData;
-import com.bootcamp.demo.data.game.MilitaryGearSlot;
-import com.bootcamp.demo.data.game.TacticalGameData;
+import com.badlogic.gdx.utils.*;
+import com.bootcamp.demo.data.Stat;
+import com.bootcamp.demo.data.StatData;
+import com.bootcamp.demo.data.StatType;
+import com.bootcamp.demo.data.StatsData;
+import com.bootcamp.demo.data.game.*;
 import com.bootcamp.demo.data.save.*;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Labels;
@@ -21,8 +20,6 @@ import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.pages.core.APage;
 
 public class MissionsPage extends APage {
-
-    private static final float STAT_HEIGHT = 50f;
     private static final float WIDGET_SIZE = 225f;
 
     private StatsContainer statsContainer;
@@ -298,32 +295,40 @@ public class MissionsPage extends APage {
     public void show (Runnable onComplete) {
         super.show(onComplete);
         final SaveData saveData = API.get(SaveData.class);
-        statsContainer.setData();
+        final StatsData statsData = API.get(StatsData.class);
+        statsContainer.setData(statsData);
         tacticalGearContainer.setData(saveData.getTacticalsSaveData());
         gearsContainer.setData(saveData.getMilitaryGearsSaveData());
         flagContainer.setData();
-        petContainer.setData();
+        petContainer.setData(saveData.getPetsSaveData());
         lootLevelButton.setData();
         lootButton.setData();
         autoLootButton.setData();
     }
 
     public static class StatsContainer extends WidgetsContainer<StatWidget> {
+        private ObjectMap<Stat, StatWidget> stats = new ObjectMap<>();
 
         public StatsContainer () {
             super(3);
-            defaults().space(25).growX().height(STAT_HEIGHT);
+            padLeft(50).defaults().space(25).expand().left();
 
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < Stat.values.length; i++) {
                 final StatWidget statContainer = new StatWidget();
                 add(statContainer);
+                stats.put(Stat.values[i], statContainer);
             }
         }
 
-        public void setData () {
-            final Array<StatWidget> widgets = getWidgets();
-            for (StatWidget widget : widgets) {
-                widget.setData();
+        public void setData (StatsData statsData) {
+            for (IntMap.Entry<StatData> statData : statsData.getStats()) {
+                final StatWidget widget = stats.get(statData.value.getStat());
+                widget.setData(statData.value);
+            }
+            for (ObjectMap.Entry<Stat, StatWidget> statEntry : stats) {
+                if (statEntry.value.label.getText().isEmpty()) {
+                    statEntry.value.setEmptyData(statEntry.key);
+                }
             }
         }
     }
@@ -379,14 +384,31 @@ public class MissionsPage extends APage {
 
     public static class StatWidget extends Table {
         private final Label label;
+        private final int defaultValue = 0;
 
         public StatWidget () {
-            label = Labels.make(GameFont.BOLD_24, ColorLibrary.get("4e4238"));
+            label = Labels.make(GameFont.BOLD_20, ColorLibrary.get("4e4238"));
             add(label);
         }
 
-        private void setData () {
-            label.setText("Power: 124k");
+        private void setData (@Null StatData statData) {
+            if (statData == null) {
+                setEmpty();
+                return;
+            }
+            if (statData.getType() == StatType.NUMBER) {
+                label.setText(statData.getStat() + ": " + statData.getStatNumber() + "k");
+            } else {
+                label.setText(statData.getStat() + ": " + statData.getStatNumber() + "%");
+            }
+        }
+
+        private void setEmptyData (Stat stat) {
+            label.setText(stat + ": " + defaultValue);
+        }
+
+        private void setEmpty () {
+            label.setText("0");
         }
     }
 
@@ -512,8 +534,17 @@ public class MissionsPage extends APage {
             add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
         }
 
-        private void setData () {
-            icon.setDrawable(Resources.getDrawable("ui/secondarygears/susu"));
+        private void setData (@Null PetsSaveData petsSaveData) {
+            if (petsSaveData == null) {
+                setEmpty();
+                return;
+            }
+            for (IntMap.Entry<PetSaveData> petSaveData : petsSaveData.getPets()) {
+                if (petSaveData.value.isEquipped()) {
+                    final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPets().get(petSaveData.value.getName());
+                    icon.setDrawable(petGameData.getIcon());
+                }
+            }
         }
     }
 

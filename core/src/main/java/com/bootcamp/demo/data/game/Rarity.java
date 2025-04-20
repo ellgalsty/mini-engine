@@ -5,5 +5,7 @@ public enum Rarity {
     RARE,
     EPIC,
     LEGENDARY,
-    EXOTIC,
+    EXOTIC;
+
+    public static final Rarity[] values = Rarity.values();
 }

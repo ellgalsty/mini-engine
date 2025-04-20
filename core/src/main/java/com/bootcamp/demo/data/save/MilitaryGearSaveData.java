@@ -27,7 +27,7 @@ public class MilitaryGearSaveData implements Json.Serializable {
         json.writeValue("p", power);
         json.writeValue("r", rarity);
         json.writeValue("s", starCount);
-        json.writeValue("ra", rank);
+        json.writeValue("rk", rank);
     }
 
     @Override
@@ -37,6 +37,6 @@ public class MilitaryGearSaveData implements Json.Serializable {
         power = jsonValue.getInt("p");
         rarity = Rarity.valueOf(jsonValue.getString("r"));
         starCount = jsonValue.getInt("s");
-        rank = jsonValue.getString("ra");
+        rank = jsonValue.getString("rk");
     }
 }

@@ -5,9 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.*;
+import com.bootcamp.demo.data.Stat;
+import com.bootcamp.demo.data.StatData;
+import com.bootcamp.demo.data.StatType;
+import com.bootcamp.demo.data.StatsData;
 import com.bootcamp.demo.data.game.GameData;
 import com.bootcamp.demo.data.game.Rarity;
 import com.bootcamp.demo.data.save.MilitaryGearSaveData;
+import com.bootcamp.demo.data.save.PetSaveData;
 import com.bootcamp.demo.data.save.SaveData;
 import com.bootcamp.demo.data.save.TacticalSaveData;
 import com.bootcamp.demo.events.GameStartedEvent;
@@ -23,6 +28,9 @@ public class DemoGame extends Game {
         final GameData gameData = new GameData();
         API.Instance().register(GameData.class, gameData);
         gameData.load();
+
+        final StatsData statsData = new StatsData();
+        API.Instance().register(StatsData.class, statsData);
 
         loadSaveData();
 
@@ -41,9 +49,22 @@ public class DemoGame extends Game {
         militaryGearSaveData.setStarCount(2);
         militaryGearSaveData.setRank("A");
 
+        final StatData statData = new StatData();
+        statData.setStat(Stat.ATK);
+        statData.setStatNumber(23);
+        statData.setType(StatType.PERCENT);
 
+        final PetSaveData petSaveData = new PetSaveData();
+        petSaveData.setName("cactus");
+        petSaveData.setLevel(5);
+        petSaveData.setRarity(Rarity.RARE);
+        petSaveData.setStarCount(2);
+        petSaveData.setEquipped(true);
+
+        API.get(StatsData.class).getStats().put(0, statData);
         API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(0, tacticalsSaveData);
         API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(0, militaryGearSaveData);
+        API.get(SaveData.class).getPetsSaveData().getPets().put(0, petSaveData);
         savePlayerData();
 
         setScreen(new GameScreen());
