@@ -5,6 +5,8 @@ import com.badlogic.gdx.utils.JsonValue;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Locale;
+
 public class StatData implements Json.Serializable {
     @Getter @Setter
     private Stat stat;
@@ -25,6 +27,6 @@ public class StatData implements Json.Serializable {
     public void read (Json json, JsonValue jsonValue) {
         stat = Stat.valueOf(jsonValue.getString("s"));
         statNumber = jsonValue.getInt("n");
-        type = StatType.valueOf(jsonValue.getString("t"));
+        type = StatType.valueOf(jsonValue.getString("t").toUpperCase(Locale.ENGLISH));
     }
 }

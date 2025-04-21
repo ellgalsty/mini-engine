@@ -3,6 +3,7 @@ package com.bootcamp.demo.pages;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.*;
+import com.bootcamp.demo.Utils;
 import com.bootcamp.demo.data.*;
 import com.bootcamp.demo.data.game.*;
 import com.bootcamp.demo.data.save.*;
@@ -297,8 +298,7 @@ public class MissionsPage extends APage {
     public void show (Runnable onComplete) {
         super.show(onComplete);
         final SaveData saveData = API.get(SaveData.class);
-        final StatsData statsData = API.get(StatsData.class);
-        statsContainer.setData(statsData);
+        statsContainer.setData(Utils.getGeneralStatsData());
         tacticalGearContainer.setData(saveData.getTacticalsSaveData());
         gearsContainer.setData(saveData.getMilitaryGearsSaveData());
         flagContainer.setData(saveData.getFlagsSaveData());
@@ -329,7 +329,7 @@ public class MissionsPage extends APage {
             }
             for (ObjectMap.Entry<Stat, StatWidget> statEntry : stats) {
                 if (statEntry.value.label.getText().isEmpty()) {
-                    statEntry.value.setEmptyData(statEntry.key);
+                    statEntry.value.setEmpty(statEntry.key);
                 }
             }
         }
@@ -395,7 +395,6 @@ public class MissionsPage extends APage {
     public static class StatWidget extends Table {
         private final Label label;
         private final int defaultValue = 0;
-        private int currentValue;
 
         public StatWidget () {
             label = Labels.make(GameFont.BOLD_20, ColorLibrary.get("4e4238"));
@@ -406,15 +405,14 @@ public class MissionsPage extends APage {
             if (statData == null) {
                 return;
             }
-            currentValue += statData.getStatNumber();
             if (statData.getType() == StatType.NUMBER) {
-                label.setText(statData.getStat() + ": " + currentValue + "k");
+                label.setText(statData.getStat() + ": " + statData.getStatNumber() + "k");
             } else {
-                label.setText(statData.getStat() + ": " + currentValue + "%");
+                label.setText(statData.getStat() + ": " + statData.getStatNumber() + "%");
             }
         }
 
-        private void setEmptyData (Stat stat) {
+        private void setEmpty (Stat stat) {
             label.setText(stat + ": " + defaultValue + "%");
         }
     }

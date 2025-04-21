@@ -30,6 +30,8 @@ public class DemoGame extends Game {
 
         loadSaveData();
 
+        final StatsData statsData1 = generateStatsData();
+
         final TacticalSaveData tacticalsSaveData = new TacticalSaveData();
         tacticalsSaveData.setName("present");
         tacticalsSaveData.setLevel(3);
@@ -37,26 +39,9 @@ public class DemoGame extends Game {
         tacticalsSaveData.setRarity(Rarity.EPIC);
         tacticalsSaveData.setStarCount(2);
         tacticalsSaveData.setEquipped(true);
+        tacticalsSaveData.setStatsData(statsData1);
 
-        final StatsData statsData1 = new StatsData();
-        final StatData statData1 = new StatData();
-        statData1.setStat(Stat.ATK);
-        statData1.setStatNumber(23);
-        statData1.setType(StatType.PERCENT);
-
-        final StatData statData3 = new StatData();
-        statData3.setStat(Stat.ATK);
-        statData3.setStatNumber(20);
-        statData3.setType(StatType.PERCENT);
-
-        final StatData statData2 = new StatData();
-        statData2.setStat(Stat.HP);
-        statData2.setStatNumber(15);
-        statData2.setType(StatType.NUMBER);
-
-        statsData1.getStats().put(0,statData1);
-        statsData1.getStats().put(1,statData2);
-        statsData1.getStats().put(2,statData3);
+        final StatsData statsData2 = generateStatsData();
 
         final MilitaryGearSaveData militaryGearSaveData1 = new MilitaryGearSaveData();
         militaryGearSaveData1.setName("bloody-grail");
@@ -66,7 +51,9 @@ public class DemoGame extends Game {
         militaryGearSaveData1.setStarCount(2);
         militaryGearSaveData1.setRank("A");
         militaryGearSaveData1.setEquipped(true);
-        militaryGearSaveData1.setStatsData(statsData1);
+        militaryGearSaveData1.setStatsData(statsData2);
+
+        final StatsData statsData3 = generateStatsData();
 
         final MilitaryGearSaveData militaryGearSaveData2 = new MilitaryGearSaveData();
         militaryGearSaveData2.setName("hard-armor");
@@ -76,7 +63,9 @@ public class DemoGame extends Game {
         militaryGearSaveData2.setStarCount(1);
         militaryGearSaveData2.setRank("C");
         militaryGearSaveData2.setEquipped(true);
+        militaryGearSaveData2.setStatsData(statsData3);
 
+        final StatsData statsData4 = generateStatsData();
 
         final PetSaveData petSaveData = new PetSaveData();
         petSaveData.setName("cactus");
@@ -84,6 +73,9 @@ public class DemoGame extends Game {
         petSaveData.setRarity(Rarity.RARE);
         petSaveData.setStarCount(2);
         petSaveData.setEquipped(true);
+        petSaveData.setStatsData(statsData4);
+
+        final StatsData statsData5 = generateStatsData();
 
         final FlagSaveData flagSaveData = new FlagSaveData();
         flagSaveData.setName("flash-flag");
@@ -91,6 +83,7 @@ public class DemoGame extends Game {
         flagSaveData.setRarity(Rarity.RARE);
         flagSaveData.setStarCount(1);
         flagSaveData.setEquipped(true);
+        flagSaveData.setStatsData(statsData5);
 
         API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(0, tacticalsSaveData);
         API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(0, militaryGearSaveData1);
@@ -144,6 +137,30 @@ public class DemoGame extends Game {
             playerDataFile.writeString("", false);
         }
         return playerDataFile;
+    }
+
+    private static StatsData generateStatsData () {
+        final StatsData statsData = new StatsData();
+        final StatData statData1 = new StatData();
+        statData1.setStat(Stat.ATK);
+        statData1.setStatNumber(23);
+        statData1.setType(StatType.PERCENT);
+
+        final StatData statData2 = new StatData();
+        statData2.setStat(Stat.HP);
+        statData2.setStatNumber(15);
+        statData2.setType(StatType.NUMBER);
+
+        final StatData statData3 = new StatData();
+        statData3.setStat(Stat.ATK);
+        statData3.setStatNumber(20);
+        statData3.setType(StatType.PERCENT);
+
+        statsData.getStats().put(0, statData1);
+        statsData.getStats().put(1, statData2);
+        statsData.getStats().put(2, statData3);
+
+        return statsData;
     }
 
     @Override

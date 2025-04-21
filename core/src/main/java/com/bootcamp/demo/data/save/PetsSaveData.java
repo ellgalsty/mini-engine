@@ -3,7 +3,6 @@ package com.bootcamp.demo.data.save;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.bootcamp.demo.data.game.PetsGameData;
 import lombok.Getter;
 
 public class PetsSaveData implements Json.Serializable {
