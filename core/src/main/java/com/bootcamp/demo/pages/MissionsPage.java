@@ -114,6 +114,7 @@ public class MissionsPage extends APage {
 
         final BorderedTable tacticalGearWrapper = new BorderedTable();
         tacticalGearWrapper.add(tacticalGearContainer).grow();
+        tacticalGearWrapper.setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get("bab9bb")));
 
         final Table tacticalFlagContainersWrapper = new Table();
         tacticalFlagContainersWrapper.defaults().space(space).size(WIDGET_SIZE);
@@ -450,11 +451,12 @@ public class MissionsPage extends APage {
             this.slot = slot;
             setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("6098c0")));
 
-            icon = new Image();
-            icon.setScaling(Scaling.fit);
-            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
             starsContainer = new StarsContainer();
             final Table overlay = constructOverlay();
+            icon = new Image();
+            icon.setScaling(Scaling.fit);
+
+            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
             addActor(overlay);
         }
 
@@ -518,11 +520,16 @@ public class MissionsPage extends APage {
 
     public static class PetContainer extends BorderedTable {
         private final Image icon;
+        private final StarsContainer starsContainer;
 
         public PetContainer () {
+            starsContainer = new StarsContainer();
+            final Table overlay = constructOverlay();
             icon = new Image();
             icon.setScaling(Scaling.fit);
+
             add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
+            addActor(overlay);
         }
 
         private void setData (@Null PetsSaveData petsSaveData) {
@@ -534,19 +541,32 @@ public class MissionsPage extends APage {
                 if (petSaveData.value.isEquipped()) {
                     final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPets().get(petSaveData.value.getName());
                     icon.setDrawable(petGameData.getIcon());
+                    starsContainer.setData(petSaveData.value.getStarCount());
                 }
             }
+        }
+
+        private Table constructOverlay () {
+            final Table segment = new Table();
+            segment.pad(10);
+            segment.add(starsContainer).expand().top().left();
+            segment.setFillParent(true);
+            return segment;
         }
     }
 
     public static class FlagContainer extends BorderedTable {
         private final Image icon;
+        private final StarsContainer starsContainer;
 
         public FlagContainer () {
+            starsContainer = new StarsContainer();
+            final Table overlay = constructOverlay();
             icon = new Image();
             icon.setScaling(Scaling.fit);
-            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
 
+            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
+            addActor(overlay);
         }
 
         private void setData (FlagsSaveData flagsSaveData) {
@@ -558,8 +578,17 @@ public class MissionsPage extends APage {
                 if (flagSaveData.value.isEquipped()) {
                     final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(flagSaveData.value.getName());
                     icon.setDrawable(flagGameData.getIcon());
+                    starsContainer.setData(flagSaveData.value.getStarCount());
                 }
             }
+        }
+
+        private Table constructOverlay () {
+            final Table segment = new Table();
+            segment.pad(10);
+            segment.add(starsContainer).expand().top().left();
+            segment.setFillParent(true);
+            return segment;
         }
     }
 }
