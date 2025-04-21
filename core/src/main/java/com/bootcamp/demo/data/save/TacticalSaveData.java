@@ -18,6 +18,8 @@ public class TacticalSaveData implements Json.Serializable {
     private Rarity rarity;
     @Getter @Setter
     private int starCount;
+    @Getter @Setter
+    private boolean isEquipped;
 
     @Override
     public void write (Json json) {
@@ -26,6 +28,7 @@ public class TacticalSaveData implements Json.Serializable {
         json.writeValue("p", power);
         json.writeValue("r", rarity);
         json.writeValue("s", starCount);
+        json.writeValue("e", isEquipped);
     }
 
     @Override
@@ -35,5 +38,6 @@ public class TacticalSaveData implements Json.Serializable {
         power = jsonValue.getInt("p");
         rarity = Rarity.valueOf(jsonValue.getString("r"));
         starCount = jsonValue.getInt("s");
+        isEquipped = jsonValue.getBoolean("e");
     }
 }

@@ -26,8 +26,7 @@ public class DemoGame extends Game {
         API.Instance().register(GameData.class, gameData);
         gameData.load();
 
-        final StatsData statsData = new StatsData();
-        API.Instance().register(StatsData.class, statsData);
+        API.Instance().register(StatsData.class);
 
         loadSaveData();
 
@@ -37,16 +36,9 @@ public class DemoGame extends Game {
         tacticalsSaveData.setPower(750);
         tacticalsSaveData.setRarity(Rarity.EPIC);
         tacticalsSaveData.setStarCount(2);
+        tacticalsSaveData.setEquipped(true);
 
-        final MilitaryGearSaveData militaryGearSaveData = new MilitaryGearSaveData();
-        militaryGearSaveData.setName("bloody-grail");
-        militaryGearSaveData.setLevel(5);
-        militaryGearSaveData.setPower(490);
-        militaryGearSaveData.setRarity(Rarity.RARE);
-        militaryGearSaveData.setStarCount(2);
-        militaryGearSaveData.setRank("A");
-        militaryGearSaveData.setEquipped(true);
-
+        final StatsData statsData1 = new StatsData();
         final StatData statData1 = new StatData();
         statData1.setStat(Stat.ATK);
         statData1.setStatNumber(23);
@@ -62,6 +54,30 @@ public class DemoGame extends Game {
         statData2.setStatNumber(15);
         statData2.setType(StatType.NUMBER);
 
+        statsData1.getStats().put(0,statData1);
+        statsData1.getStats().put(1,statData2);
+        statsData1.getStats().put(2,statData3);
+
+        final MilitaryGearSaveData militaryGearSaveData1 = new MilitaryGearSaveData();
+        militaryGearSaveData1.setName("bloody-grail");
+        militaryGearSaveData1.setLevel(5);
+        militaryGearSaveData1.setPower(490);
+        militaryGearSaveData1.setRarity(Rarity.RARE);
+        militaryGearSaveData1.setStarCount(2);
+        militaryGearSaveData1.setRank("A");
+        militaryGearSaveData1.setEquipped(true);
+        militaryGearSaveData1.setStatsData(statsData1);
+
+        final MilitaryGearSaveData militaryGearSaveData2 = new MilitaryGearSaveData();
+        militaryGearSaveData2.setName("hard-armor");
+        militaryGearSaveData2.setLevel(3);
+        militaryGearSaveData2.setPower(500);
+        militaryGearSaveData2.setRarity(Rarity.RARE);
+        militaryGearSaveData2.setStarCount(1);
+        militaryGearSaveData2.setRank("C");
+        militaryGearSaveData2.setEquipped(true);
+
+
         final PetSaveData petSaveData = new PetSaveData();
         petSaveData.setName("cactus");
         petSaveData.setLevel(5);
@@ -76,11 +92,9 @@ public class DemoGame extends Game {
         flagSaveData.setStarCount(1);
         flagSaveData.setEquipped(true);
 
-        API.get(StatsData.class).getStats().put(0, statData1);
-        API.get(StatsData.class).getStats().put(1, statData2);
-        API.get(StatsData.class).getStats().put(2, statData3);
         API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(0, tacticalsSaveData);
-        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(0, militaryGearSaveData);
+        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(0, militaryGearSaveData1);
+        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(1, militaryGearSaveData2);
         API.get(SaveData.class).getPetsSaveData().getPets().put(0, petSaveData);
         API.get(SaveData.class).getFlagsSaveData().getFlags().put(0, flagSaveData);
         savePlayerData();
