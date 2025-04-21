@@ -29,7 +29,6 @@ public class MilitaryGearSaveData implements Json.Serializable {
     public void write (Json json) {
         json.writeValue("n", name);
         json.writeValue("l", level);
-        json.writeValue("p", power);
         json.writeValue("sd", statsData);
         json.writeValue("r", rarity);
         json.writeValue("s", starCount);
@@ -41,7 +40,6 @@ public class MilitaryGearSaveData implements Json.Serializable {
     public void read (Json json, JsonValue jsonValue) {
         name = jsonValue.getString("n");
         level = jsonValue.getInt("l");
-        power = jsonValue.getInt("p");
         statsData.read(json, jsonValue.get("sd"));
         rarity = Rarity.valueOf(jsonValue.getString("r"));
         starCount = jsonValue.getInt("s");
