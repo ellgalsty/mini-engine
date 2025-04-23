@@ -1,18 +1,18 @@
 package com.bootcamp.demo.data;
 
-import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.ObjectMap;
 import lombok.Getter;
 
 public class StatsData implements Json.Serializable {
     @Getter
-    private final IntMap<StatData> stats = new IntMap<>();
+    private final ObjectMap<String, StatData> stats = new ObjectMap<>();
 
     @Override
     public void write (Json json) {
-        for (IntMap.Entry<StatData> entry : stats.entries()) {
-            json.writeValue(String.valueOf(entry.key), entry.value);
+        for (ObjectMap.Entry<String, StatData> entry : stats.entries()) {
+            json.writeValue(entry.key, entry.value);
         }
     }
 
@@ -21,9 +21,17 @@ public class StatsData implements Json.Serializable {
         stats.clear();
 
         for (JsonValue value : jsonData) {
-            final Integer slotIndex = Integer.valueOf(value.name);
+            final String statName = String.valueOf(value.name);
             final StatData statSaveData = json.readValue(StatData.class, value);
-            stats.put(slotIndex, statSaveData);
+            stats.put(statName, statSaveData);
         }
+    }
+
+    public void putStatData (Stat stat, StatData data) {
+        stats.put(stat.name(), data);
+    }
+
+    public StatData getStatData (String statName) {
+        return stats.get(statName);
     }
 }

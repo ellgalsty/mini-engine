@@ -3,7 +3,7 @@ package com.bootcamp.demo.pages;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.*;
-import com.bootcamp.demo.Utils;
+import com.bootcamp.demo.data.DataUtils;
 import com.bootcamp.demo.data.*;
 import com.bootcamp.demo.data.game.*;
 import com.bootcamp.demo.data.save.*;
@@ -298,7 +298,7 @@ public class MissionsPage extends APage {
     public void show (Runnable onComplete) {
         super.show(onComplete);
         final SaveData saveData = API.get(SaveData.class);
-        statsContainer.setData(Utils.getGeneralStatsData());
+        statsContainer.setData(DataUtils.getGeneralStatsData());
         tacticalGearContainer.setData(saveData.getTacticalsSaveData());
         gearsContainer.setData(saveData.getMilitaryGearsSaveData());
         flagContainer.setData(saveData.getFlagsSaveData());
@@ -323,9 +323,9 @@ public class MissionsPage extends APage {
         }
 
         public void setData (StatsData statsData) {
-            for (IntMap.Entry<StatData> statData : statsData.getStats()) {
-                final StatWidget widget = stats.get(statData.value.getStat());
-                widget.setData(statData.value);
+            for (StatData statData : statsData.getStats().values()) {
+                final StatWidget widget = stats.get(statData.getStat());
+                widget.setData(statData);
             }
             for (ObjectMap.Entry<Stat, StatWidget> statEntry : stats) {
                 if (statEntry.value.label.getText().isEmpty()) {

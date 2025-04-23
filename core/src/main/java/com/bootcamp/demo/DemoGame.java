@@ -145,14 +145,8 @@ public class DemoGame extends Game {
         statData2.setStatNumber(15);
         statData2.setType(StatType.NUMBER);
 
-        final StatData statData3 = new StatData();
-        statData3.setStat(Stat.ATK);
-        statData3.setStatNumber(20);
-        statData3.setType(StatType.PERCENT);
-
-        statsData.getStats().put(0, statData1);
-        statsData.getStats().put(1, statData2);
-        statsData.getStats().put(2, statData3);
+        statsData.getStats().put(String.valueOf(statData1.getStat()), statData1);
+        statsData.getStats().put(String.valueOf(statData2.getStat()), statData2);
 
         return statsData;
     }

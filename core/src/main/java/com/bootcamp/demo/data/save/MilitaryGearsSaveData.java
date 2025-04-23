@@ -14,7 +14,7 @@ public class MilitaryGearsSaveData implements Json.Serializable {
 
     @Override
     public void write (Json json) {
-        for (ObjectMap.Entry<String, MilitaryGearSaveData> entry : militaryGears.entries()) {
+        for (ObjectMap.Entry<String, MilitaryGearSaveData> entry : militaryGears) {
             json.writeValue(entry.key, entry.value);
         }
     }
