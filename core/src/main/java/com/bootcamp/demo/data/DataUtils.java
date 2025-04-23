@@ -1,9 +1,7 @@
 package com.bootcamp.demo.data;
 
 import com.badlogic.gdx.utils.ObjectMap;
-import com.bootcamp.demo.data.save.MilitaryGearSaveData;
-import com.bootcamp.demo.data.save.SaveData;
-import com.bootcamp.demo.data.save.TacticalSaveData;
+import com.bootcamp.demo.data.save.*;
 import com.bootcamp.demo.managers.API;
 
 public class DataUtils {
@@ -28,6 +26,14 @@ public class DataUtils {
         ObjectMap<String, TacticalSaveData> tacticals = API.get(SaveData.class).getTacticalsSaveData().getTacticals();
         for (TacticalSaveData tacticalSaveData : tacticals.values()) {
             addStats(statsData, tacticalSaveData.getStatsData());
+        }
+        ObjectMap<String, PetSaveData> pets = API.get(SaveData.class).getPetsSaveData().getPets();
+        for (PetSaveData petSaveData : pets.values()) {
+            addStats(statsData, petSaveData.getStatsData());
+        }
+        ObjectMap<String, FlagSaveData> flags = API.get(SaveData.class).getFlagsSaveData().getFlags();
+        for (FlagSaveData flagSaveData : flags.values()) {
+            addStats(statsData, flagSaveData.getStatsData());
         }
 
         return statsData;
