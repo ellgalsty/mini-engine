@@ -315,10 +315,10 @@ public class MissionsPage extends APage {
             super(3);
             padLeft(50).defaults().space(25).expand().left();
 
-            for (int i = 0; i < Stat.values.length; i++) {
+            for (Stat stat : Stat.values()) {
                 final StatWidget statContainer = new StatWidget();
                 add(statContainer);
-                stats.put(Stat.values[i], statContainer);
+                stats.put(stat, statContainer);
             }
         }
 
@@ -353,12 +353,12 @@ public class MissionsPage extends APage {
 
             for (int i = 0; i < widgets.size; i++) {
                 final TacticalContainer widget = widgets.get(i);
-                final TacticalSaveData tacticalSaveData = tacticalsSaveData.getTacticals().get(i);
-
-                if (tacticalSaveData == null || !tacticalSaveData.isEquipped()) {
-                    widget.setData(null);
-                } else {
+                final String equippedTacticalName = tacticalsSaveData.getEquippedTacticals().get(i);
+                if (equippedTacticalName != null) {
+                    final TacticalSaveData tacticalSaveData = tacticalsSaveData.getTacticals().get(equippedTacticalName);
                     widget.setData(tacticalSaveData);
+                } else {
+                    widget.setData(null);
                 }
             }
         }
@@ -379,15 +379,15 @@ public class MissionsPage extends APage {
         private void setData (MilitaryGearsSaveData militaryGearsSaveData) {
             final Array<GearContainer> widgets = getWidgets();
 
-            for (int i = 0; i < widgets.size; i++) {
+            for (int i = 0; i < MilitaryGearSlot.values.length; i++) {
                 final GearContainer widget = widgets.get(i);
-                final MilitaryGearSaveData militarySaveData = militaryGearsSaveData.getMilitaryGears().get(i);
-
-                if (militarySaveData == null || !militarySaveData.isEquipped()) {
-                    widget.setData(null);
-                } else {
-                    widget.setData(militarySaveData);
+                String equippedSlotName = militaryGearsSaveData.getEquippedGears().get(MilitaryGearSlot.values[i]);
+                if (equippedSlotName == null) {
+                    widget.setEmpty();
+                    continue;
                 }
+                final MilitaryGearSaveData militarySaveData = militaryGearsSaveData.getMilitaryGears().get(equippedSlotName);
+                widget.setData(militarySaveData);
             }
         }
     }
@@ -535,13 +535,14 @@ public class MissionsPage extends APage {
                 setEmpty();
                 return;
             }
-            for (IntMap.Entry<PetSaveData> petSaveData : petsSaveData.getPets()) {
-                if (petSaveData.value.isEquipped()) {
-                    final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPets().get(petSaveData.value.getName());
-                    icon.setDrawable(petGameData.getIcon());
-                    starsContainer.setData(petSaveData.value.getStarCount());
-                }
+            String equippedPetName = petsSaveData.getEquippedPet();
+            if (equippedPetName == null) {
+                setEmpty();
+                return;
             }
+            final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPets().get(equippedPetName);
+            icon.setDrawable(petGameData.getIcon());
+            starsContainer.setData(petsSaveData.getPets().get(equippedPetName).getStarCount());
         }
 
         private Table constructOverlay () {
@@ -572,12 +573,12 @@ public class MissionsPage extends APage {
                 setEmpty();
                 return;
             }
-            for (IntMap.Entry<FlagSaveData> flagSaveData : flagsSaveData.getFlags()) {
-                if (flagSaveData.value.isEquipped()) {
-                    final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(flagSaveData.value.getName());
-                    icon.setDrawable(flagGameData.getIcon());
-                    starsContainer.setData(flagSaveData.value.getStarCount());
-                }
+            if (flagsSaveData.getEquippedFlag() != null) {
+                final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(flagsSaveData.getEquippedFlag());
+                icon.setDrawable(flagGameData.getIcon());
+                starsContainer.setData(flagsSaveData.getFlags().get(flagsSaveData.getEquippedFlag()).getStarCount());
+            } else {
+                setEmpty();
             }
         }
 

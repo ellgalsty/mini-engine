@@ -22,8 +22,6 @@ public class MilitaryGearSaveData implements Json.Serializable {
     private int starCount;
     @Getter @Setter
     private String rank;
-    @Getter @Setter
-    private boolean equipped;
 
     @Override
     public void write (Json json) {
@@ -33,7 +31,6 @@ public class MilitaryGearSaveData implements Json.Serializable {
         json.writeValue("r", rarity);
         json.writeValue("s", starCount);
         json.writeValue("rk", rank);
-        json.writeValue("e", equipped);
     }
 
     @Override
@@ -44,6 +41,5 @@ public class MilitaryGearSaveData implements Json.Serializable {
         rarity = Rarity.valueOf(jsonValue.getString("r"));
         starCount = jsonValue.getInt("s");
         rank = jsonValue.getString("rk");
-        equipped = jsonValue.getBoolean("e");
     }
 }

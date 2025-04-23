@@ -1,18 +1,20 @@
 package com.bootcamp.demo.data.save;
 
-import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.ObjectMap;
 import lombok.Getter;
 
 public class PetsSaveData implements Json.Serializable {
     @Getter
-    private final IntMap<PetSaveData> pets = new IntMap<>();
+    private final ObjectMap<String, PetSaveData> pets = new ObjectMap<>();
+    @Getter
+    private String equippedPet = "cactus";
 
     @Override
     public void write (Json json) {
-        for (IntMap.Entry<PetSaveData> entry : pets.entries()) {
-            json.writeValue(String.valueOf(entry.key), entry.value);
+        for (ObjectMap.Entry<String, PetSaveData> entry : pets.entries()) {
+            json.writeValue(entry.key, entry.value);
         }
     }
 
@@ -21,9 +23,9 @@ public class PetsSaveData implements Json.Serializable {
         pets.clear();
 
         for (JsonValue value : jsonData) {
-            final Integer slotIndex = Integer.valueOf(value.name);
+            final String slotName = value.name;
             final PetSaveData petSaveData = json.readValue(PetSaveData.class, value);
-            pets.put(slotIndex, petSaveData);
+            pets.put(slotName, petSaveData);
         }
     }
 }

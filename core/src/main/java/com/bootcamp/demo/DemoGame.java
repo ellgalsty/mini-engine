@@ -37,7 +37,6 @@ public class DemoGame extends Game {
         tacticalsSaveData.setLevel(3);
         tacticalsSaveData.setRarity(Rarity.EPIC);
         tacticalsSaveData.setStarCount(2);
-        tacticalsSaveData.setEquipped(true);
         tacticalsSaveData.setStatsData(statsData1);
 
         final StatsData statsData2 = generateStatsData();
@@ -48,7 +47,6 @@ public class DemoGame extends Game {
         militaryGearSaveData1.setRarity(Rarity.RARE);
         militaryGearSaveData1.setStarCount(2);
         militaryGearSaveData1.setRank("A");
-        militaryGearSaveData1.setEquipped(true);
         militaryGearSaveData1.setStatsData(statsData2);
 
         final StatsData statsData3 = generateStatsData();
@@ -59,7 +57,6 @@ public class DemoGame extends Game {
         militaryGearSaveData2.setRarity(Rarity.RARE);
         militaryGearSaveData2.setStarCount(1);
         militaryGearSaveData2.setRank("C");
-        militaryGearSaveData2.setEquipped(true);
         militaryGearSaveData2.setStatsData(statsData3);
 
         final StatsData statsData4 = generateStatsData();
@@ -82,11 +79,11 @@ public class DemoGame extends Game {
         flagSaveData.setEquipped(true);
         flagSaveData.setStatsData(statsData5);
 
-        API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(0, tacticalsSaveData);
-        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(0, militaryGearSaveData1);
-        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(1, militaryGearSaveData2);
-        API.get(SaveData.class).getPetsSaveData().getPets().put(0, petSaveData);
-        API.get(SaveData.class).getFlagsSaveData().getFlags().put(0, flagSaveData);
+        API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(tacticalsSaveData.getName(), tacticalsSaveData);
+        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(militaryGearSaveData1.getName(), militaryGearSaveData1);
+        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(militaryGearSaveData2.getName(), militaryGearSaveData2);
+        API.get(SaveData.class).getPetsSaveData().getPets().put(petSaveData.getName(), petSaveData);
+        API.get(SaveData.class).getFlagsSaveData().getFlags().put(flagSaveData.getName(), flagSaveData);
         savePlayerData();
 
         setScreen(new GameScreen());
