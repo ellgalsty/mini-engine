@@ -109,7 +109,6 @@ public class PetDialog extends ADialog {
         atkValueLabel.setText(String.valueOf(equippedPetSaveData.getStatsData().getStats().get(Stat.ATK).getStatNumber()));
         rarityValueLabel.setText(equippedPetSaveData.getRarity().getStringValue());
         rarityValueLabel.setColor(Color.valueOf(equippedPetSaveData.getRarity().getBackgroundColor()));
-
     }
 
     public static class PetContainer extends BorderedTable {
