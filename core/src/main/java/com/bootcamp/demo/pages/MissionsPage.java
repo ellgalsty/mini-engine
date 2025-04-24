@@ -420,7 +420,6 @@ public class MissionsPage extends APage {
         private final Image icon;
 
         public TacticalContainer () {
-            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("6398c3")));
             setTouchable(Touchable.disabled);
 
             icon = new Image();
@@ -434,6 +433,8 @@ public class MissionsPage extends APage {
             }
             final TacticalGameData tacticalGameData = API.get(GameData.class).getTacticalsGameData().getTacticals().get(tacticalSaveData.getName());
             icon.setDrawable(tacticalGameData.getIcon());
+            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(tacticalSaveData.getRarity().getBackgroundColor())));
+            setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(tacticalSaveData.getRarity().getBorderColor())));
         }
     }
 
@@ -446,7 +447,6 @@ public class MissionsPage extends APage {
 
         public GearContainer (MilitaryGearSlot slot) {
             this.slot = slot;
-            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("6098c0")));
 
             starsContainer = new StarsContainer();
             final Table overlay = constructOverlay();
@@ -467,6 +467,8 @@ public class MissionsPage extends APage {
             levelLabel.setText("Lv. " + militaryGearSaveData.getLevel());
             rankLabel.setText(militaryGearSaveData.getRank());
             starsContainer.setData(militaryGearSaveData.getStarCount());
+            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(militaryGearSaveData.getRarity().getBackgroundColor())));
+            setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(militaryGearSaveData.getRarity().getBorderColor())));
         }
 
         private Table constructOverlay () {
@@ -534,14 +536,17 @@ public class MissionsPage extends APage {
                 setEmpty();
                 return;
             }
-            String equippedPetName = petsSaveData.getEquippedPet();
+            final String equippedPetName = petsSaveData.getEquippedPet();
             if (equippedPetName == null) {
                 setEmpty();
                 return;
             }
+            final PetSaveData equippedPetSaveData = petsSaveData.getPets().get(equippedPetName);
             final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPets().get(equippedPetName);
             icon.setDrawable(petGameData.getIcon());
-            starsContainer.setData(petsSaveData.getPets().get(equippedPetName).getStarCount());
+            starsContainer.setData(equippedPetSaveData.getStarCount());
+            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(equippedPetSaveData.getRarity().getBackgroundColor())));
+            setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(equippedPetSaveData.getRarity().getBorderColor())));
         }
 
         private Table constructOverlay () {
@@ -571,10 +576,14 @@ public class MissionsPage extends APage {
                 setEmpty();
                 return;
             }
-            if (flagsSaveData.getEquippedFlag() != null) {
-                final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(flagsSaveData.getEquippedFlag());
+            final String equippedFlagName = flagsSaveData.getEquippedFlag();
+            if (equippedFlagName != null) {
+                final FlagSaveData equippedFlagSaveData = flagsSaveData.getFlags().get(equippedFlagName);
+                final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(equippedFlagName);
                 icon.setDrawable(flagGameData.getIcon());
                 starsContainer.setData(flagsSaveData.getFlags().get(flagsSaveData.getEquippedFlag()).getStarCount());
+                setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(equippedFlagSaveData.getRarity().getBackgroundColor())));
+                setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(equippedFlagSaveData.getRarity().getBorderColor())));
             } else {
                 setEmpty();
             }
