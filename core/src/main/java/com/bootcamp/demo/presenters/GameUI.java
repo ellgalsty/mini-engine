@@ -13,10 +13,8 @@ import com.bootcamp.demo.events.core.EventModule;
 import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.pages.MissionsPage;
 import com.bootcamp.demo.pages.TestPage;
-import com.bootcamp.demo.pages.homeworks.HomeworkOne;
 import com.bootcamp.demo.pages.core.APage;
 import com.bootcamp.demo.pages.core.PageManager;
-import com.bootcamp.demo.pages.homeworks.HomeworkTwo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,12 +49,6 @@ public class GameUI extends ScreenAdapter implements Disposable, EventListener {
 
     @Override
     public void render (float delta) {
-        if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.L)) {
-            API.get(PageManager.class).show(HomeworkOne.class);
-        }
-        if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.K)) {
-            API.get(PageManager.class).show(HomeworkTwo.class);
-        }
         if(Gdx.app.getInput().isKeyJustPressed(Input.Keys.M)) {
             API.get(PageManager.class).show(MissionsPage.class);
         }

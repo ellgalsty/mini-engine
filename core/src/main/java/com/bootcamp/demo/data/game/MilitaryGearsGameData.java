@@ -11,6 +11,8 @@ import java.util.Locale;
 public class MilitaryGearsGameData implements IGameData {
     @Getter
     private final ObjectMap<MilitaryGearSlot, ObjectMap<String, MilitaryGearGameData>> militarySlotsWithGears = new ObjectMap<>();
+    @Getter
+    private final ObjectMap<String, MilitaryGearGameData> gears = new ObjectMap<>();
 
     @Override
     public void load (XmlReader.Element rootXml) {
@@ -23,6 +25,7 @@ public class MilitaryGearsGameData implements IGameData {
                 final MilitaryGearGameData gearGameData = new MilitaryGearGameData();
                 gearGameData.load(itemXml);
                 militaryGameData.put(gearGameData.getName(), gearGameData);
+                gears.put(gearGameData.getName(), gearGameData);
             }
             militarySlotsWithGears.put(slot, militaryGameData);
         }
