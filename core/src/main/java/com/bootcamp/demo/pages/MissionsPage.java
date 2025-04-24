@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.*;
 import com.bootcamp.demo.data.*;
 import com.bootcamp.demo.data.game.*;
 import com.bootcamp.demo.data.save.*;
+import com.bootcamp.demo.dialogs.FlagDialog;
 import com.bootcamp.demo.dialogs.GearDialog;
 import com.bootcamp.demo.dialogs.PetDialog;
 import com.bootcamp.demo.dialogs.core.DialogManager;
@@ -505,6 +506,11 @@ public class MissionsPage extends APage {
             }
             final String equippedFlagName = flagsSaveData.getEquippedFlag();
             if (equippedFlagName != null) {
+                setOnClick(() -> {
+                    FlagDialog flagDialog = API.get(DialogManager.class).getDialog(FlagDialog.class);
+                    flagDialog.setData(flagsSaveData);
+                    API.get(DialogManager.class).show(FlagDialog.class);
+                });
                 final FlagSaveData equippedFlagSaveData = flagsSaveData.getFlags().get(equippedFlagName);
                 final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(equippedFlagName);
                 icon.setDrawable(flagGameData.getIcon());
@@ -512,6 +518,11 @@ public class MissionsPage extends APage {
                 setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(equippedFlagSaveData.getRarity().getBackgroundColor())));
                 setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(equippedFlagSaveData.getRarity().getBorderColor())));
             } else {
+                setOnClick(() -> {
+                    FlagDialog flagDialog = API.get(DialogManager.class).getDialog(FlagDialog.class);
+                    flagDialog.setData(flagsSaveData);
+                    API.get(DialogManager.class).show(FlagDialog.class);
+                });
                 setEmpty();
             }
         }
