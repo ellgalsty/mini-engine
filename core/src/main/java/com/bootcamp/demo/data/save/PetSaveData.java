@@ -18,8 +18,6 @@ public class PetSaveData implements Json.Serializable {
     private int starCount;
     @Getter @Setter
     private Rarity rarity;
-    @Getter @Setter
-    private boolean equipped;
 
     @Override
     public void write (Json json) {
@@ -28,7 +26,6 @@ public class PetSaveData implements Json.Serializable {
         json.writeValue("sd", statsData);
         json.writeValue("s", starCount);
         json.writeValue("r", rarity);
-        json.writeValue("e", equipped);
     }
 
     @Override
@@ -38,6 +35,5 @@ public class PetSaveData implements Json.Serializable {
         statsData.read(json, jsonValue.get("sd"));
         starCount = jsonValue.getInt("s");
         rarity = Rarity.valueOf(jsonValue.getString("r"));
-        equipped = jsonValue.getBoolean("e");
     }
 }

@@ -7,12 +7,12 @@ import lombok.Getter;
 
 public class StatsData implements Json.Serializable {
     @Getter
-    private final ObjectMap<String, StatData> stats = new ObjectMap<>();
+    private final ObjectMap<Stat, StatData> stats = new ObjectMap<>();
 
     @Override
     public void write (Json json) {
-        for (ObjectMap.Entry<String, StatData> entry : stats.entries()) {
-            json.writeValue(entry.key, entry.value);
+        for (ObjectMap.Entry<Stat, StatData> entry : stats.entries()) {
+            json.writeValue(entry.key.name(), entry.value);
         }
     }
 
@@ -21,17 +21,17 @@ public class StatsData implements Json.Serializable {
         stats.clear();
 
         for (JsonValue value : jsonData) {
-            final String statName = String.valueOf(value.name);
+            final Stat stat = Stat.valueOf(value.name);
             final StatData statSaveData = json.readValue(StatData.class, value);
-            stats.put(statName, statSaveData);
+            stats.put(stat, statSaveData);
         }
     }
 
     public void putStatData (Stat stat, StatData data) {
-        stats.put(stat.name(), data);
+        stats.put(stat, data);
     }
 
-    public StatData getStatData (String statName) {
-        return stats.get(statName);
+    public StatData getStatData (Stat stat) {
+        return stats.get(stat);
     }
 }

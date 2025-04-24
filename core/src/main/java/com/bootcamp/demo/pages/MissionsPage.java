@@ -3,7 +3,7 @@ package com.bootcamp.demo.pages;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.*;
-import com.bootcamp.demo.data.DataUtils;
+import com.bootcamp.demo.data.StatManager;
 import com.bootcamp.demo.data.*;
 import com.bootcamp.demo.data.game.*;
 import com.bootcamp.demo.data.save.*;
@@ -65,7 +65,7 @@ public class MissionsPage extends APage {
         return segment;
     }
 
-    private Table constructMainUISegment () {
+    private Table constructMainUISegment  () {
         final Table statsSegment = constructStatsSegment();
         final Table equipmentsSegment = constructEquipmentsSegment();
         final Table buttonsSegment = constructButtonsSegment();
@@ -298,7 +298,7 @@ public class MissionsPage extends APage {
     public void show (Runnable onComplete) {
         super.show(onComplete);
         final SaveData saveData = API.get(SaveData.class);
-        statsContainer.setData(DataUtils.getGeneralStatsData());
+        statsContainer.setData(StatManager.getGeneralStatsData());
         tacticalGearContainer.setData(saveData.getTacticalsSaveData());
         gearsContainer.setData(saveData.getMilitaryGearsSaveData());
         flagContainer.setData(saveData.getFlagsSaveData());
@@ -381,13 +381,12 @@ public class MissionsPage extends APage {
 
             for (int i = 0; i < MilitaryGearSlot.values.length; i++) {
                 final GearContainer widget = widgets.get(i);
-                String equippedSlotName = militaryGearsSaveData.getEquippedGears().get(MilitaryGearSlot.values[i]);
-                if (equippedSlotName == null) {
+                MilitaryGearSaveData militaryGearSaveData = militaryGearsSaveData.getMilitaryGears().get(MilitaryGearSlot.values[i]);
+                if (militaryGearSaveData == null) {
                     widget.setEmpty();
                     continue;
                 }
-                final MilitaryGearSaveData militarySaveData = militaryGearsSaveData.getMilitaryGears().get(equippedSlotName);
-                widget.setData(militarySaveData);
+                widget.setData(militaryGearSaveData);
             }
         }
     }
@@ -567,7 +566,6 @@ public class MissionsPage extends APage {
             add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
             addActor(overlay);
         }
-
         private void setData (FlagsSaveData flagsSaveData) {
             if (flagsSaveData == null) {
                 setEmpty();
