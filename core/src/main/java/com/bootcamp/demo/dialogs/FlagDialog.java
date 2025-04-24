@@ -42,8 +42,9 @@ public class FlagDialog extends ADialog {
     }
 
     private Table constructMainDialog () {
-        final Table petInfoSegment = constructPetInfoSegment();
+        flagTitleLabel = Labels.make(GameFont.BOLD_24);
         equippedFlagContainer = new FlagContainer();
+        final Table flagInfoSegment = constructFlagInfoSegment();
         flagsSegment = new WidgetsContainer<>(4);
         flagsSegment.setBackground(Squircle.SQUIRCLE_35.getDrawable(Color.valueOf("bdbdbd")));
         flagsSegment.pad(45).defaults().size(200).space(25);
@@ -54,13 +55,13 @@ public class FlagDialog extends ADialog {
         segment.row();
         segment.add(equippedFlagContainer).height(450).growX();
         segment.row();
-        segment.add(petInfoSegment).grow();
+        segment.add(flagInfoSegment).grow();
         segment.row();
         segment.add(flagsSegment).grow();
         return segment;
     }
 
-    private Table constructPetInfoSegment () {
+    private Table constructFlagInfoSegment () {
         final Label hpLabel = Labels.make(GameFont.BOLD_22, Color.valueOf("403837"));
         hpLabel.setText("HP:");
         final Label atkLabel = Labels.make(GameFont.BOLD_22, Color.valueOf("403837"));
@@ -69,7 +70,6 @@ public class FlagDialog extends ADialog {
         rarityLabel.setText("Rarity:");
 
         rarityValueLabel = Labels.make(GameFont.BOLD_22);
-        flagTitleLabel = Labels.make(GameFont.BOLD_24);
         hpValueLabel = Labels.make(GameFont.BOLD_22, Color.valueOf("fdf3eb"));
         atkValueLabel = Labels.make(GameFont.BOLD_22, Color.valueOf("fdf3eb"));
 
@@ -89,7 +89,6 @@ public class FlagDialog extends ADialog {
     }
 
     public void setData (FlagsSaveData flagsSaveData) {
-
         flagsSegment.freeChildren();
         for (FlagSaveData flagSaveData : flagsSaveData.getFlags().values()) {
             final FlagContainer widget = new FlagContainer();
