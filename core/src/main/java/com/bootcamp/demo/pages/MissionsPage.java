@@ -10,6 +10,7 @@ import com.bootcamp.demo.data.*;
 import com.bootcamp.demo.data.game.*;
 import com.bootcamp.demo.data.save.*;
 import com.bootcamp.demo.dialogs.GearDialog;
+import com.bootcamp.demo.dialogs.PetDialog;
 import com.bootcamp.demo.dialogs.core.DialogManager;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Labels;
@@ -143,7 +144,7 @@ public class MissionsPage extends APage {
     }
 
     private Table constructPetButtonSegment () {
-        final Image buttonImage = new Image(Resources.getDrawable("ui/secondarygears/susu"));
+        final Image buttonImage = new Image(Resources.getDrawable("ui/secondarygears/proof-of-glory"));
         buttonImage.setScaling(Scaling.fit);
 
         final OffsetButton petButton = new OffsetButton(OffsetButton.Style.ORANGE_35) {
@@ -484,47 +485,6 @@ public class MissionsPage extends APage {
         }
     }
 
-    public static class PetContainer extends BorderedTable {
-        private final Image icon;
-        private final StarsContainer starsContainer;
-
-        public PetContainer () {
-            starsContainer = new StarsContainer();
-            final Table overlay = constructOverlay();
-            icon = new Image();
-            icon.setScaling(Scaling.fit);
-
-            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
-            addActor(overlay);
-        }
-
-        private void setData (@Null PetsSaveData petsSaveData) {
-            if (petsSaveData == null) {
-                setEmpty();
-                return;
-            }
-            final String equippedPetName = petsSaveData.getEquippedPet();
-            if (equippedPetName == null) {
-                setEmpty();
-                return;
-            }
-            final PetSaveData equippedPetSaveData = petsSaveData.getPets().get(equippedPetName);
-            final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPets().get(equippedPetName);
-            icon.setDrawable(petGameData.getIcon());
-            starsContainer.setData(equippedPetSaveData.getStarCount());
-            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(equippedPetSaveData.getRarity().getBackgroundColor())));
-            setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(equippedPetSaveData.getRarity().getBorderColor())));
-        }
-
-        private Table constructOverlay () {
-            final Table segment = new Table();
-            segment.pad(10);
-            segment.add(starsContainer).expand().top().left();
-            segment.setFillParent(true);
-            return segment;
-        }
-    }
-
     public static class FlagContainer extends BorderedTable {
         private final Image icon;
         private final StarsContainer starsContainer;
@@ -554,6 +514,52 @@ public class MissionsPage extends APage {
             } else {
                 setEmpty();
             }
+        }
+
+        private Table constructOverlay () {
+            final Table segment = new Table();
+            segment.pad(10);
+            segment.add(starsContainer).expand().top().left();
+            segment.setFillParent(true);
+            return segment;
+        }
+    }
+
+    public static class PetContainer extends BorderedTable {
+        private final Image icon;
+        private final StarsContainer starsContainer;
+
+        public PetContainer () {
+            starsContainer = new StarsContainer();
+            final Table overlay = constructOverlay();
+            icon = new Image();
+            icon.setScaling(Scaling.fit);
+
+            add(icon).size(Value.percentWidth(0.75f, this), Value.percentHeight(0.75f, this));
+            addActor(overlay);
+        }
+
+        private void setData (@Null PetsSaveData petsSaveData) {
+            if (petsSaveData == null) {
+                setEmpty();
+                return;
+            }
+            final String equippedPetName = petsSaveData.getEquippedPet();
+            if (equippedPetName == null) {
+                setEmpty();
+                return;
+            }
+            setOnClick(() -> {
+                PetDialog petDialog = API.get(DialogManager.class).getDialog(PetDialog.class);
+                petDialog.setData(petsSaveData);
+                API.get(DialogManager.class).show(PetDialog.class);
+            });
+            final PetSaveData equippedPetSaveData = petsSaveData.getPets().get(equippedPetName);
+            final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPets().get(equippedPetName);
+            icon.setDrawable(petGameData.getIcon());
+            starsContainer.setData(equippedPetSaveData.getStarCount());
+            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(equippedPetSaveData.getRarity().getBackgroundColor())));
+            setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(equippedPetSaveData.getRarity().getBorderColor())));
         }
 
         private Table constructOverlay () {

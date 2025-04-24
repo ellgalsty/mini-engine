@@ -5,12 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.*;
-import com.bootcamp.demo.data.Stat;
-import com.bootcamp.demo.data.StatData;
-import com.bootcamp.demo.data.StatType;
-import com.bootcamp.demo.data.StatsData;
+import com.bootcamp.demo.data.*;
 import com.bootcamp.demo.data.game.GameData;
-import com.bootcamp.demo.data.Rarity;
 import com.bootcamp.demo.data.save.*;
 import com.bootcamp.demo.events.GameStartedEvent;
 import com.bootcamp.demo.managers.API;
@@ -35,7 +31,7 @@ public class DemoGame extends Game {
         final TacticalSaveData tacticalsSaveData = new TacticalSaveData();
         tacticalsSaveData.setName("present");
         tacticalsSaveData.setLevel(3);
-        tacticalsSaveData.setRarity(Rarity.EPIC);
+        tacticalsSaveData.setRarity(Rarity.ASCENDANT);
         tacticalsSaveData.setStarCount(2);
         tacticalsSaveData.setStatsData(statsData1);
 
@@ -44,7 +40,7 @@ public class DemoGame extends Game {
         final MilitaryGearSaveData militaryGearSaveData1 = new MilitaryGearSaveData();
         militaryGearSaveData1.setName("bloody-grail");
         militaryGearSaveData1.setLevel(5);
-        militaryGearSaveData1.setRarity(Rarity.RARE);
+        militaryGearSaveData1.setRarity(Rarity.ETHEREAL);
         militaryGearSaveData1.setStarCount(2);
         militaryGearSaveData1.setRank("A");
         militaryGearSaveData1.setStatsData(statsData2);
@@ -54,7 +50,7 @@ public class DemoGame extends Game {
         final MilitaryGearSaveData militaryGearSaveData2 = new MilitaryGearSaveData();
         militaryGearSaveData2.setName("hard-armor");
         militaryGearSaveData2.setLevel(3);
-        militaryGearSaveData2.setRarity(Rarity.RARE);
+        militaryGearSaveData2.setRarity(Rarity.DOMINION);
         militaryGearSaveData2.setStarCount(1);
         militaryGearSaveData2.setRank("C");
         militaryGearSaveData2.setStatsData(statsData3);
@@ -64,25 +60,60 @@ public class DemoGame extends Game {
         final PetSaveData petSaveData = new PetSaveData();
         petSaveData.setName("cactus");
         petSaveData.setLevel(5);
-        petSaveData.setRarity(Rarity.RARE);
+        petSaveData.setRarity(Rarity.NUCLEAR);
         petSaveData.setStarCount(2);
-        petSaveData.setEquipped(true);
         petSaveData.setStatsData(statsData4);
 
-        final StatsData statsData5 = generateStatsData();
+        final StatsData statsData5 = new StatsData();
+        final StatData statData11 = new StatData();
+        statData11.setStat(Stat.ATK);
+        statData11.setStatNumber(5);
+        statData11.setType(StatType.PERCENT);
+
+        final StatData statData22 = new StatData();
+        statData22.setStat(Stat.HP);
+        statData22.setStatNumber(10);
+        statData22.setType(StatType.PERCENT);
+
+        statsData5.putStatData(statData11.getStat(), statData11);
+        statsData5.putStatData(statData22.getStat(), statData22);
+
+        final PetSaveData petSaveData2 = new PetSaveData();
+        petSaveData2.setName("susu");
+        petSaveData2.setLevel(7);
+        petSaveData2.setRarity(Rarity.ELITE);
+        petSaveData2.setStarCount(1);
+        petSaveData2.setStatsData(statsData5);
+
+        final StatsData statsData = new StatsData();
+        final StatData statData1 = new StatData();
+        statData1.setStat(Stat.ATK);
+        statData1.setStatNumber(5);
+        statData1.setType(StatType.PERCENT);
+
+        final StatData statData2 = new StatData();
+        statData2.setStat(Stat.HP);
+        statData2.setStatNumber(10);
+        statData2.setType(StatType.PERCENT);
+
+        statsData.getStats().put(statData1.getStat(), statData1);
+        statsData.getStats().put(statData2.getStat(), statData2);
 
         final FlagSaveData flagSaveData = new FlagSaveData();
         flagSaveData.setName("flash-flag");
         flagSaveData.setLevel(3);
-        flagSaveData.setRarity(Rarity.RARE);
+        flagSaveData.setRarity(Rarity.IMMORTAL);
         flagSaveData.setStarCount(1);
         flagSaveData.setEquipped(true);
-        flagSaveData.setStatsData(statsData5);
+        flagSaveData.setStatsData(statsData);
 
         API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(tacticalsSaveData.getName(), tacticalsSaveData);
-        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(militaryGearSaveData1.getName(), militaryGearSaveData1);
-        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(militaryGearSaveData2.getName(), militaryGearSaveData2);
+        MilitaryGearSlot gearSlot1 = API.get(GameData.class).getMilitaryGearsGameData().getGears().get(militaryGearSaveData1.getName()).getType();
+        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(gearSlot1, militaryGearSaveData1);
+        MilitaryGearSlot gearSlot2 = API.get(GameData.class).getMilitaryGearsGameData().getGears().get(militaryGearSaveData2.getName()).getType();
+        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(gearSlot2, militaryGearSaveData2);
         API.get(SaveData.class).getPetsSaveData().getPets().put(petSaveData.getName(), petSaveData);
+        API.get(SaveData.class).getPetsSaveData().getPets().put(petSaveData2.getName(), petSaveData2);
         API.get(SaveData.class).getFlagsSaveData().getFlags().put(flagSaveData.getName(), flagSaveData);
         savePlayerData();
 
@@ -145,8 +176,8 @@ public class DemoGame extends Game {
         statData2.setStatNumber(15);
         statData2.setType(StatType.NUMBER);
 
-        statsData.getStats().put(String.valueOf(statData1.getStat()), statData1);
-        statsData.getStats().put(String.valueOf(statData2.getStat()), statData2);
+        statsData.getStats().put(statData1.getStat(), statData1);
+        statsData.getStats().put(statData2.getStat(), statData2);
 
         return statsData;
     }
