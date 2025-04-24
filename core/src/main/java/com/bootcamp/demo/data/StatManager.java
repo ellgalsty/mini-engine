@@ -86,4 +86,20 @@ public class StatManager {
     public static float applyCumulativePercentModifier (float currentNumber, float percent) {
         return currentNumber * (percent / 100 + 1);
     }
+
+    public static float calculatePowerFromStats (StatsData statsData) {
+        EnumMap<StatType, Float> statTypeCumulativeValues = new EnumMap<>(StatType.class);
+
+        for (StatData statData: statsData.getStats().values()) {
+            if (statData == null) {
+                continue;
+            }
+            statTypeCumulativeValues.put(statData.getType(), statTypeCumulativeValues.getOrDefault(statData.getType(), 0f)+statData.getStatNumber());
+        }
+        return statTypeCumulativeValues.get(StatType.NUMBER) * (1 + statTypeCumulativeValues.getOrDefault(StatType.PERCENT, 0f)/100);
+    }
+
+    public static float calculateCumulativePower () {
+        return calculatePowerFromStats(getGeneralStatsData());
+    }
 }

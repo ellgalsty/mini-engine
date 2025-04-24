@@ -56,7 +56,7 @@ public class MissionsPage extends APage {
 
         // add inner table so that we have a border for the segment
         final Label label = Labels.make(GameFont.BOLD_28, ColorLibrary.get("fffdfc"));
-        label.setText("30.3m");
+        label.setText(String.valueOf(StatManager.calculateCumulativePower()));
 
         final Table inner = new Table();
         inner.setBackground(Squircle.SQUIRCLE_35_TOP.getDrawable(ColorLibrary.get("998272")));
@@ -303,6 +303,12 @@ public class MissionsPage extends APage {
     public void show (Runnable onComplete) {
         super.show(onComplete);
         final SaveData saveData = API.get(SaveData.class);
+        for (MilitaryGearSlot slot : MilitaryGearSlot.values) {
+            MilitaryGearSaveData gearSaveData = saveData.getMilitaryGearsSaveData().getMilitaryGears().get(slot);
+            if (gearSaveData != null) {
+                saveData.getMilitaryGearsSaveData().getMilitaryGears().get(slot).setPower(StatManager.calculatePowerFromStats(gearSaveData.getStatsData()));
+            }
+        }
         statsContainer.setData(StatManager.getGeneralStatsData());
         tacticalGearContainer.setData(saveData.getTacticalsSaveData());
         gearsContainer.setData(saveData.getMilitaryGearsSaveData());

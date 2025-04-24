@@ -13,7 +13,7 @@ public class MilitaryGearSaveData implements Json.Serializable {
     @Getter @Setter
     private int level;
     @Getter @Setter
-    private int power;
+    private float power;
     @Getter @Setter
     private StatsData statsData = new StatsData();
     @Getter @Setter
@@ -27,6 +27,7 @@ public class MilitaryGearSaveData implements Json.Serializable {
     public void write (Json json) {
         json.writeValue("n", name);
         json.writeValue("l", level);
+        json.writeValue("p", power);
         json.writeValue("sd", statsData);
         json.writeValue("r", rarity);
         json.writeValue("s", starCount);
@@ -37,6 +38,7 @@ public class MilitaryGearSaveData implements Json.Serializable {
     public void read (Json json, JsonValue jsonValue) {
         name = jsonValue.getString("n");
         level = jsonValue.getInt("l");
+        power = jsonValue.getFloat("p");
         statsData.read(json, jsonValue.get("sd"));
         rarity = Rarity.valueOf(jsonValue.getString("r"));
         starCount = jsonValue.getInt("s");
