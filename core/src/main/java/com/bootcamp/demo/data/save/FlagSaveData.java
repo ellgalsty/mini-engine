@@ -18,8 +18,6 @@ public class FlagSaveData implements Json.Serializable {
     private Rarity rarity;
     @Getter @Setter
     private int starCount;
-    @Getter @Setter
-    private boolean equipped;
 
     @Override
     public void write (Json json) {
@@ -28,7 +26,7 @@ public class FlagSaveData implements Json.Serializable {
         json.writeValue("sd", statsData);
         json.writeValue("r", rarity);
         json.writeValue("s", starCount);
-        json.writeValue("e", equipped);
+
     }
 
     @Override
@@ -38,6 +36,5 @@ public class FlagSaveData implements Json.Serializable {
         statsData.read(json, jsonValue.get("sd"));
         rarity = Rarity.valueOf(jsonValue.getString("r"));
         starCount = jsonValue.getInt("s");
-        equipped = jsonValue.getBoolean("e");
     }
 }

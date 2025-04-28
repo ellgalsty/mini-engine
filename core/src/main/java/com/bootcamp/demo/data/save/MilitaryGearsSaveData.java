@@ -28,6 +28,5 @@ public class MilitaryGearsSaveData implements Json.Serializable {
             final MilitaryGearSaveData militarySaveData = json.readValue(MilitaryGearSaveData.class, value);
             militaryGears.put(slot, militarySaveData);
         }
-
     }
 }

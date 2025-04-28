@@ -4,8 +4,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
-import com.badlogic.gdx.utils.*;
-import com.bootcamp.demo.data.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.Scaling;
+import com.bootcamp.demo.data.MilitaryGearSlot;
+import com.bootcamp.demo.data.Stat;
+import com.bootcamp.demo.data.StatManager;
 import com.bootcamp.demo.data.game.FlagGameData;
 import com.bootcamp.demo.data.game.GameData;
 import com.bootcamp.demo.data.game.PetGameData;
@@ -24,8 +28,11 @@ import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.localization.GameFont;
 import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.pages.containers.GearContainer;
+import com.bootcamp.demo.pages.containers.StarsContainer;
+import com.bootcamp.demo.pages.containers.StatsContainer;
 import com.bootcamp.demo.pages.containers.TacticalContainer;
 import com.bootcamp.demo.pages.core.APage;
+import lombok.Getter;
 
 public class MissionsPage extends APage {
     private static final float WIDGET_SIZE = 225f;
@@ -33,7 +40,9 @@ public class MissionsPage extends APage {
     private StatsContainer statsContainer;
     private TacticalsContainer tacticalGearContainer;
     private GearsContainer gearsContainer;
+    @Getter
     private FlagContainer flagContainer;
+    @Getter
     private PetContainer petContainer;
     private LootLevelButton lootLevelButton;
     private LootButton lootButton;
@@ -74,7 +83,7 @@ public class MissionsPage extends APage {
         return segment;
     }
 
-    private Table constructMainUISegment  () {
+    private Table constructMainUISegment () {
         final Table statsSegment = constructStatsSegment();
         final Table equipmentsSegment = constructEquipmentsSegment();
         final Table buttonsSegment = constructButtonsSegment();
@@ -91,7 +100,7 @@ public class MissionsPage extends APage {
     }
 
     private Table constructStatsSegment () {
-        statsContainer = new StatsContainer();
+        statsContainer = new StatsContainer(new Array<>(Stat.values));
 
         final Table statsInfoButton = new BorderedTable();
         statsInfoButton.setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("f4e7dc")));
@@ -122,7 +131,6 @@ public class MissionsPage extends APage {
         tacticalGearContainer = new TacticalsContainer();
         flagContainer = new FlagContainer();
 
-        // TODO: make this wrapper a class for tacticalContainer or figure out how to set data
         final BorderedTable tacticalGearWrapper = new BorderedTable();
         tacticalGearWrapper.add(tacticalGearContainer).grow();
         tacticalGearWrapper.setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get("bab9bb")));
@@ -252,8 +260,6 @@ public class MissionsPage extends APage {
         }
     }
 
-    // TODO: basically LootButton and AutoLootButton are the same, with different data,
-    //  so when we have actual data we will deal accordingly:)
     public static class LootButton extends OffsetButton {
         private final Label label;
         private final Image lootIcon;
@@ -324,33 +330,6 @@ public class MissionsPage extends APage {
         autoLootButton.setData();
     }
 
-    public static class StatsContainer extends WidgetsContainer<StatWidget> {
-        private final ObjectMap<Stat, StatWidget> stats = new ObjectMap<>();
-
-        public StatsContainer () {
-            super(3);
-            padLeft(50).defaults().space(25).expand().left();
-
-            for (Stat stat : Stat.values()) {
-                final StatWidget statContainer = new StatWidget();
-                add(statContainer);
-                stats.put(stat, statContainer);
-            }
-        }
-
-        public void setData (StatsData statsData) {
-            for (StatData statData : statsData.getStats().values()) {
-                final StatWidget widget = stats.get(statData.getStat());
-                widget.setData(statData);
-            }
-            for (ObjectMap.Entry<Stat, StatWidget> statEntry : stats) {
-                if (statEntry.value.label.getText().isEmpty()) {
-                    statEntry.value.setEmpty(statEntry.key);
-                }
-            }
-        }
-    }
-
     private static class TacticalsContainer extends WidgetsContainer<TacticalContainer> {
 
         public TacticalsContainer () {
@@ -380,93 +359,6 @@ public class MissionsPage extends APage {
         }
     }
 
-    public static class GearsContainer extends WidgetsContainer<GearContainer> {
-
-        public GearsContainer () {
-            super(3);
-            defaults().space(25).size(WIDGET_SIZE);
-
-            for (MilitaryGearSlot slot : MilitaryGearSlot.values) {
-                final GearContainer gearContainer = new GearContainer(slot);
-                add(gearContainer);
-            }
-        }
-
-        private void setData (MilitaryGearsSaveData militaryGearsSaveData) {
-            final Array<GearContainer> widgets = getWidgets();
-
-            for (int i = 0; i < MilitaryGearSlot.values.length; i++) {
-                final GearContainer widget = widgets.get(i);
-                MilitaryGearSaveData gearSaveData = militaryGearsSaveData.getMilitaryGears().get(MilitaryGearSlot.values[i]);
-                if (gearSaveData == null) {
-                    widget.setEmpty();
-                    continue;
-                }
-                MilitaryGearSlot slot = API.get(GameData.class).getMilitaryGearsGameData().getGears().get(gearSaveData.getName()).getType();
-                widget.setOnClick(() -> {
-                    GearDialog gearDialog = API.get(DialogManager.class).getDialog(GearDialog.class);
-                    gearDialog.setData(gearSaveData, slot);
-                    API.get(DialogManager.class).show(GearDialog.class);
-                });
-                widget.setData(gearSaveData);
-            }
-        }
-    }
-
-    public static class StatWidget extends Table {
-        private final Label label;
-        private final int defaultValue = 0;
-
-        public StatWidget () {
-            label = Labels.make(GameFont.BOLD_20, ColorLibrary.get("4e4238"));
-            add(label);
-        }
-
-        private void setData (@Null StatData statData) {
-            if (statData == null) {
-                return;
-            }
-            if (statData.getType() == StatType.NUMBER) {
-                label.setText(statData.getStat() + ": " + statData.getStatNumber() + "k");
-            } else {
-                label.setText(statData.getStat() + ": " + statData.getStatNumber() + "%");
-            }
-        }
-
-        private void setEmpty (Stat stat) {
-            label.setText(stat + ": " + defaultValue + "%");
-        }
-    }
-
-    public static class StarsContainer extends WidgetsContainer<StarWidget> {
-        public StarsContainer () {
-            super(4);
-            defaults().space(5).size(30);
-        }
-
-        public void setData (int starCount) {
-            freeChildren();
-            for (int i = 0; i < starCount; i++) {
-                final StarWidget star = Pools.obtain(StarWidget.class);
-                add(star);
-                star.setData();
-            }
-        }
-    }
-
-    public static class StarWidget extends Table {
-        private Image star;
-
-        public StarWidget () {
-            star = new Image();
-            add(star).size(30);
-        }
-
-        private void setData () {
-            star.setDrawable(Resources.getDrawable("ui/star"));
-        }
-    }
-
     public static class FlagContainer extends BorderedTable {
         private final Image icon;
         private final StarsContainer starsContainer;
@@ -480,7 +372,8 @@ public class MissionsPage extends APage {
             add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
             addActor(overlay);
         }
-        private void setData (FlagsSaveData flagsSaveData) {
+
+        public void setData (FlagsSaveData flagsSaveData) {
             if (flagsSaveData == null) {
                 setEmpty();
                 return;
@@ -531,7 +424,7 @@ public class MissionsPage extends APage {
             addActor(overlay);
         }
 
-        private void setData (@Null PetsSaveData petsSaveData) {
+        public void setData (@Null PetsSaveData petsSaveData) {
             if (petsSaveData == null) {
                 setEmpty();
                 return;
@@ -560,6 +453,40 @@ public class MissionsPage extends APage {
             segment.add(starsContainer).expand().top().left();
             segment.setFillParent(true);
             return segment;
+        }
+    }
+
+    public static class GearsContainer extends WidgetsContainer<GearContainer> {
+        private static final float WIDGET_SIZE = 225f;
+
+        public GearsContainer () {
+            super(3);
+            defaults().space(25).size(WIDGET_SIZE);
+
+            for (MilitaryGearSlot slot : MilitaryGearSlot.values) {
+                final GearContainer gearContainer = new GearContainer(slot);
+                add(gearContainer);
+            }
+        }
+
+        private void setData (MilitaryGearsSaveData militaryGearsSaveData) {
+            final Array<GearContainer> widgets = getWidgets();
+
+            for (int i = 0; i < MilitaryGearSlot.values.length; i++) {
+                final GearContainer widget = widgets.get(i);
+                MilitaryGearSaveData gearSaveData = militaryGearsSaveData.getMilitaryGears().get(MilitaryGearSlot.values[i]);
+                if (gearSaveData == null) {
+                    widget.setEmpty();
+                    continue;
+                }
+                MilitaryGearSlot slot = API.get(GameData.class).getMilitaryGearsGameData().getGears().get(gearSaveData.getName()).getType();
+                widget.setOnClick(() -> {
+                    GearDialog gearDialog = API.get(DialogManager.class).getDialog(GearDialog.class);
+                    gearDialog.setData(gearSaveData, slot);
+                    API.get(DialogManager.class).show(GearDialog.class);
+                });
+                widget.setData(gearSaveData);
+            }
         }
     }
 }

@@ -9,28 +9,25 @@ import com.bootcamp.demo.data.MilitaryGearSlot;
 import com.bootcamp.demo.data.game.GameData;
 import com.bootcamp.demo.data.game.MilitaryGearGameData;
 import com.bootcamp.demo.data.save.MilitaryGearSaveData;
-import com.bootcamp.demo.dialogs.GearDialog;
-import com.bootcamp.demo.dialogs.core.DialogManager;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Labels;
 import com.bootcamp.demo.engine.Squircle;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
 import com.bootcamp.demo.localization.GameFont;
 import com.bootcamp.demo.managers.API;
-import com.bootcamp.demo.pages.MissionsPage;
 
 public class GearContainer extends BorderedTable {
     private final Image icon;
     private final MilitaryGearSlot slot;
     private Label levelLabel;
     private Label rankLabel;
-    private final MissionsPage.StarsContainer starsContainer;
+    private final StarsContainer starsContainer;
 
 
     public GearContainer (MilitaryGearSlot slot) {
         this.slot = slot;
 
-        starsContainer = new MissionsPage.StarsContainer();
+        starsContainer = new StarsContainer();
         final Table overlay = constructOverlay();
         icon = new Image();
         icon.setScaling(Scaling.fit);

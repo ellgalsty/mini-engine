@@ -104,7 +104,6 @@ public class DemoGame extends Game {
         flagSaveData.setLevel(3);
         flagSaveData.setRarity(Rarity.IMMORTAL);
         flagSaveData.setStarCount(1);
-        flagSaveData.setEquipped(true);
         flagSaveData.setStatsData(statsData);
 
         API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(tacticalsSaveData.getName(), tacticalsSaveData);

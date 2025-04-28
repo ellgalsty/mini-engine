@@ -1,20 +1,20 @@
 <root>
     <weapon>
-        <item name="bloody-grail" title="Night Vision" icon="ui/maingears/bloody-grail" type="weapon"/>
+        <item name="bloody-grail" title="Bloody Grail" icon="ui/maingears/bloody-grail" type="weapon"/>
     </weapon>
     <melee>
-        <item name="hard-armor" title="Night Vision" icon="ui/maingears/hard-armor" type="melee"/>
+        <item name="hard-armor" title="Hard Armor" icon="ui/maingears/hard-armor" type="melee"/>
     </melee>
     <head>
-        <item name="revival-cape" title="Night Vision" icon="ui/maingears/revival-cape" type="head"/>
+        <item name="revival-cape" title="Revival Cape" icon="ui/maingears/revival-cape" type="head"/>
     </head>
     <body>
-        <item name="skyflame-crown" title="Night Vision" icon="ui/maingears/skyflame-crown" type="body"/>
+        <item name="skyflame-crown" title="Skyflame Crown" icon="ui/maingears/skyflame-crown" type="body"/>
     </body>
     <gloves>
-        <item name="star-palochka" title="Night Vision" icon="ui/maingears/star-palochka" type="gloves"/>
+        <item name="star-palochka" title="Star Palochka" icon="ui/maingears/star-palochka" type="gloves"/>
     </gloves>
     <shoes>
-        <item name="warriors-blade" title="Night Vision" icon="ui/maingears/warriors-blade" type="shoes"/>
+        <item name="warriors-blade" title="Warrior's Blade" icon="ui/maingears/warriors-blade" type="shoes"/>
     </shoes>
 </root>
