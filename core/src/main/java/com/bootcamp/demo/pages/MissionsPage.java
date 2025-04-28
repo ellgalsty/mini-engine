@@ -1,13 +1,14 @@
 package com.bootcamp.demo.pages;
 
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.*;
 import com.bootcamp.demo.data.*;
-import com.bootcamp.demo.data.game.*;
+import com.bootcamp.demo.data.game.FlagGameData;
+import com.bootcamp.demo.data.game.GameData;
+import com.bootcamp.demo.data.game.PetGameData;
 import com.bootcamp.demo.data.save.*;
 import com.bootcamp.demo.dialogs.FlagDialog;
 import com.bootcamp.demo.dialogs.GearDialog;
@@ -23,6 +24,7 @@ import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.localization.GameFont;
 import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.pages.containers.GearContainer;
+import com.bootcamp.demo.pages.containers.TacticalContainer;
 import com.bootcamp.demo.pages.core.APage;
 
 public class MissionsPage extends APage {
@@ -120,6 +122,7 @@ public class MissionsPage extends APage {
         tacticalGearContainer = new TacticalsContainer();
         flagContainer = new FlagContainer();
 
+        // TODO: make this wrapper a class for tacticalContainer or figure out how to set data
         final BorderedTable tacticalGearWrapper = new BorderedTable();
         tacticalGearWrapper.add(tacticalGearContainer).grow();
         tacticalGearWrapper.setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get("bab9bb")));
@@ -207,10 +210,10 @@ public class MissionsPage extends APage {
     }
 
     public static class LootLevelButton extends OffsetButton {
-        private Label handleLevelLabel;
-        private Label gripLevelLabel;
+        private final Label handleLevelLabel;
+        private final Label gripLevelLabel;
         private final Image lootIcon;
-        private Table handleGripLevelWrapper;
+        private final Table handleGripLevelWrapper;
 
         public LootLevelButton () {
             handleLevelLabel = Labels.make(GameFont.BOLD_20, ColorLibrary.get("fffae3"));
@@ -432,28 +435,6 @@ public class MissionsPage extends APage {
 
         private void setEmpty (Stat stat) {
             label.setText(stat + ": " + defaultValue + "%");
-        }
-    }
-
-    public static class TacticalContainer extends BorderedTable {
-        private final Image icon;
-
-        public TacticalContainer () {
-            setTouchable(Touchable.disabled);
-
-            icon = new Image();
-            icon.setScaling(Scaling.fit);
-            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
-        }
-
-        private void setData (@Null TacticalSaveData tacticalSaveData) {
-            if (tacticalSaveData == null) {
-                return;
-            }
-            final TacticalGameData tacticalGameData = API.get(GameData.class).getTacticalsGameData().getTacticals().get(tacticalSaveData.getName());
-            icon.setDrawable(tacticalGameData.getIcon());
-            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(tacticalSaveData.getRarity().getBackgroundColor())));
-            setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(tacticalSaveData.getRarity().getBorderColor())));
         }
     }
 

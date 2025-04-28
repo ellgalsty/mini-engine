@@ -29,4 +29,8 @@ public class TacticalsSaveData implements Json.Serializable {
             tacticals.put(slotName, tacticalSaveData);
         }
     }
+
+    public void putEquippedTactical (int slotNumber, String equippedTactical) {
+        equippedTacticals.put(slotNumber, equippedTactical);
+    }
 }
