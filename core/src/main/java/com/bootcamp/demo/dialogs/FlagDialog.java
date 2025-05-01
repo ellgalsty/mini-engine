@@ -30,7 +30,7 @@ import lombok.Getter;
 
 
 public class FlagDialog extends ADialog {
-    private static SelectedFlagContainer currentSelectedContainer;
+    private static FlagContainer currentSelectedContainer;
     private static Label flagTitleLabel;
     private static StatsContainer flagStats;
     private OwnedFlagsContainer ownedFlags;
@@ -79,7 +79,7 @@ public class FlagDialog extends ADialog {
 
     private Table constructFlagInfoWrapper () {
         flagTitleLabel = Labels.make(GameFont.BOLD_24);
-        currentSelectedContainer = new SelectedFlagContainer();
+        currentSelectedContainer = new FlagContainer();
 
         final Table segment = new Table();
         segment.defaults().space(25);
@@ -124,7 +124,7 @@ public class FlagDialog extends ADialog {
         ownedFlags.setData(flagsSaveData);
     }
 
-    public static class OwnedFlagsContainer extends WidgetsContainer<OwnedFlagContainer> {
+    public static class OwnedFlagsContainer extends WidgetsContainer<FlagContainer> {
         private static final float WIDGET_SIZE = 200f;
 
         public OwnedFlagsContainer () {
@@ -133,7 +133,7 @@ public class FlagDialog extends ADialog {
             pad(45).defaults().size(WIDGET_SIZE).space(25);
 
             for (int i = 0; i < API.get(SaveData.class).getFlagsSaveData().getFlags().size; i++) {
-                final OwnedFlagContainer flagContainer = new OwnedFlagContainer();
+                final FlagContainer flagContainer = new FlagContainer();
                 add(flagContainer);
             }
         }
@@ -142,18 +142,20 @@ public class FlagDialog extends ADialog {
             freeChildren();
 
             for (FlagSaveData flagSaveData : flagsSaveData.getFlags().values()) {
-                final OwnedFlagContainer widget = Pools.obtain(OwnedFlagContainer.class);
+                final FlagContainer widget = Pools.obtain(FlagContainer.class);
                 add(widget);
                 widget.setData(flagSaveData);
             }
         }
     }
 
-    public static class OwnedFlagContainer extends BorderedTable {
+    public static class FlagContainer extends BorderedTable {
         private final Image icon;
         private final StarsContainer starsContainer;
+        @Getter
+        private FlagSaveData flagSaveData;
 
-        public OwnedFlagContainer () {
+        public FlagContainer () {
             starsContainer = new StarsContainer();
             final Table overlay = constructOverlay();
             icon = new Image();
@@ -164,6 +166,7 @@ public class FlagDialog extends ADialog {
         }
 
         private void setData (@Null FlagSaveData flagSaveData) {
+            this.flagSaveData = flagSaveData;
             if (flagSaveData == null) {
                 setEmpty();
                 return;
@@ -186,16 +189,6 @@ public class FlagDialog extends ADialog {
             segment.add(starsContainer).expand().top().left();
             segment.setFillParent(true);
             return segment;
-        }
-    }
-
-    public static class SelectedFlagContainer extends OwnedFlagContainer {
-        @Getter
-        private FlagSaveData flagSaveData;
-
-        private void setData (FlagSaveData flagSaveData) {
-            super.setData(flagSaveData);
-            this.flagSaveData = flagSaveData;
         }
     }
 }
