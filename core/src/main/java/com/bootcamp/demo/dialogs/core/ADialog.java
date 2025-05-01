@@ -24,7 +24,7 @@ public abstract class ADialog extends Table {
     protected Label titleLabel;
     protected Cell<Label> titleLabelCell;
     protected Color titleFontColor = Color.WHITE;
-    protected GameFont titleFont = GameFont.BOLD_50;
+    protected GameFont titleFont = GameFont.BOLD_32;
 
     // content
     protected Table contentWrapper;
@@ -152,7 +152,7 @@ public abstract class ADialog extends Table {
     protected void constructTitleSegment (Table titleSegment) {
         titleLabel = Labels.make(titleFont, titleFontColor);
         titleLabel.setText(getTitle());
-        titleLabelCell = titleSegment.add(titleLabel);
+        titleLabelCell = titleSegment.add(titleLabel).pad(25);
     }
 
     protected String getTitle () {
@@ -170,6 +170,11 @@ public abstract class ADialog extends Table {
     protected void setTitle (CharSequence title, Color titleFontColor) {
         titleLabel.setText(title);
         titleLabel.setColor(titleFontColor);
+    }
+    protected void setTitle (CharSequence title, Color titleFontColor, Color backgroundColor) {
+        titleLabel.setText(title);
+        titleLabel.setColor(titleFontColor);
+        titleSegment.setBackground(Squircle.SQUIRCLE_35_TOP.getDrawable(backgroundColor));
     }
 
     protected abstract void constructContent (Table content);

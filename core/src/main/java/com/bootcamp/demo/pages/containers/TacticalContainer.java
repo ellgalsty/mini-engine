@@ -26,11 +26,18 @@ public class TacticalContainer extends BorderedTable {
 
     public void setData (@Null TacticalSaveData tacticalSaveData) {
         if (tacticalSaveData == null) {
+            setEmpty();
             return;
         }
         final TacticalGameData tacticalGameData = API.get(GameData.class).getTacticalsGameData().getTacticals().get(tacticalSaveData.getName());
         icon.setDrawable(tacticalGameData.getIcon());
         setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(tacticalSaveData.getRarity().getBackgroundColor())));
         setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(tacticalSaveData.getRarity().getBorderColor())));
+    }
+
+    @Override
+    public void setEmpty () {
+        super.setEmpty();
+        icon.setDrawable(null);
     }
 }

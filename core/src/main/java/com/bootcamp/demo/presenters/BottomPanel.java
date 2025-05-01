@@ -12,7 +12,6 @@ import com.bootcamp.demo.pages.core.PageManager;
 import com.bootcamp.demo.events.core.EventHandler;
 import com.bootcamp.demo.events.core.EventListener;
 import com.bootcamp.demo.pages.MissionsPage;
-import com.bootcamp.demo.pages.TestPage;
 import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.pages.core.APage;
 import com.bootcamp.demo.engine.Resources;
@@ -43,7 +42,6 @@ public class BottomPanel extends Table implements EventListener {
 
     @EventHandler
     public void onGameStartedEvent (GameStartedEvent event) {
-        buttons.get(0).setPageClass(TestPage.class);
         buttons.get(1).setPageClass(null);
         buttons.get(2).setPageClass(MissionsPage.class);
 

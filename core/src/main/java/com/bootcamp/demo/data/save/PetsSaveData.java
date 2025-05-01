@@ -9,9 +9,8 @@ import lombok.Setter;
 public class PetsSaveData implements Json.Serializable {
     @Getter
     private final ObjectMap<String, PetSaveData> pets = new ObjectMap<>();
-    @Setter
-    @Getter
-    private String equippedPet = "cactus";
+    @Setter @Getter
+    private String equippedPetId;
 
     @Override
     public void write (Json json) {

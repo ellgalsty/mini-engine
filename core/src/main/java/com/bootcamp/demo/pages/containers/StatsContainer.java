@@ -1,34 +1,58 @@
 package com.bootcamp.demo.pages.containers;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.*;
 import com.bootcamp.demo.data.Stat;
 import com.bootcamp.demo.data.StatData;
+import com.bootcamp.demo.data.StatType;
 import com.bootcamp.demo.data.StatsData;
+import com.bootcamp.demo.engine.ColorLibrary;
+import com.bootcamp.demo.engine.Labels;
 import com.bootcamp.demo.engine.widgets.WidgetsContainer;
+import com.bootcamp.demo.localization.GameFont;
 
-public class StatsContainer extends WidgetsContainer<StatWidget> {
-    private final ObjectMap<Stat, StatWidget> statWidgets = new ObjectMap<>();
+public class StatsContainer extends WidgetsContainer<StatsContainer.StatWidget> {
 
-    public StatsContainer (Array<Stat> stats) {
+    public StatsContainer () {
         super(3);
         padLeft(50).defaults().space(25).expand().left();
-
-        for (Stat stat : stats) {
-            final StatWidget statContainer = new StatWidget();
-            add(statContainer);
-            statWidgets.put(stat, statContainer);
-        }
     }
 
     public void setData (StatsData statsData) {
-        for (StatData statData : statsData.getStats().values()) {
-            final StatWidget widget = statWidgets.get(statData.getStat());
-            widget.setData(statData);
+        freeChildren();
+        if (statsData == null) {
+            return;
         }
-        for (ObjectMap.Entry<Stat, StatWidget> statEntry : statWidgets) {
-            if (statEntry.value.label.getText().isEmpty()) {
-                statEntry.value.setEmpty(statEntry.key);
+
+        final OrderedMap<Stat, StatData> statsMap = statsData.getStats();
+        for (ObjectMap.Entry<Stat, StatData> entry : statsMap) {
+            final StatData statData = entry.value;
+            // don't show empty stats
+            if (statData.getValue() == 0) continue;
+
+            final StatWidget widget = Pools.obtain(StatWidget.class);
+            widget.setData(statData);
+            add(widget);
+        }
+    }
+
+    public static class StatWidget extends Table {
+        protected final Label label;
+
+        public StatWidget () {
+            label = Labels.make(GameFont.BOLD_20, ColorLibrary.get("4e4238"));
+            add(label);
+        }
+
+        protected void setData (@Null StatData statData) {
+            if (statData == null) {
+                return;
+            }
+            if (statData.getType() == StatType.NUMBER) {
+                label.setText(statData.getStat() + ": " + statData.getValue());
+            } else {
+                label.setText(statData.getStat() + ": " + statData.getValue() + "%");
             }
         }
     }

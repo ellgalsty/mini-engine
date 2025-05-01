@@ -5,20 +5,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.Scaling;
-import com.bootcamp.demo.data.Stat;
 import com.bootcamp.demo.data.game.GameData;
 import com.bootcamp.demo.data.game.PetGameData;
 import com.bootcamp.demo.data.save.PetSaveData;
 import com.bootcamp.demo.data.save.PetsSaveData;
 import com.bootcamp.demo.data.save.SaveData;
 import com.bootcamp.demo.dialogs.core.ADialog;
+import com.bootcamp.demo.dialogs.buttons.TextOffsetButton;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Labels;
 import com.bootcamp.demo.engine.Squircle;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
+import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.localization.GameFont;
 import com.bootcamp.demo.managers.API;
@@ -29,9 +29,10 @@ import com.bootcamp.demo.pages.core.PageManager;
 
 public class PetDialog extends ADialog {
     private static PetContainer currentContainer;
-    private Label petTitleLabel;
+    private static Label petTitleLabel;
     private static StatsContainer petStats;
     private OwnedPetsContainer ownedPets;
+    private TextOffsetButton equipButton;
 
     @Override
     protected void constructContent (Table content) {
@@ -45,6 +46,7 @@ public class PetDialog extends ADialog {
         final Table petInfoWrapper = constructPetInfoWrapper();
         final Table petStatsSegment = constructStatsSegment();
         final Table ownedPetsSegment = constructOwnedPetsSegment();
+        equipButton = new TextOffsetButton(OffsetButton.Style.GREEN_35);
 
         final Table segment = new Table();
         segment.defaults().space(25).grow();
@@ -53,6 +55,8 @@ public class PetDialog extends ADialog {
         segment.add(petStatsSegment);
         segment.row();
         segment.add(ownedPetsSegment);
+        segment.row();
+        segment.add(equipButton).size(300, 200);
         return segment;
     }
 
@@ -82,10 +86,7 @@ public class PetDialog extends ADialog {
     private Table constructStatsSegment () {
         final Label statsTitle = Labels.make(GameFont.BOLD_22, Color.valueOf("2c1a12"));
         statsTitle.setText("Pet Stats");
-        Array<Stat> stats = new Array<>();
-        stats.add(Stat.HP);
-        stats.add(Stat.ATK);
-        petStats = new StatsContainer(stats);
+        petStats = new StatsContainer();
         petStats.setBackground(Squircle.SQUIRCLE_35.getDrawable(Color.valueOf("af9e90")));
 
         final Table segment = new Table();
@@ -97,20 +98,25 @@ public class PetDialog extends ADialog {
     }
 
     public void setData (PetsSaveData petsSaveData) {
-        if (petsSaveData.getEquippedPet() == null){
+        setEquippedPet(petsSaveData.getEquippedPetId());
+        ownedPets.setData(petsSaveData);
+    }
+
+    private void setEquippedPet (String equippedPetId) {
+        equipButton.setText("Equip");
+        if (equippedPetId == null || equippedPetId.isEmpty()) {
             currentContainer.setData(null);
             petTitleLabel.setText("No pet selected");
-            ownedPets.setData(petsSaveData);
             return;
         }
-        PetGameData equippedPetGameData = API.get(GameData.class).getPetsGameData().getPets().get(petsSaveData.getEquippedPet());
-        PetSaveData equippedPetSaveData = petsSaveData.getPets().get(petsSaveData.getEquippedPet());
+
+        final PetSaveData equippedPetSaveData = API.get(SaveData.class).getPetsSaveData().getPets().get(equippedPetId);
+        final PetGameData equippedPetGameData = API.get(GameData.class).getPetsGameData().getPets().get(equippedPetSaveData.getName());
 
         currentContainer.setData(equippedPetSaveData);
         petTitleLabel.setText(equippedPetGameData.getTitle());
         petTitleLabel.setColor(Color.valueOf(equippedPetSaveData.getRarity().getBackgroundColor()));
         petStats.setData(equippedPetSaveData.getStatsData());
-        ownedPets.setData(petsSaveData);
     }
 
     public static class OwnedPetsContainer extends WidgetsContainer<PetContainer> {
@@ -163,9 +169,10 @@ public class PetDialog extends ADialog {
             setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(petSaveData.getRarity().getBackgroundColor())));
             setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(petSaveData.getRarity().getBorderColor())));
             setOnClick(() -> {
-                API.get(SaveData.class).getPetsSaveData().setEquippedPet(petSaveData.getName());
+                API.get(SaveData.class).getPetsSaveData().setEquippedPetId(petSaveData.getName());
                 currentContainer.setData(petSaveData);
                 petStats.setData(petSaveData.getStatsData());
+                petTitleLabel.setText(petGameData.getTitle());
                 API.get(PageManager.class).getPage(MissionsPage.class).getPetContainer().setData(API.get(SaveData.class).getPetsSaveData());
             });
         }

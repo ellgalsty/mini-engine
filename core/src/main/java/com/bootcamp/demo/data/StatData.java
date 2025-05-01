@@ -11,22 +11,21 @@ public class StatData implements Json.Serializable {
     @Getter @Setter
     private Stat stat;
     @Getter @Setter
-    private float statNumber;
+    private float value;
     @Getter @Setter
     private StatType type;
 
     @Override
     public void write (Json json) {
         json.writeValue("s", stat);
-        json.writeValue("n", statNumber);
+        json.writeValue("v", value);
         json.writeValue("t", type);
-
     }
 
     @Override
     public void read (Json json, JsonValue jsonValue) {
         stat = Stat.valueOf(jsonValue.getString("s"));
-        statNumber = jsonValue.getFloat("n");
+        value = jsonValue.getFloat("v");
         type = StatType.valueOf(jsonValue.getString("t").toUpperCase(Locale.ENGLISH));
     }
 }

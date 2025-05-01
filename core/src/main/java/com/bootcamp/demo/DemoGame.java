@@ -67,12 +67,12 @@ public class DemoGame extends Game {
         final StatsData statsData5 = new StatsData();
         final StatData statData11 = new StatData();
         statData11.setStat(Stat.ATK);
-        statData11.setStatNumber(5);
+        statData11.setValue(5);
         statData11.setType(StatType.PERCENT);
 
         final StatData statData22 = new StatData();
         statData22.setStat(Stat.HP);
-        statData22.setStatNumber(10);
+        statData22.setValue(10);
         statData22.setType(StatType.PERCENT);
 
         statsData5.putStatData(statData11.getStat(), statData11);
@@ -88,12 +88,12 @@ public class DemoGame extends Game {
         final StatsData statsData = new StatsData();
         final StatData statData1 = new StatData();
         statData1.setStat(Stat.ATK);
-        statData1.setStatNumber(5);
+        statData1.setValue(5);
         statData1.setType(StatType.PERCENT);
 
         final StatData statData2 = new StatData();
         statData2.setStat(Stat.HP);
-        statData2.setStatNumber(10);
+        statData2.setValue(10);
         statData2.setType(StatType.PERCENT);
 
         statsData.getStats().put(statData1.getStat(), statData1);
@@ -108,15 +108,16 @@ public class DemoGame extends Game {
 
         API.get(SaveData.class).getTacticalsSaveData().getTacticals().put(tacticalsSaveData.getName(), tacticalsSaveData);
         MilitaryGearSlot gearSlot1 = API.get(GameData.class).getMilitaryGearsGameData().getGears().get(militaryGearSaveData1.getName()).getType();
-        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(gearSlot1, militaryGearSaveData1);
         MilitaryGearSlot gearSlot2 = API.get(GameData.class).getMilitaryGearsGameData().getGears().get(militaryGearSaveData2.getName()).getType();
         API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(gearSlot2, militaryGearSaveData2);
+        API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().put(gearSlot1, militaryGearSaveData1);
         API.get(SaveData.class).getPetsSaveData().getPets().put(petSaveData.getName(), petSaveData);
         API.get(SaveData.class).getPetsSaveData().getPets().put(petSaveData2.getName(), petSaveData2);
         API.get(SaveData.class).getFlagsSaveData().getFlags().put(flagSaveData.getName(), flagSaveData);
         savePlayerData();
 
         setScreen(new GameScreen());
+        API.Instance().register(DemoGame.class, this);
         API.get(EventModule.class).fireEvent(GameStartedEvent.class);
     }
 
@@ -167,12 +168,12 @@ public class DemoGame extends Game {
         final StatsData statsData = new StatsData();
         final StatData statData1 = new StatData();
         statData1.setStat(Stat.ATK);
-        statData1.setStatNumber(23);
+        statData1.setValue(23);
         statData1.setType(StatType.NUMBER);
 
         final StatData statData2 = new StatData();
         statData2.setStat(Stat.HP);
-        statData2.setStatNumber(15);
+        statData2.setValue(15);
         statData2.setType(StatType.NUMBER);
 
         statsData.getStats().put(statData1.getStat(), statData1);

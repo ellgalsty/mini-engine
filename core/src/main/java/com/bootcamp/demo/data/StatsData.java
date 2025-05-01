@@ -3,11 +3,12 @@ package com.bootcamp.demo.data;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.OrderedMap;
 import lombok.Getter;
 
 public class StatsData implements Json.Serializable {
     @Getter
-    private final ObjectMap<Stat, StatData> stats = new ObjectMap<>();
+    private final OrderedMap<Stat, StatData> stats = new OrderedMap<>();
 
     @Override
     public void write (Json json) {

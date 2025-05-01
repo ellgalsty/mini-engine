@@ -2,13 +2,13 @@ package com.bootcamp.demo.data;
 
 public enum Stat {
     HP,
-    COMBO,
-    REGEN,
     ATK,
-    CRIT,
-    STEAL,
     DODGE,
+    COMBO,
+    CRIT,
     STUN,
+    REGEN,
+    STEAL,
     POISON;
 
     public static final Stat[] values = values();
