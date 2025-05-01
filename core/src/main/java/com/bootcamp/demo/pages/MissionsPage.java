@@ -28,6 +28,7 @@ import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.events.EquipFlagEvent;
 import com.bootcamp.demo.events.EquipGearEvent;
+import com.bootcamp.demo.events.EquipPetEvent;
 import com.bootcamp.demo.events.core.EventHandler;
 import com.bootcamp.demo.events.core.EventListener;
 import com.bootcamp.demo.events.core.EventModule;
@@ -231,6 +232,11 @@ public class MissionsPage extends APage implements EventListener {
         flagContainer.setData(flagsSaveData);
     }
 
+    @EventHandler
+    public void onEquipPetEvent (EquipPetEvent event) {
+        final PetsSaveData petsSaveData = API.get(SaveData.class).getPetsSaveData();
+        petContainer.setData(petsSaveData);
+    }
 
     @Override
     public void show (Runnable onComplete) {

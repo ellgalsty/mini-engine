@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.Scaling;
+import com.bootcamp.demo.data.MissionsManager;
 import com.bootcamp.demo.data.game.GameData;
 import com.bootcamp.demo.data.game.PetGameData;
 import com.bootcamp.demo.data.save.PetSaveData;
@@ -25,10 +26,10 @@ import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.pages.MissionsPage;
 import com.bootcamp.demo.pages.containers.StarsContainer;
 import com.bootcamp.demo.pages.containers.StatsContainer;
-import com.bootcamp.demo.pages.core.PageManager;
+import lombok.Getter;
 
 public class PetDialog extends ADialog {
-    private static PetContainer currentContainer;
+    private static PetContainer currentSelectedContainer;
     private static Label petTitleLabel;
     private static StatsContainer petStats;
     private OwnedPetsContainer ownedPets;
@@ -47,6 +48,9 @@ public class PetDialog extends ADialog {
         final Table petStatsSegment = constructStatsSegment();
         final Table ownedPetsSegment = constructOwnedPetsSegment();
         equipButton = new TextOffsetButton(OffsetButton.Style.GREEN_35);
+        equipButton.setOnClick(() -> {
+            MissionsManager.equipPet(currentSelectedContainer.getPetSaveData());
+        });
 
         final Table segment = new Table();
         segment.defaults().space(25).grow();
@@ -73,13 +77,13 @@ public class PetDialog extends ADialog {
     }
 
     private Table constructPetInfoWrapper () {
-        currentContainer = new PetContainer();
+        currentSelectedContainer = new PetContainer();
         petTitleLabel = Labels.make(GameFont.BOLD_22, Color.valueOf("403937"));
 
         final Table segment = new Table();
         segment.add(petTitleLabel).expand().left();
         segment.row();
-        segment.add(currentContainer).growX().height(450);
+        segment.add(currentSelectedContainer).growX().height(450);
         return segment;
     }
 
@@ -105,7 +109,7 @@ public class PetDialog extends ADialog {
     private void setEquippedPet (String equippedPetId) {
         equipButton.setText("Equip");
         if (equippedPetId == null || equippedPetId.isEmpty()) {
-            currentContainer.setData(null);
+            currentSelectedContainer.setData(null);
             petTitleLabel.setText("No pet selected");
             return;
         }
@@ -113,7 +117,7 @@ public class PetDialog extends ADialog {
         final PetSaveData equippedPetSaveData = API.get(SaveData.class).getPetsSaveData().getPets().get(equippedPetId);
         final PetGameData equippedPetGameData = API.get(GameData.class).getPetsGameData().getPets().get(equippedPetSaveData.getName());
 
-        currentContainer.setData(equippedPetSaveData);
+        currentSelectedContainer.setData(equippedPetSaveData);
         petTitleLabel.setText(equippedPetGameData.getTitle());
         petTitleLabel.setColor(Color.valueOf(equippedPetSaveData.getRarity().getBackgroundColor()));
         petStats.setData(equippedPetSaveData.getStatsData());
@@ -147,6 +151,8 @@ public class PetDialog extends ADialog {
     public static class PetContainer extends BorderedTable {
         private final Image icon;
         private final StarsContainer starsContainer;
+        @Getter
+        private PetSaveData petSaveData;
 
         public PetContainer () {
             starsContainer = new StarsContainer();
@@ -159,6 +165,7 @@ public class PetDialog extends ADialog {
         }
 
         private void setData (PetSaveData petSaveData) {
+            this.petSaveData = petSaveData;
             if (petSaveData == null) {
                 setEmpty();
                 return;
@@ -169,11 +176,9 @@ public class PetDialog extends ADialog {
             setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(petSaveData.getRarity().getBackgroundColor())));
             setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(petSaveData.getRarity().getBorderColor())));
             setOnClick(() -> {
-                API.get(SaveData.class).getPetsSaveData().setEquippedPetId(petSaveData.getName());
-                currentContainer.setData(petSaveData);
+                currentSelectedContainer.setData(petSaveData);
                 petStats.setData(petSaveData.getStatsData());
                 petTitleLabel.setText(petGameData.getTitle());
-                API.get(PageManager.class).getPage(MissionsPage.class).getPetContainer().setData(API.get(SaveData.class).getPetsSaveData());
             });
         }
 
