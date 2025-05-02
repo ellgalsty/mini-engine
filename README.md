@@ -1,8 +1,6 @@
-# demo
+# mini-engine
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
-
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws a simple GUI on the screen.
+A modular libGDX-based engine which contains mission page simulation for gear looting, inventory, and stat management.
 
 ## Platforms
 
@@ -11,26 +9,76 @@ This project was generated with a template including simple application launcher
 - `android`: Android mobile platform. Needs Android SDK.
 - `ios`: iOS mobile platform using RoboVM.
 
-## Gradle
+## 🌟 Features
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+- 🎯 **Mission Page Simulation**  
+  Fully functional mission screen UI for gear and stat management.
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `android:lint`: performs Android project validation.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+- 🎖️ **Military Gear Looting**  
+  Press **L** to equip new randomized military gear.
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+- 🐾 **Pet Items**  
+  Press **P** to generate random pet gear.
+
+- 🚩 **Flags**  
+  Press **F** to generate random flag gear.
+
+- 🧠 **Tactical Items**  
+  Press **T** to generate random tactical gear.
+
+- 💾 **Robust Save Data Management**  
+  Each gear type (Military, Pet, Flag, Tactical) has a dedicated `GameData` and `SaveData` implementation.
+
+- 📦 **Dialog System**  
+  Modular, stylized dialogs for looting, equipping, and inspecting gear.
+
+- 🔔 **Event-Driven Architecture**  
+  Uses custom events (e.g., `EquipGearEvent`, `UpdateStatsEvent`) to synchronize UI and logic.
+
+- 📊 **Stat Aggregation Engine**  
+  `MissionsManager` calculates player stats using additive and percentage modifiers.
+
+- 🧪 **Data Generator Utility**  
+  Easily generates randomized gear and stats for gameplay testing.
+
+- 🧰 **Reusable UI Components**  
+  Widget containers and pooled UI components built for performance.
+
+- 🧼 **Clean & Structured Codebase**  
+  Modular, readable, and scalable architecture.
+
+
+## 🛠️ Technologies Used
+Java 8+
+
+libGDX
+
+LWJGL3 (for desktop)
+
+Gradle
+
+Pools & JSON serialization (libGDX)
+
+## 🎮 Controls
+
+| Key | Action                          |
+|-----|---------------------------------|
+| **L** | Loot new military gear         |
+| **T** | Add random tactical item       |
+| **P** | Add random pet item            |
+| **F** | Add random flag item           |
+
+
+## See my UI :)
+<img width="544" alt="Screenshot 2025-05-03 at 02 02 08" src="https://github.com/user-attachments/assets/7350848a-7107-4cf9-b0fd-36cd802120d5" />
+
+As you can see, the power logic is not written fully yet, that's why it is 0 now.
+
+## 🔮 Future Plans
+
+Add animation effects for gear looting
+
+Add correct loot drop logic
+
+Add correct power calculation logic
+
