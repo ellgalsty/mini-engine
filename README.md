@@ -61,12 +61,12 @@ Pools & JSON serialization (libGDX)
 
 ## 🎮 Controls
 
-| Key | Action                          |
-|-----|---------------------------------|
-| **L** | Loot new military gear         |
-| **T** | Add random tactical item       |
-| **P** | Add random pet item            |
-| **F** | Add random flag item           |
+| Key | Action                                      |
+|-----------------|---------------------------------|
+| **Loot Button** | Loot new military gear          |
+|     **T**       | Add random tactical item        |
+|     **P**       | Add random pet item             |
+|     **F**       | Add random flag item            | 
 
 
 ## See my UI :)
