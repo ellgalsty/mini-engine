@@ -5,12 +5,15 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.bootcamp.demo.data.MilitaryGearSlot;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Locale;
 
 public class MilitaryGearsSaveData implements Json.Serializable {
     @Getter
     private final ObjectMap<MilitaryGearSlot, MilitaryGearSaveData> militaryGears = new ObjectMap<>();
+    @Getter @Setter
+    private String equippedSkin;
 
     @Override
     public void write (Json json) {

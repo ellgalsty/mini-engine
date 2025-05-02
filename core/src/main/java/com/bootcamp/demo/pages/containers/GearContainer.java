@@ -28,6 +28,16 @@ public class GearContainer extends BorderedTable {
     @Getter
     private MilitaryGearSaveData data;
 
+    public GearContainer() {
+        starsContainer = new StarsContainer();
+        final Table overlay = constructOverlay();
+        icon = new Image();
+        icon.setScaling(Scaling.fit);
+
+        add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
+        addActor(overlay);
+    }
+
     public GearContainer (MilitaryGearSlot slot) {
         this.slot = slot;
 

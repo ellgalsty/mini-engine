@@ -1,5 +1,7 @@
 package com.bootcamp.demo.pages;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -13,11 +15,9 @@ import com.bootcamp.demo.data.MissionsManager;
 import com.bootcamp.demo.data.game.FlagGameData;
 import com.bootcamp.demo.data.game.GameData;
 import com.bootcamp.demo.data.game.PetGameData;
+import com.bootcamp.demo.data.game.TacticalGameData;
 import com.bootcamp.demo.data.save.*;
-import com.bootcamp.demo.dialogs.FlagDialog;
-import com.bootcamp.demo.dialogs.GearDialog;
-import com.bootcamp.demo.dialogs.PetDialog;
-import com.bootcamp.demo.dialogs.TacticalDialog;
+import com.bootcamp.demo.dialogs.*;
 import com.bootcamp.demo.dialogs.core.DialogManager;
 import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Labels;
@@ -26,9 +26,7 @@ import com.bootcamp.demo.engine.Squircle;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
 import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.engine.widgets.WidgetsContainer;
-import com.bootcamp.demo.events.EquipFlagEvent;
-import com.bootcamp.demo.events.EquipGearEvent;
-import com.bootcamp.demo.events.EquipPetEvent;
+import com.bootcamp.demo.events.*;
 import com.bootcamp.demo.events.core.EventHandler;
 import com.bootcamp.demo.events.core.EventListener;
 import com.bootcamp.demo.events.core.EventModule;
@@ -37,15 +35,15 @@ import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.pages.containers.GearContainer;
 import com.bootcamp.demo.pages.containers.StarsContainer;
 import com.bootcamp.demo.pages.containers.StatsContainer;
-import com.bootcamp.demo.pages.containers.TacticalContainer;
 import com.bootcamp.demo.pages.core.APage;
+import com.bootcamp.demo.logic.DataGenerator;
 import lombok.Getter;
 
 public class MissionsPage extends APage implements EventListener {
     private static final float WIDGET_SIZE = 225f;
 
     private StatsContainer statsContainer;
-    private TacticalsContainer tacticalGearContainer;
+    private TacticalsPreviewContainer tacticalGearContainer;
     private GearsContainer gearsContainer;
     @Getter
     private FlagContainer flagContainer;
@@ -74,7 +72,6 @@ public class MissionsPage extends APage implements EventListener {
         final Image atkIcon = new Image(Resources.getDrawable("ui/atk"));
         atkIcon.setScaling(Scaling.fit);
 
-        // add inner table so that we have a border for the segment
         final Label label = Labels.make(GameFont.BOLD_28, ColorLibrary.get("fffdfc"));
         label.setText(String.valueOf(MissionsManager.calculateCumulativePower()));
 
@@ -98,7 +95,7 @@ public class MissionsPage extends APage implements EventListener {
         final Table segment = new Table();
         segment.setBackground(Resources.getDrawable("basics/white-pixel", ColorLibrary.get("f6e6de")));
         segment.pad(30).defaults().growX().space(30);
-        segment.add(statsSegment);
+        segment.add(statsSegment).height(225);
         segment.row();
         segment.add(equipmentsSegment);
         segment.row();
@@ -135,7 +132,7 @@ public class MissionsPage extends APage implements EventListener {
         final int space = 25;
 
         // left segment
-        tacticalGearContainer = new TacticalsContainer();
+        tacticalGearContainer = new TacticalsPreviewContainer();
         flagContainer = new FlagContainer();
 
         final Table tacticalFlagContainersWrapper = new Table();
@@ -238,6 +235,17 @@ public class MissionsPage extends APage implements EventListener {
         petContainer.setData(petsSaveData);
     }
 
+    @EventHandler
+    public void onEquipTacticalEvent (EquipTacticalEvent event) {
+        final TacticalsSaveData tacticalsSaveData = API.get(SaveData.class).getTacticalsSaveData();
+        tacticalGearContainer.setData(tacticalsSaveData);
+    }
+
+    @EventHandler
+    public void onUpdateStatsEvent (UpdateStatsEvent event) {
+        statsContainer.setData(MissionsManager.getGeneralStatsData());
+    }
+
     @Override
     public void show (Runnable onComplete) {
         super.show(onComplete);
@@ -310,6 +318,17 @@ public class MissionsPage extends APage implements EventListener {
             label = Labels.make(GameFont.BOLD_22, ColorLibrary.get("fffae3"));
             lootIcon = new Image();
 
+            setOnClick(() -> {
+                MilitaryGearSaveData gearSaveData = DataGenerator.generateGearData();
+                if (!API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears().containsKey(gearSaveData.getSlot())) {
+                    MissionsManager.equipGear(gearSaveData);
+                    MissionsManager.updateStats();
+                } else {
+                    API.get(DialogManager.class).getDialog(LootDialog.class).setData(gearSaveData);
+                    API.get(DialogManager.class).show(LootDialog.class);
+                }
+            });
+
             build(Style.GREEN_35);
         }
 
@@ -352,27 +371,27 @@ public class MissionsPage extends APage implements EventListener {
         }
     }
 
-    private static class TacticalsContainer extends BorderedTable {
-        private final WidgetsContainer<TacticalContainer> tacticalWidgets = new WidgetsContainer<>(2);
+    private static class TacticalsPreviewContainer extends BorderedTable {
+        private final WidgetsContainer<TacticalPreviewContainer> tacticalWidgets = new WidgetsContainer<>(2);
 
-        public TacticalsContainer () {
+        public TacticalsPreviewContainer () {
             super(2);
             setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get("bab9bb")));
             setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get("bab9bb")));
             tacticalWidgets.pad(5).defaults().space(10).grow();
 
             for (int i = 0; i < 4; i++) {
-                final TacticalContainer tacticalContainer = new TacticalContainer();
+                final TacticalPreviewContainer tacticalContainer = new TacticalPreviewContainer();
                 tacticalWidgets.add(tacticalContainer);
             }
             add(tacticalWidgets).grow();
         }
 
         public void setData (TacticalsSaveData tacticalsSaveData) {
-            final Array<TacticalContainer> widgets = tacticalWidgets.getWidgets();
+            final Array<TacticalPreviewContainer> widgets = tacticalWidgets.getWidgets();
 
             for (int i = 0; i < widgets.size; i++) {
-                final TacticalContainer widget = widgets.get(i);
+                final TacticalPreviewContainer widget = widgets.get(i);
                 final String equippedTacticalName = tacticalsSaveData.getEquippedTacticals().get(i);
                 if (equippedTacticalName != null) {
                     final TacticalSaveData tacticalSaveData = tacticalsSaveData.getTacticals().get(equippedTacticalName);
@@ -417,7 +436,7 @@ public class MissionsPage extends APage implements EventListener {
                     API.get(DialogManager.class).show(FlagDialog.class);
                 });
                 final FlagSaveData equippedFlagSaveData = flagsSaveData.getFlags().get(equippedFlagName);
-                final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(equippedFlagName);
+                final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlagsMap().get(equippedFlagName);
                 icon.setDrawable(flagGameData.getIcon());
                 starsContainer.setData(flagsSaveData.getFlags().get(flagsSaveData.getEquippedFlag()).getStarCount());
                 setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(equippedFlagSaveData.getRarity().getBackgroundColor())));
@@ -461,7 +480,7 @@ public class MissionsPage extends APage implements EventListener {
             } else {
                 final String equippedPetName = petsSaveData.getEquippedPetId();
                 final PetSaveData equippedPetSaveData = petsSaveData.getPets().get(equippedPetName);
-                final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPets().get(equippedPetName);
+                final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPetsMap().get(equippedPetName);
                 icon.setDrawable(petGameData.getIcon());
                 starsContainer.setData(equippedPetSaveData.getStarCount());
                 setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(equippedPetSaveData.getRarity().getBackgroundColor())));
@@ -522,6 +541,35 @@ public class MissionsPage extends APage implements EventListener {
                 });
 
             }
+        }
+    }
+
+    public static class TacticalPreviewContainer extends BorderedTable {
+        private final Image icon;
+
+        public TacticalPreviewContainer () {
+            setTouchable(Touchable.disabled);
+
+            icon = new Image();
+            icon.setScaling(Scaling.fit);
+            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
+        }
+
+        public void setData (@Null TacticalSaveData tacticalSaveData) {
+            if (tacticalSaveData == null) {
+                setEmpty();
+                return;
+            }
+            final TacticalGameData tacticalGameData = API.get(GameData.class).getTacticalsGameData().getTacticalsMap().get(tacticalSaveData.getName());
+            icon.setDrawable(tacticalGameData.getIcon());
+            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(tacticalSaveData.getRarity().getBackgroundColor())));
+            setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(ColorLibrary.get(tacticalSaveData.getRarity().getBorderColor())));
+        }
+
+        @Override
+        public void setEmpty () {
+            super.setEmpty();
+            icon.setDrawable(null);
         }
     }
 }

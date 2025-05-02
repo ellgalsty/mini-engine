@@ -1,3 +1,13 @@
 <root>
-    <tactical name="present" icon="ui/star"/>
+    <tactical name="present" icon="ui/star" title="Starochka"/>
+    <tactical name="capybara" icon="ui/capy-loot" title="Capybara"/>
+    <tactical name="trap" icon="ui/atk" title="Trap"/>
+    <tactical name="babulya" icon="ui/star" title="Babulya"/>
+    <tactical name="chinovnik" icon="ui/star" title="De hima"/>
+    <tactical name="keratin" icon="ui/star" title="Straight"/>
+    <tactical name="kera" icon="ui/star" title="Anush"/>
+    <tactical name="pupush" icon="ui/star" title="Pupush"/>
+    <tactical name="star" icon="ui/star" title="Star"/>
+    <tactical name="basic" icon="ui/star" title="Basic"/>
+    <tactical name="roze" icon="ui/star" title="Roze"/>
 </root>

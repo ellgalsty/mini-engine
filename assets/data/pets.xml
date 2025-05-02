@@ -1,4 +1,5 @@
 <root>
     <pet name="cactus" title="Sexy Cactus" icon="ui/secondarygears/cactus-fighter"/>
-    <pet name="susu" title="Hot Susu" icon="ui/secondarygears/susu"/>
+    <pet name="hot-susu" title="Hot Susu" icon="ui/secondarygears/susu"/>
+    <pet name="susu" title="Not That Hot Susu" icon="ui/secondarygears/susu"/>
 </root>

@@ -1,144 +1,216 @@
 package com.bootcamp.demo.dialogs;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.Pools;
-import com.badlogic.gdx.utils.Scaling;
+import com.bootcamp.demo.data.MissionsManager;
 import com.bootcamp.demo.data.game.GameData;
 import com.bootcamp.demo.data.game.TacticalGameData;
-import com.bootcamp.demo.data.game.TacticalsGameData;
+import com.bootcamp.demo.data.save.SaveData;
 import com.bootcamp.demo.data.save.TacticalSaveData;
 import com.bootcamp.demo.data.save.TacticalsSaveData;
+import com.bootcamp.demo.dialogs.buttons.TextOffsetButton;
 import com.bootcamp.demo.dialogs.core.ADialog;
-import com.bootcamp.demo.engine.ColorLibrary;
+import com.bootcamp.demo.dialogs.core.DialogManager;
 import com.bootcamp.demo.engine.Labels;
 import com.bootcamp.demo.engine.Squircle;
-import com.bootcamp.demo.engine.widgets.BorderedTable;
+import com.bootcamp.demo.engine.widgets.CustomScrollPane;
+import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.localization.GameFont;
 import com.bootcamp.demo.managers.API;
-import com.bootcamp.demo.pages.containers.StarsContainer;
+import com.bootcamp.demo.pages.containers.StatsContainer;
+import com.bootcamp.demo.presenters.WidgetLibrary;
+import com.bootcamp.demo.presenters.widgets.TacticalContainer;
 
 public class TacticalDialog extends ADialog {
     private EquippedTacticalsContainer equippedTacticals;
+    private OwnedTacticalsContainer ownedTacticals;
+    private OwnedTacticalContainer currentSelectedContainer;
+    private StatsContainer statsContainer;
+    private TextOffsetButton equipButton;
+    private Label rarityValueLabel;
+    private Label selectedTacticalTitle;
+    private boolean tacticalSelection = false;
 
     @Override
     protected void constructContent (Table content) {
-        setTitle("Tactical", Color.valueOf("fee7da"), Color.valueOf("799f6c"));
-
-        final Table mainDialog = constructMainDialog();
-        content.pad(30);
-        content.add(mainDialog).width(1000);
-    }
-
-    private Table constructMainDialog () {
-        final Table equippedTacticalsSegment = constructEquippedTacticalsSegment();
         final Table tacticalInfoSegment = constructTacticalInfoSegment();
-        final Table ownedTacticalsSegment = constructOwnedTacticalsSegment();
+        equippedTacticals = new EquippedTacticalsContainer();
+        ownedTacticals = new OwnedTacticalsContainer();
+        ownedTacticals.setBackground(Squircle.SQUIRCLE_35.getDrawable(Color.valueOf("bfbab7")));
+        final CustomScrollPane ownedTacticalsScrollPane = WidgetLibrary.verticalScrollPane(ownedTacticals);
 
-        final Table segment = new Table();
-        segment.defaults().space(25).grow();
-        segment.add(equippedTacticalsSegment);
-        segment.row();
-        segment.add(tacticalInfoSegment);
-        segment.row();
-        segment.add(ownedTacticalsSegment);
-        return segment;
-    }
+        equipButton = new TextOffsetButton(OffsetButton.Style.GREEN_35);
+        equipButton.setOnClick(() -> {
+            final TacticalSaveData chosenTacticalSaveData = currentSelectedContainer.container.getTacticalSaveData();
+            OrderedMap<Integer, String> equippedTacticalsMap = API.get(SaveData.class).getTacticalsSaveData().getEquippedTacticals();
+            if (equippedTacticalsMap.containsValue(chosenTacticalSaveData.getName(), true)) {
+                return;
+            }
+            if (equippedTacticalsMap.size < 4) {
+                MissionsManager.equipTactical(currentSelectedContainer.container.getTacticalSaveData(), equippedTacticalsMap.size);
+                equippedTacticals.setData(equippedTacticalsMap);
+            } else {
+                tacticalSelection = true;
+            }
+        });
 
-    private Table constructOwnedTacticalsSegment () {
-        return new Table();
+        // assemble
+        content.pad(30);
+        content.defaults().space(25).growX();
+        content.add(equippedTacticals);
+        content.row();
+        content.add(tacticalInfoSegment);
+        content.row();
+        content.add(ownedTacticalsScrollPane).height(350);
+        content.row();
+        content.add(equipButton).size(300, 200);
     }
 
     private Table constructTacticalInfoSegment () {
-        return new Table();
-    }
-
-    private Table constructEquippedTacticalsSegment () {
-        equippedTacticals = new EquippedTacticalsContainer();
+        selectedTacticalTitle = Labels.make(GameFont.BOLD_20, Color.valueOf("4b4543"));
+        currentSelectedContainer = new OwnedTacticalContainer();
+        final Table statsWrapper = constructStatsWrapper();
 
         final Table segment = new Table();
-        segment.defaults().space(25);
-        segment.add(equippedTacticals);
+        segment.setBackground(Squircle.SQUIRCLE_35.getDrawable(Color.valueOf("bfbab8")));
+        segment.pad(20);
+        segment.add(selectedTacticalTitle);
+        segment.row();
+        segment.add(currentSelectedContainer).size(200);
+        segment.add(statsWrapper).growX().height(350);
         return segment;
     }
 
-    public void setData (@Null TacticalsSaveData tacticalsSaveData) {
-        TacticalsGameData tacticalsGameData = API.get(GameData.class).getTacticalsGameData();
+    private Table constructStatsWrapper () {
+        statsContainer = new StatsContainer();
 
-        if (tacticalsSaveData == null) {
+        rarityValueLabel = Labels.make(GameFont.BOLD_22);
+        final Label rarityLabel = Labels.make(GameFont.BOLD_22, Color.valueOf("020000"));
+        rarityLabel.setText("Rarity:");
+        final Table rarityLabelWrapper = new Table();
+        rarityLabelWrapper.defaults().space(20);
+        rarityLabelWrapper.add(rarityLabel);
+        rarityLabelWrapper.add(rarityValueLabel);
 
-        } else {
 
+        final Table segment = new Table();
+        segment.defaults().expand();
+        segment.add(rarityLabelWrapper).top();
+        segment.row();
+        segment.add(statsContainer);
+        return segment;
+    }
+
+    public void setData (TacticalsSaveData tacticalsSaveData) {
+        equipButton.setText("Equip");
+
+        if (tacticalsSaveData != null) {
+            ownedTacticals.setData(tacticalsSaveData);
+            equippedTacticals.setData(tacticalsSaveData.getEquippedTacticals());
         }
     }
 
-    public static class EquippedTacticalsContainer extends WidgetsContainer<EquippedTacticalContainer> {
-        private static final float WIDGET_SIZE = 225f;
+    private class EquippedTacticalContainerWrapper extends Table {
+        private final TacticalContainer container;
 
-        public EquippedTacticalsContainer () {
-            super(5);
-            pad(25).defaults().space(25).size(WIDGET_SIZE);
+        public EquippedTacticalContainerWrapper () {
+            container = new TacticalContainer();
+            container.setOnClick(() -> {
+                final TacticalSaveData tacticalSaveData = container.getTacticalSaveData();
+                if (tacticalSelection) {
+                    MissionsManager.equipTactical(currentSelectedContainer.container.getTacticalSaveData(), tacticalSaveData.getSlot());
+                    tacticalSelection = false;
+                    equippedTacticals.setData(API.get(SaveData.class).getTacticalsSaveData().getEquippedTacticals());
+                    return;
+                }
+                API.get(DialogManager.class).getDialog(TacticalDialog.class).selectTactical(tacticalSaveData);
+            });
+            add(container).size(225);
         }
 
-        private void setData (TacticalsSaveData tacticalsSaveData) {
-            freeChildren();
-
-            for (TacticalSaveData tacticalSaveData: tacticalsSaveData.getTacticals().values()) {
-                final EquippedTacticalContainer widget = Pools.obtain(EquippedTacticalContainer.class);
-                add(widget);
-                widget.setData(tacticalSaveData);
-            }
-        }
-    }
-
-    public static class EquippedTacticalContainer extends BorderedTable {
-        private final Image icon;
-        private final Label levelLabel;
-        private final StarsContainer starsContainer;
-
-        public EquippedTacticalContainer () {
-            setBorderDrawable(Squircle.SQUIRCLE_35_BORDER.getDrawable(Color.valueOf("a8f782")));
-            starsContainer = new StarsContainer();
-            final Table tacticalOverlay = constructOverLay();
-            icon = new Image();
-            icon.setScaling(Scaling.fit);
-            levelLabel = Labels.make(GameFont.BOLD_20, Color.valueOf("ebe6d9"));
-
-            add(icon).size(Value.percentWidth(0.75f, this), Value.percentWidth(0.75f, this));
-            addActor(tacticalOverlay);
+        public void setData (TacticalSaveData tacticalSaveData) {
+            container.setData(tacticalSaveData);
         }
 
-        public void setData (@Null TacticalSaveData tacticalSaveData) {
-            if (tacticalSaveData == null) {
-                setEmpty();
+        public void setData (@Null String tacticalName) {
+            if (tacticalName == null) {
+                container.setEmpty();
                 return;
             }
-            final TacticalGameData tacticalGameData = API.get(GameData.class).getTacticalsGameData().getTacticals().get(tacticalSaveData.getName());
-            levelLabel.setText("lv" + tacticalSaveData.getLevel());
-            starsContainer.setData(tacticalSaveData.getStarCount());
-            icon.setDrawable(tacticalGameData.getIcon());
-            setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(tacticalSaveData.getRarity().getBackgroundColor())));
+            container.setData(API.get(SaveData.class).getTacticalsSaveData().getTacticals().get(tacticalName));
+        }
+    }
+
+    public static class OwnedTacticalContainer extends Table {
+        private final TacticalContainer container;
+
+        public OwnedTacticalContainer () {
+            container = new TacticalContainer();
+            container.setOnClick(() -> {
+                final TacticalSaveData tacticalSaveData = container.getTacticalSaveData();
+                API.get(DialogManager.class).getDialog(TacticalDialog.class).selectTactical(tacticalSaveData);
+            });
+            add(container).grow();
         }
 
-        @Override
-        public void setEmpty () {
-            super.setEmpty();
-            icon.setDrawable(null);
-            levelLabel.setText("");
+        private void setData (TacticalSaveData tacticalSaveData) {
+            container.setData(tacticalSaveData);
         }
-        private Table constructOverLay () {
-            final Table segment = new Table();
-            segment.pad(10).defaults().expand();
-            segment.add(starsContainer).top().right();
-            segment.row();
-            segment.add(levelLabel).top().left();
-            segment.setFillParent(true);
-            return segment;
+    }
+
+    private void selectTactical (TacticalSaveData tacticalSaveData) {
+        final TacticalGameData tacticalGameData = API.get(GameData.class).getTacticalsGameData().getTacticalsMap().get(tacticalSaveData.getName());
+        currentSelectedContainer.setData(tacticalSaveData);
+        statsContainer.setData(tacticalSaveData.getStatsData());
+        selectedTacticalTitle.setText(tacticalGameData.getTitle());
+        rarityValueLabel.setText(tacticalSaveData.getRarity().toString());
+        rarityValueLabel.setColor(Color.valueOf(tacticalSaveData.getRarity().getBackgroundColor()));
+    }
+
+    public class EquippedTacticalsContainer extends WidgetsContainer<EquippedTacticalContainerWrapper> {
+        public EquippedTacticalsContainer () {
+            super(4);
+            pad(25).defaults().space(25).size(225);
+
+            for (int i = 0; i < 4; i++) {
+                final EquippedTacticalContainerWrapper widget = new EquippedTacticalContainerWrapper();
+                add(widget);
+            }
         }
+
+        public void setData (OrderedMap<Integer, String> equippedTacticalsNames) {
+            final Array<EquippedTacticalContainerWrapper> widgets = getWidgets();
+
+            for (int i = 0; i < 4; i++) {
+                widgets.get(i).setData(equippedTacticalsNames.get(i));
+            }
+        }
+    }
+
+    public static class OwnedTacticalsContainer extends WidgetsContainer<OwnedTacticalContainer> {
+        public OwnedTacticalsContainer () {
+            super(5);
+            pad(25).defaults().space(25).size(175);
+        }
+
+        public void setData (TacticalsSaveData data) {
+            freeChildren();
+            for (TacticalSaveData tacticalData : data.getTacticals().values()) {
+                OwnedTacticalContainer widget = Pools.obtain(OwnedTacticalContainer.class);
+                add(widget);
+                widget.setData(tacticalData);
+            }
+        }
+    }
+
+    @Override
+    protected String getTitle () {
+        return "Tactical";
     }
 }

@@ -4,8 +4,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.bootcamp.demo.data.game.GameData;
 import com.bootcamp.demo.data.game.MilitaryGearGameData;
 import com.bootcamp.demo.data.save.*;
-import com.bootcamp.demo.events.EquipFlagEvent;
-import com.bootcamp.demo.events.EquipGearEvent;
+import com.bootcamp.demo.events.*;
 import com.bootcamp.demo.events.core.EventModule;
 import com.bootcamp.demo.managers.API;
 
@@ -102,11 +101,23 @@ public class MissionsManager {
             }
             statTypeCumulativeValues.put(statData.getType(), statTypeCumulativeValues.getOrDefault(statData.getType(), 0f) + statData.getValue());
         }
-        return statTypeCumulativeValues.get(StatType.NUMBER) * (1 + statTypeCumulativeValues.getOrDefault(StatType.PERCENT, 0f) / 100);
+        return statTypeCumulativeValues.getOrDefault(StatType.NUMBER, 0f) * (1 + statTypeCumulativeValues.getOrDefault(StatType.PERCENT, 0f) / 100);
     }
 
     public static float calculateCumulativePower () {
         return calculatePowerFromStats(getGeneralStatsData());
+    }
+
+    public static int calculateLevelFromXp (float xp) {
+        return (int) (xp / 100 + 1);
+    }
+
+    public static int getCumulativeLevel () {
+        int level = 0;
+        for (ObjectMap.Entry<MilitaryGearSlot, MilitaryGearSaveData> militaryGear : API.get(SaveData.class).getMilitaryGearsSaveData().getMilitaryGears()) {
+            level += calculateLevelFromXp(militaryGear.value.getXp());
+        }
+        return level;
     }
 
     public static void equipGear (MilitaryGearSaveData militaryGearSaveData) {
@@ -116,7 +127,39 @@ public class MissionsManager {
     }
 
     public static void equipFlag (FlagSaveData flagSaveData) {
+        if (flagSaveData == null) {
+            return;
+        }
         API.get(SaveData.class).getFlagsSaveData().setEquippedFlag(flagSaveData.getName());
+        API.get(SaveData.class).save();
         API.get(EventModule.class).fireEvent(EquipFlagEvent.class);
+    }
+
+    public static void equipPet (PetSaveData petSaveData) {
+        if (petSaveData == null) {
+            return;
+        }
+        API.get(SaveData.class).getPetsSaveData().setEquippedPetId(petSaveData.getName());
+        API.get(SaveData.class).save();
+        API.get(EventModule.class).fireEvent(EquipPetEvent.class);
+    }
+
+    public static void equipTactical (TacticalSaveData tacticalSaveData, int slot) {
+        if (tacticalSaveData == null) {
+            return;
+        }
+        TacticalsSaveData tacticalsSaveData = API.get(SaveData.class).getTacticalsSaveData();
+        tacticalsSaveData.putEquippedTactical(slot, tacticalSaveData.getName());
+        tacticalsSaveData.getTacticals().get(tacticalsSaveData.getEquippedTacticals().get(slot)).setSlot(slot);
+        API.get(SaveData.class).save();
+        API.get(EventModule.class).fireEvent(EquipTacticalEvent.class);
+    }
+
+    public static void updateStats () {
+        API.get(EventModule.class).fireEvent(UpdateStatsEvent.class);
+    }
+
+    public static void dropItem () {
+        // adds xp to the cumulative xp based on the dropped item's xp and level
     }
 }

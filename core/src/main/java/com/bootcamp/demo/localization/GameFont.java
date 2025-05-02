@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public enum GameFont implements IFont {
+    BOLD_16("roboto-bold", 16),
+    BOLD_18("roboto-bold", 18),
     BOLD_20("roboto-bold", 20),
     BOLD_22("roboto-bold", 22),
     BOLD_24("roboto-bold", 24),

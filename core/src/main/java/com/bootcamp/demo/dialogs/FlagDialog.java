@@ -20,12 +20,14 @@ import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Labels;
 import com.bootcamp.demo.engine.Squircle;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
+import com.bootcamp.demo.engine.widgets.CustomScrollPane;
 import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.localization.GameFont;
 import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.pages.containers.StarsContainer;
 import com.bootcamp.demo.pages.containers.StatsContainer;
+import com.bootcamp.demo.presenters.WidgetLibrary;
 import lombok.Getter;
 
 
@@ -38,13 +40,6 @@ public class FlagDialog extends ADialog {
 
     @Override
     protected void constructContent (Table content) {
-        setTitle("Flags", Color.valueOf("494846"));
-        final Table mainDialog = constructMainDialog();
-        content.pad(30);
-        content.add(mainDialog).width(1000);
-    }
-
-    private Table constructMainDialog () {
         final Table flagInfoWrapper = constructFlagInfoWrapper();
         final Table statsSegment = constructStatsSegment();
         final Table ownedFlagsSegment = constructOwnedFlagsSegment();
@@ -53,27 +48,27 @@ public class FlagDialog extends ADialog {
             MissionsManager.equipFlag(currentSelectedContainer.getFlagSaveData());
         });
 
-        final Table segment = new Table();
-        segment.pad(30).defaults().space(25).grow();
-        segment.add(flagInfoWrapper);
-        segment.row();
-        segment.add(statsSegment);
-        segment.row();
-        segment.add(ownedFlagsSegment);
-        segment.row();
-        segment.add(equipButton).size(300, 200);
-        return segment;
+        content.pad(30).defaults().space(25).growX().uniformX().minWidth(1000);
+        content.add(flagInfoWrapper);
+        content.row();
+        content.add(statsSegment).height(300);
+        content.row();
+        content.add(ownedFlagsSegment);
+        content.row();
+        content.add(equipButton).size(300, 200);
     }
 
     private Table constructOwnedFlagsSegment () {
         final Label ownedFlagsTitle = Labels.make(GameFont.BOLD_22, Color.valueOf("2c1a12"));
-        ownedFlagsTitle.setText("Owned pets");
+        ownedFlagsTitle.setText("Owned flags");
         ownedFlags = new OwnedFlagsContainer();
+        final CustomScrollPane ownedFlagsScrollPane = WidgetLibrary.verticalScrollPane(ownedFlags);
 
         final Table segment = new Table();
+        segment.defaults().grow();
         segment.add(ownedFlagsTitle);
         segment.row();
-        segment.add(ownedFlags);
+        segment.add(ownedFlagsScrollPane).height(300);
         return segment;
     }
 
@@ -115,7 +110,7 @@ public class FlagDialog extends ADialog {
             return;
         }
 
-        FlagGameData equippedFlagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(flagsSaveData.getEquippedFlag());
+        FlagGameData equippedFlagGameData = API.get(GameData.class).getFlagsGameData().getFlagsMap().get(flagsSaveData.getEquippedFlag());
         FlagSaveData equippedFlagSaveData = flagsSaveData.getFlags().get(flagsSaveData.getEquippedFlag());
 
         currentSelectedContainer.setData(equippedFlagSaveData);
@@ -171,7 +166,7 @@ public class FlagDialog extends ADialog {
                 setEmpty();
                 return;
             }
-            final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlags().get(flagSaveData.getName());
+            final FlagGameData flagGameData = API.get(GameData.class).getFlagsGameData().getFlagsMap().get(flagSaveData.getName());
             icon.setDrawable(flagGameData.getIcon());
             starsContainer.setData(flagSaveData.getStarCount());
             setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(flagSaveData.getRarity().getBackgroundColor())));
@@ -190,5 +185,10 @@ public class FlagDialog extends ADialog {
             segment.setFillParent(true);
             return segment;
         }
+    }
+
+    @Override
+    protected String getTitle () {
+        return "Flags";
     }
 }

@@ -10,10 +10,13 @@ public class TacticalGameData implements IGameData {
     private String name;
     @Getter
     private Drawable icon;
+    @Getter
+    private String title;
 
     @Override
     public void load (XmlReader.Element rootXml) {
         name = rootXml.getAttribute("name");
         icon = Resources.getDrawable(rootXml.getAttribute("icon"));
+        title = rootXml.getAttribute("title");
     }
 }

@@ -1,3 +1,6 @@
 <root>
     <flag name="flash-flag" title="Flash Flag" icon="ui/secondarygears/flag"/>
+    <flag name="yo-flag" title="Yo Flag" icon="ui/secondarygears/flag"/>
+    <flag name="bro-flag" title="Bro FLag" icon="ui/secondarygears/flag"/>
+    <flag name="bruh-flag" title="Bruh Flag" icon="ui/secondarygears/flag"/>
 </root>

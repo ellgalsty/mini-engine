@@ -16,7 +16,7 @@ public class StatsContainer extends WidgetsContainer<StatsContainer.StatWidget> 
 
     public StatsContainer () {
         super(3);
-        padLeft(50).defaults().space(25).expand().left();
+        defaults().space(25).expand();
     }
 
     public void setData (StatsData statsData) {
@@ -39,10 +39,18 @@ public class StatsContainer extends WidgetsContainer<StatsContainer.StatWidget> 
 
     public static class StatWidget extends Table {
         protected final Label label;
+        protected final Label valueLabel;
 
         public StatWidget () {
-            label = Labels.make(GameFont.BOLD_20, ColorLibrary.get("4e4238"));
-            add(label);
+            label = Labels.make(GameFont.BOLD_18, ColorLibrary.get("4e4238"));
+            valueLabel = Labels.make(GameFont.BOLD_18, ColorLibrary.get("4e4238"));
+
+            final Table labelWrapper = new Table();
+            labelWrapper.defaults().expand().space(10);
+            labelWrapper.add(label);
+            labelWrapper.add(valueLabel).right();
+
+            add(labelWrapper).expand();
         }
 
         protected void setData (@Null StatData statData) {
@@ -50,9 +58,11 @@ public class StatsContainer extends WidgetsContainer<StatsContainer.StatWidget> 
                 return;
             }
             if (statData.getType() == StatType.NUMBER) {
-                label.setText(statData.getStat() + ": " + statData.getValue());
+                label.setText(statData.getStat() + ":");
+                valueLabel.setText(statData.getValue() + "");
             } else {
-                label.setText(statData.getStat() + ": " + statData.getValue() + "%");
+                label.setText(statData.getStat() + ":");
+                valueLabel.setText(statData.getValue() + "%");
             }
         }
     }

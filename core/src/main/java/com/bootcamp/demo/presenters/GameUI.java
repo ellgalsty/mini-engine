@@ -8,8 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bootcamp.demo.data.MissionsManager;
 import com.bootcamp.demo.events.core.EventListener;
 import com.bootcamp.demo.events.core.EventModule;
+import com.bootcamp.demo.logic.DataGenerator;
 import com.bootcamp.demo.managers.API;
 import com.bootcamp.demo.pages.MissionsPage;
 import com.bootcamp.demo.pages.core.APage;
@@ -47,10 +49,21 @@ public class GameUI extends ScreenAdapter implements Disposable, EventListener {
 
     @Override
     public void render (float delta) {
-        if(Gdx.app.getInput().isKeyJustPressed(Input.Keys.M)) {
+        if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.M)) {
             API.get(PageManager.class).show(MissionsPage.class);
         }
-
+        if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.T)) {
+            DataGenerator.generateTacticalData();
+            MissionsManager.updateStats();
+        }
+        if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.F)) {
+            DataGenerator.generateFlagData();
+            MissionsManager.updateStats();
+        }
+        if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.P)) {
+            DataGenerator.generatePetData();
+            MissionsManager.updateStats();
+        }
         stage.act(delta);
         stage.draw();
     }

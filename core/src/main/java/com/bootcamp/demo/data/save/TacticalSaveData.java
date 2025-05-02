@@ -14,13 +14,13 @@ public class TacticalSaveData implements Json.Serializable {
     @Getter @Setter
     private int level;
     @Getter @Setter
-    private int power;
-    @Getter @Setter
     private StatsData statsData = new StatsData();
     @Getter @Setter
     private Rarity rarity;
     @Getter @Setter
     private int starCount;
+    @Getter @Setter
+    private int slot;
 
     @Override
     public void write (Json json) {
@@ -28,7 +28,8 @@ public class TacticalSaveData implements Json.Serializable {
         json.writeValue("l", level);
         json.writeValue("sd", statsData);
         json.writeValue("r", rarity);
-        json.writeValue("s", starCount);
+        json.writeValue("sc", starCount);
+        json.writeValue("s", slot);
     }
 
     @Override
@@ -37,6 +38,7 @@ public class TacticalSaveData implements Json.Serializable {
         level = jsonValue.getInt("l");
         statsData.read(json, jsonValue.get("sd"));
         rarity = Rarity.valueOf(jsonValue.getString("r"));
-        starCount = jsonValue.getInt("s");
+        starCount = jsonValue.getInt("sc");
+        slot = jsonValue.getInt("s");
     }
 }

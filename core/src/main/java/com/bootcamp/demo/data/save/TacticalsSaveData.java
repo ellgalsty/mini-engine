@@ -1,16 +1,13 @@
 package com.bootcamp.demo.data.save;
 
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.*;
 import lombok.Getter;
 
 public class TacticalsSaveData implements Json.Serializable {
     @Getter
     private final ObjectMap<String, TacticalSaveData> tacticals = new ObjectMap<>();
     @Getter
-    private final IntMap<String> equippedTacticals = new IntMap<>();
+    private final OrderedMap<Integer, String> equippedTacticals = new OrderedMap<>();
 
     @Override
     public void write (Json json) {

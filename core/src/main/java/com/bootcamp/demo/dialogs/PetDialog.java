@@ -19,13 +19,14 @@ import com.bootcamp.demo.engine.ColorLibrary;
 import com.bootcamp.demo.engine.Labels;
 import com.bootcamp.demo.engine.Squircle;
 import com.bootcamp.demo.engine.widgets.BorderedTable;
+import com.bootcamp.demo.engine.widgets.CustomScrollPane;
 import com.bootcamp.demo.engine.widgets.OffsetButton;
 import com.bootcamp.demo.engine.widgets.WidgetsContainer;
 import com.bootcamp.demo.localization.GameFont;
 import com.bootcamp.demo.managers.API;
-import com.bootcamp.demo.pages.MissionsPage;
 import com.bootcamp.demo.pages.containers.StarsContainer;
 import com.bootcamp.demo.pages.containers.StatsContainer;
+import com.bootcamp.demo.presenters.WidgetLibrary;
 import lombok.Getter;
 
 public class PetDialog extends ADialog {
@@ -37,13 +38,6 @@ public class PetDialog extends ADialog {
 
     @Override
     protected void constructContent (Table content) {
-        setTitle("Pets", Color.valueOf("494846"));
-        final Table mainDialog = constructMainDialog();
-        content.pad(30);
-        content.add(mainDialog).width(1000);
-    }
-
-    private Table constructMainDialog () {
         final Table petInfoWrapper = constructPetInfoWrapper();
         final Table petStatsSegment = constructStatsSegment();
         final Table ownedPetsSegment = constructOwnedPetsSegment();
@@ -52,27 +46,28 @@ public class PetDialog extends ADialog {
             MissionsManager.equipPet(currentSelectedContainer.getPetSaveData());
         });
 
-        final Table segment = new Table();
-        segment.defaults().space(25).grow();
-        segment.add(petInfoWrapper);
-        segment.row();
-        segment.add(petStatsSegment);
-        segment.row();
-        segment.add(ownedPetsSegment);
-        segment.row();
-        segment.add(equipButton).size(300, 200);
-        return segment;
+        content.pad(30).defaults().space(25).growX().uniformX().minWidth(1000);
+        content.add(petInfoWrapper);
+        content.row();
+        content.add(petStatsSegment).height(225);
+        content.row();
+        content.add(ownedPetsSegment);
+        content.row();
+        content.add(equipButton).size(300, 200);
     }
 
     private Table constructOwnedPetsSegment () {
         final Label ownedPetsTitle = Labels.make(GameFont.BOLD_22, Color.valueOf("2c1a12"));
         ownedPetsTitle.setText("Owned pets");
         ownedPets = new OwnedPetsContainer();
+        CustomScrollPane ownedItemsScroll = WidgetLibrary.verticalScrollPane(ownedPets);
+
 
         final Table segment = new Table();
+        segment.defaults().grow();
         segment.add(ownedPetsTitle);
         segment.row();
-        segment.add(ownedPets);
+        segment.add(ownedItemsScroll).height(300);
         return segment;
     }
 
@@ -115,7 +110,7 @@ public class PetDialog extends ADialog {
         }
 
         final PetSaveData equippedPetSaveData = API.get(SaveData.class).getPetsSaveData().getPets().get(equippedPetId);
-        final PetGameData equippedPetGameData = API.get(GameData.class).getPetsGameData().getPets().get(equippedPetSaveData.getName());
+        final PetGameData equippedPetGameData = API.get(GameData.class).getPetsGameData().getPetsMap().get(equippedPetSaveData.getName());
 
         currentSelectedContainer.setData(equippedPetSaveData);
         petTitleLabel.setText(equippedPetGameData.getTitle());
@@ -140,7 +135,7 @@ public class PetDialog extends ADialog {
         private void setData (PetsSaveData petsSaveData) {
             freeChildren();
 
-            for (PetSaveData petSaveData: petsSaveData.getPets().values()) {
+            for (PetSaveData petSaveData : petsSaveData.getPets().values()) {
                 final PetContainer widget = Pools.obtain(PetContainer.class);
                 add(widget);
                 widget.setData(petSaveData);
@@ -170,7 +165,7 @@ public class PetDialog extends ADialog {
                 setEmpty();
                 return;
             }
-            final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPets().get(petSaveData.getName());
+            final PetGameData petGameData = API.get(GameData.class).getPetsGameData().getPetsMap().get(petSaveData.getName());
             icon.setDrawable(petGameData.getIcon());
             starsContainer.setData(petSaveData.getStarCount());
             setBackground(Squircle.SQUIRCLE_35.getDrawable(ColorLibrary.get(petSaveData.getRarity().getBackgroundColor())));
@@ -189,5 +184,10 @@ public class PetDialog extends ADialog {
             segment.setFillParent(true);
             return segment;
         }
+    }
+
+    @Override
+    protected String getTitle () {
+        return "Pets";
     }
 }
